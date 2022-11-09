@@ -1,0 +1,370 @@
+<!DOCTYPE HTML>
+  <html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+    body, html {
+      padding:0 !important;
+      margin: 0 !important;
+      margin-bottom: 0px;
+      padding-bottom: 0px;
+    }
+
+    * {
+      padding: 0;
+      margin: 0;
+    }
+      body  { background-color: black; overflow: hidden;}
+    .img{
+      position: absolute;
+      object-fit: contain;
+      display: none;
+    }
+      .canvas{position:absolute;}
+
+	/* The Modal  */
+			.modal {
+			  display: none;
+			  position: fixed;
+			  z-index: 4;
+			  left: 0;
+			  top: 0;
+			  width: 100%;
+			  height: 100%;
+			  background-color: black;
+
+
+			}
+
+			.modal-buttons {
+				margin:auto;
+			  	max-width: 650px;
+
+			}
+
+
+			.modal-content {
+			  margin: auto;
+			  display: block;
+
+			  max-width: 650px;
+			}
+
+
+			.modal-content, #caption {
+			  animation-name: zoom;
+			  animation-duration: 0.6s;
+			}
+
+			@keyframes zoom {
+			  from {transform:scale(0)}
+			  to {transform:scale(1)}
+			}
+
+
+
+			.close {
+			  right: 35px;
+			  color: #f1f1f1;
+			  font-size: 40px;
+			  font-weight: bold;
+			  transition: 0.3s;
+			}
+
+			.close:hover,
+			.close:focus {
+			  color: #bbb;
+			  text-decoration: none;
+			  cursor: pointer;
+			}
+
+
+			@media only screen and (max-width: 700px){
+			  .modal-content {
+				width: 100%;
+			  }
+			}
+
+			#mainCanvas {
+				-webkit-user-select: none; /* Safari */
+				-ms-user-select: none; /* IE 10 and IE 11 */
+				user-select: none; /* Standard syntax */
+			}
+
+
+
+		button {
+			margin-right: 10px;
+			padding: 5px;
+		}
+
+	    #myImg1{
+        zoom: 0.5;
+        -moz-transform: scale(0.5);
+        background-color: gray;
+        margin-left: 25%;
+    }
+
+
+      </style>
+    </head>
+
+    <body>
+
+    <div style="text-align:center">
+    	<img id="myImg" class="img" alt="Fre5hies">
+      <img id="myImg1" style="object-fit: contain; top: 0; left: 0; position: absolute;">
+    	<canvas id="myCanvas2" style="object-fit: contain; top: 0; left: 0; position: absolute; "></canvas>/*main*/
+    	<canvas id="myCanvas3" style="object-fit: contain; top: 0; left: 0; position: absolute;"></canvas> /*black bg*/
+      <canvas id="myCanvas4" style="object-fit: contain; top: 0; left: 0; position: absolute;"></canvas> /*tp bg*/
+    </div>
+
+<!-- The Modal -->
+		<div id="myModal" class="modal">
+
+
+			<!-- Modal Content  -->
+			<table class="modal-buttons">
+				<tr>
+					<th ><button id="transparent" type="button">Transparent BG</button><button id="withbg" type="button">Gradien BG</button><button id="blackbg" type="button">Black BG</button></th>
+
+					<th >
+						<!-- The Close Button -->
+						<span class="close" style="float: right;">&times;</span>
+					</th>
+				</tr>
+			</table>
+
+
+			<img class="modal-content" id="imgBG" style="object-fit: contain; width: 100vw; height: 80vh;" width="4096" height="4096">
+			<img class="modal-content" id="imgTrans" style="object-fit: contain; width: 100vw; height: 80vh;" width="4096" height="4096">
+			<img class="modal-content" id="imgBlack" style="object-fit: contain; width: 100vw; height: 80vh;" width="4096" height="4096">
+		</div>
+
+    <script type="text/javascript">
+
+    function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+
+    function getRandomDec(min,max) {
+    return Math.random() * (max - min) + min;
+    }
+
+    function randomColor() {
+        return '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
+      }
+
+		/*Globals*/
+		var color1 = randomColor();
+		var color2 = randomColor();
+    var color3 = randomColor();
+		var color4 = randomColor();
+    var color5 = randomColor();
+    var color6 = randomColor();
+    var color7 = randomColor();
+    var bglg1 = (Math.random() * 4096);
+    var bglg2 = (Math.random() * 4096);
+    var bglg3 = (Math.random() * 4096);
+    var bglg4 = (Math.random() * 4096);
+    var bggrad1 = randomColor();
+    var bggrad2 = randomColor();
+    var dgrad1 = randomColor();
+    var dgrad2 = randomColor();
+    var dgrad3 = randomColor();
+    var dgrad4 = randomColor();
+    var dgrad5 = randomColor();
+    var dgrad6 = randomColor();
+    var dlg1 = (Math.random() * 2048);
+    var dlg2 = (Math.random() * 2048);
+    var dlg3 = (Math.random() * 2048);
+    var dlg4 = (Math.random() * 2048);
+
+    /*main canvas*/
+    var canvas2 = document.getElementById('myCanvas2');
+    canvas2.width =4096;
+    canvas2.height = 4096;
+    canvas2.style.width = "100vw";
+    canvas2.style.height = '100vh';
+    canvas2.getContext('2d').scale(2,2);
+
+    var ctx2 = canvas2.getContext("2d");
+    var grd1 = ctx2.createLinearGradient(bglg1, bglg2, bglg3, bglg4);
+    grd1.addColorStop(0, bggrad1);
+    grd1.addColorStop(1, bggrad2);
+    ctx2.fillStyle = grd1;
+    ctx2.fillRect(0, 0, 4096, 4096);
+
+
+  function design() {
+  	var grd2 = ctx2.createLinearGradient(dlg1, dlg2, dlg3, dlg4);
+    grd2.addColorStop(Math.random(), dgrad1);
+    grd2.addColorStop(Math.random(), dgrad2);
+    grd2.addColorStop(Math.random(), dgrad3);
+    grd2.addColorStop(Math.random(), dgrad4);
+    grd2.addColorStop(Math.random(), dgrad5);
+    grd2.addColorStop(Math.random(), dgrad6);
+
+    var c = document.getElementById("myCanvas2");
+    var ctx22 =c.getContext("2d");
+    var centerX = 1024;
+    var centerY = 1024;
+    ctx22.moveTo(centerX, centerY);
+    var gap = Math.floor(Math.random() * 1) + .0079;
+    var dSize = getRandomInt(100000, 125000);
+    var d1 = 323.73985045854977;
+    var d2 = 373.1233652645576;
+    var d3 = 310.1052662453562;
+    var dArray = [d1, d2, d3]
+    var dIndex = getRandomInt(0, 2);
+    var design = dArray[dIndex];
+    var increment = getRandomDec(275, 600);
+    var theta = increment;
+    while( theta < Math.floor(Math.random() * 50.090909095) + dSize) {
+    var newX = centerX + theta * Math.cos(theta) * gap;
+    var newY = centerY + theta * Math.sin(theta) * gap;
+    ctx22.lineTo(newX, newY);
+    theta = theta + increment;
+    }
+
+    ctx22.shadowColor = "#222222";
+    ctx22.shadowOffsetX = getRandomInt(-10, 10);
+    ctx22.shadowOffsetY = getRandomInt(-10, 10);
+    ctx22.shadowBlur = 30;
+    ctx22.strokeStyle = grd2;
+    ctx22.lineWidth = 2;
+    ctx22.stroke();
+
+  }
+  design();
+
+    /*hide canvas2*/
+    canvas2.hidden = true;
+
+    /*data url display*/
+    document.getElementById('myCanvas2');
+    const dataURL = myCanvas2.toDataURL({format: 'image/png', quality:1, width:4096, height:4096});
+    var img = document.getElementById('myImg1');
+    img.width = 2048;
+    img.height = 2048;
+    img.src = dataURL;
+    img.style.width = "100vw";
+    img.style.height = 'auto';
+
+
+    var ctx3 = canvas2.getContext("2d");
+    ctx3.clearRect(0, 0, 4096, 4096);
+    ctx3.fillStyle = "#000000";
+    ctx3.fillRect(0, 0, 4096, 4096);
+    design();
+    const dataURLBLK = myCanvas2.toDataURL({format: 'image/png', quality:1, width:4096, height:4096});
+
+    var ctx4 = canvas2.getContext("2d");
+    ctx4.clearRect(0, 0, 4096, 4096);
+    ctx4.fillRect(0, 0, 4096, 4096);
+    design();
+    const dataURLTP = myCanvas2.toDataURL({format: 'image/png', quality:1, width:4096, height:4096});
+    document.getElementById("imgTrans").innerHTML = dataURLTP;
+
+
+
+	  /*onclick refresh event*/
+			let timer;
+			document.getElementById("myImg1").addEventListener('click', event => {
+			  if (event.detail === 1) {
+				timer = setTimeout(() => {
+				  ('click');
+					location.reload();
+				}, 500)
+			  }
+			});
+			document.getElementById("myImg1").addEventListener('dblclick', event => {
+			  clearTimeout(timer);
+			  ('dblclick');
+
+				modalUp();
+			})
+
+
+
+
+			/*save image on mobile*/
+ 			function modalUp() {
+        var inputValBG = dataURL;
+				var imgBG = new Image();
+				imgBG.src = dataURL;
+
+				var inputValTrans = dataURLTP;
+				var imgTrans = new Image();
+				imgTrans.src = dataURLTP;
+
+        var inputValBlack = dataURLBLK;
+				var imgBlack = new Image();
+				imgBlack.src = dataURLBLK;
+
+
+				var modal = document.getElementById("myModal");
+				modal.style.display = "block";
+
+				/* Get the image with BG and insert it inside the modal */
+				var modalImgBG = document.getElementById("imgBG");
+			    modalImgBG.style.display = "block";
+			    modalImgBG.src = inputValBG;
+
+				/* Get the transparent image and insert it inside the modal */
+				var modalImgTrans = document.getElementById("imgTrans");
+			    modalImgTrans.style.display = "none";
+			    modalImgTrans.src = inputValTrans;
+
+          /* Get the transparent image and insert it inside the modal */
+  				var modalImgBlack = document.getElementById("imgBlack");
+  			    modalImgBlack.style.display = "none";
+  			    modalImgBlack.src = inputValBlack;
+
+			 document.getElementById("withbg").style.color = "red";
+
+				document.getElementById("transparent").onclick = function() {
+					modalImgBG.style.display = "none";
+					modalImgBlack.style.display = "none";
+					modalImgTrans.style.display = "block";
+
+					this.style.color = "red";
+					document.getElementById("withbg").style.color = "black";
+					document.getElementById("blackbg").style.color = "black";
+				}
+
+				document.getElementById("withbg").onclick = function() {
+					modalImgBG.style.display = "block";
+					modalImgTrans.style.display = "none";
+					modalImgBlack.style.display = "none";
+
+					document.getElementById("transparent").style.color = "black";
+					this.style.color = "red";
+					document.getElementById("blackbg").style.color = "black";
+				}
+
+				document.getElementById("blackbg").onclick = function() {
+					modalImgBlack.style.display = "block";
+					modalImgTrans.style.display = "none";
+					modalImgBG.style.display = "none";
+
+					document.getElementById("transparent").style.color = "black";
+					document.getElementById("withbg").style.color = "black";
+					this.style.color = "red";
+				}
+
+
+
+				/* Get the <span> element that closes the modal */
+				var span = document.getElementsByClassName("close")[0];
+
+				/* When the user clicks on <span> (x), close the modal */
+				span.onclick = function() {
+				modal.style.display = "none";
+				}
+         	}
+
+
+  </script>
+      </body>
+          </html>
