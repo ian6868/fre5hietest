@@ -91,8 +91,7 @@
 		}
 		
 		#myCanvasDesign, #myCanvasBlack {
-			/*display: none;*/
-			border: 1px solid red;
+			display: none;
 		}
 		
 
@@ -112,10 +111,10 @@
 			<canvas id="myCanvasGrad" style="object-fit: contain; top: 0; left: 0; position: absolute;"></canvas> 
 
 			/*Design canvas*/
-			<canvas id="myCanvasDesign"></canvas> 
+			<canvas id="myCanvasDesign" style="object-fit: contain; top: 0; left: 0; position: absolute;"></canvas> 
 			
 			/*Black canvas*/
-			<canvas id="myCanvasBlack"></canvas>	
+			<canvas id="myCanvasBlack" style="object-fit: contain; top: 0; left: 0; position: absolute;"></canvas>	
 
 
 		</div>
@@ -164,8 +163,6 @@
 			function releaseCanvas(canvas) {
 				canvas.width = 1;
 				canvas.height = 1;
-				canvas.style.width = 1;
-				canvas.style.height = 1;
 				const ctx = canvas.getContext('2d');
 				ctx && ctx.clearRect(0, 0, 1, 1);
 			}
@@ -247,8 +244,36 @@
 			displayCanvas.getContext('2d').scale(2,2);
 			var ctxdisplayCanvas = displayCanvas.getContext("2d");
 			ctxdisplayCanvas.drawImage(canvasGrad, 0, 0, 4096, 4096, 0, 0, 1024, 1024);	*/		
+			
+			
+/*onclick refresh event*/
+			let timer;
+			document.getElementById("myCanvasGrad").addEventListener('click', event => {
+			  if (event.detail === 1) {
+				timer = setTimeout(() => {
+					/* Release gradient canvases */
+					//releaseCanvas(canvasDesign);
+					//releaseCanvas(canvasGrad);
+					//releaseCanvas(canvasBlack);
+					
+					var canvases = document.getElementsByTagName("canvas");
+					var canvasesList = Array.prototype.slice.call(canvases);
+            		canvasesList.forEach(releaseCanvas);
+					
+					location.reload();
+				}, 200)
+			  }
+			});
+			document.getElementById("myCanvasGrad").addEventListener('dblclick', event => {
+			  clearTimeout(timer);
+				modalUp();
+			})
 
-/* Save canvases into images */
+			/*save image on mobile*/
+ 			function modalUp() {
+				
+				
+				/* Save canvases into images */
 				/* Gradient image */
 				var inputValGrad = myCanvasGrad.toDataURL({format: 'image/png', quality:1, width:4096, height:4096});
 				var imgGrad = new Image();
@@ -263,32 +288,6 @@
 				var inputValBlack = myCanvasBlack.toDataURL({format: 'image/png', quality:1, width:4096, height:4096});
 				var imgBlack = new Image();
 				imgBlack.src = inputValBlack;
-			
-/*Release hidden canvases*/
-				releaseCanvas(canvasDesign);
-				releaseCanvas(canvasBlack);
-				
-			
-/*onclick refresh event*/
-			let timer;
-			document.getElementById("myCanvasGrad").addEventListener('click', event => {
-			  if (event.detail === 1) {
-				timer = setTimeout(() => {
-					/* Release gradient canvases */
-					releaseCanvas(canvasGrad);
-					location.reload();
-				}, 200)
-			  }
-			});
-			document.getElementById("myCanvasGrad").addEventListener('dblclick', event => {
-			  clearTimeout(timer);
-				modalUp();
-			})
-
-			/*save image on mobile*/
- 			function modalUp() {
-				
-				
 				
 				/* display modal */
 				var modal = document.getElementById("myModal");
