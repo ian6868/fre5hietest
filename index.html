@@ -259,8 +259,8 @@
 					var canvases = document.getElementsByTagName("canvas");
 					var canvasesList = Array.prototype.slice.call(canvases);
             		canvasesList.forEach(releaseCanvas);
+					setTimeout("location.reload();", 1000);
 					
-					location.reload();
 				}, 200)
 			  }
 			});
