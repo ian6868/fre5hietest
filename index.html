@@ -16,7 +16,7 @@
     }
       body  { 
 		  background-color: black; 
-		  /*overflow: hidden;*/
+		  overflow: hidden;
 		}
     
      
@@ -92,7 +92,7 @@
 		
 		#myCanvasDesign, #myCanvasBlack {
 			display: none;
-			/*border: 1px solid red;*/
+			
 		}
 		
 
@@ -103,10 +103,6 @@
 		
 		<div style="text-align:center">
 
-
-			<!--<img id="displayImg" class="img" alt="Fre5hies" style="object-fit: contain; top: 0; left: 0; position: absolute;" src="">-->
-			<!--/*Display canvas*/
-			<canvas id="displayCanvas" style="object-fit: contain; top: 0; left: 0; position: absolute; width: 100vw; height: 100vh;" width="2048" height="2048"></canvas>-->
 
 			/*Gradient canvas*/
 			<canvas id="myCanvasGrad" style="object-fit: contain; top: 0; left: 0; position: absolute;"></canvas> 
@@ -242,11 +238,6 @@
 			ctxBlack.fillRect(0, 0, 4096, 4096);
 			/*Copy design canvas onto black */
 			ctxBlack.drawImage(canvasDesign, 0, 0, 4096, 4096, 0, 0, 2048, 2048);
-				
-			/*var displayCanvas = document.getElementById('displayCanvas');
-			displayCanvas.getContext('2d').scale(2,2);
-			var ctxdisplayCanvas = displayCanvas.getContext("2d");
-			ctxdisplayCanvas.drawImage(canvasGrad, 0, 0, 4096, 4096, 0, 0, 1024, 1024);	*/		
 			
 			
 /*onclick refresh event*/
@@ -254,16 +245,13 @@
 			document.getElementById("myCanvasGrad").addEventListener('click', event => {
 			  if (event.detail === 1) {
 				timer = setTimeout(() => {
-					/* Release gradient canvases */
-					//releaseCanvas(canvasDesign);
-					//releaseCanvas(canvasGrad);
-					//releaseCanvas(canvasBlack);
+					
 					
 					var canvases = document.getElementsByTagName("canvas");
 					var canvasesList = Array.prototype.slice.call(canvases);
             		canvasesList.forEach(releaseCanvas);
-					setTimeout("location.reload();", 1000);
-					
+					//setTimeout("location.reload();", 1000);
+					location.reload();
 				}, 200)
 			  }
 			});
