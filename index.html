@@ -242,9 +242,9 @@
 			  if (event.detail === 1) {
 				timer = setTimeout(() => {
 					/*Release every canvas*/
-					var canvases = document.getElementsByTagName("canvas");
-					var canvasesList = Array.prototype.slice.call(canvases);
-            		canvasesList.forEach(releaseCanvas);
+					//var canvases = document.getElementsByTagName("canvas");
+					//var canvasesList = Array.prototype.slice.call(canvases);
+            		//canvasesList.forEach(releaseCanvas);
 					
 					console.log("released by click");
 					/*Delay reload by 1 sec to make sure release canvas runs*/
@@ -259,12 +259,14 @@
 			})
 			
 /*Run release even when they refresh not with click (F5, refresh button, closing page)*/
-			addEventListener('beforeunload', (event) => {
+			window.addEventListener('beforeunload', (event) => {
 				/*Release every canvas*/
 					var canvases = document.getElementsByTagName("canvas");
 					var canvasesList = Array.prototype.slice.call(canvases);
             		canvasesList.forEach(releaseCanvas);
 				
+					console.log(canvasDesign.style.width);
+					console.log(canvasGrad.style.width);
 					console.log(canvasBlack.style.width);
 					console.log("released before refresh");
 			});
