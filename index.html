@@ -85,15 +85,14 @@
 			}
 
 			
-		button {
-			margin-right: 10px;
-			padding: 5px;
-		}
+			button {
+				margin-right: 10px;
+				padding: 5px;
+			}
 		
-		#myCanvasDesign, #myCanvasBlack {
-			display: none;
-			
-		}
+			#myCanvasDesign, #myCanvasBlack {
+				display: none;
+			}
 		
 
       </style>
@@ -102,7 +101,6 @@
     <body>
 		
 		<div style="text-align:center">
-
 
 			/*Gradient canvas*/
 			<canvas id="myCanvasGrad" style="object-fit: contain; top: 0; left: 0; position: absolute;"></canvas> 
@@ -138,13 +136,11 @@
 			<img class="modal-content" id="imgBlack" style="object-fit: contain; width: 100vw; height: 80vh;" width="4096" height="4096">
 		</div>
 		
-		
-
 
     	<script type="text/javascript">
 
 
-/*Get random number*/		
+			/*Get random number*/		
 			function getRandomInt(min, max) {
 				return Math.floor(Math.random() * (max - min + 1) + min);
 			}
@@ -152,11 +148,12 @@
 			function getRandomDec(min,max) {
 				return Math.random() * (max - min) + min;
 			}
-
+			/*Get random color*/
 			function randomColor() {
 				return '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
 			}
 			
+			/*Release canvas from memory*/
 			function releaseCanvas(canvas) {
 				canvas.width = 1;
 				canvas.style.width = "1vw";
@@ -225,7 +222,7 @@
 			ctxGrad.fillRect(0, 0, 4096, 4096);
 			ctxGrad.drawImage(canvasDesign, 0, 0, 4096, 4096, 0, 0, 2048, 2048);
 
-/* create black canvas */
+/*canvas - black background*/
 			var canvasBlack = document.getElementById('myCanvasBlack');
 			canvasBlack.width =4096;
 			canvasBlack.height = 4096;
@@ -238,18 +235,19 @@
 			ctxBlack.fillRect(0, 0, 4096, 4096);
 			/*Copy design canvas onto black */
 			ctxBlack.drawImage(canvasDesign, 0, 0, 4096, 4096, 0, 0, 2048, 2048);
-			
-			
+							
 /*onclick refresh event*/
 			let timer;
 			document.getElementById("myCanvasGrad").addEventListener('click', event => {
 			  if (event.detail === 1) {
 				timer = setTimeout(() => {
-					
-					
+					/*Release every canvas*/
 					var canvases = document.getElementsByTagName("canvas");
 					var canvasesList = Array.prototype.slice.call(canvases);
             		canvasesList.forEach(releaseCanvas);
+					
+					console.log("released by click");
+					/*Delay reload by 1 sec to make sure release canvas runs*/
 					//setTimeout("location.reload();", 1000);
 					location.reload();
 				}, 200)
@@ -259,8 +257,19 @@
 			  clearTimeout(timer);
 				modalUp();
 			})
+			
+/*Run release even when they refresh not with click (F5, refresh button, closing page)*/
+			addEventListener('beforeunload', (event) => {
+				/*Release every canvas*/
+					var canvases = document.getElementsByTagName("canvas");
+					var canvasesList = Array.prototype.slice.call(canvases);
+            		canvasesList.forEach(releaseCanvas);
+				
+					console.log(canvasBlack.style.width);
+					console.log("released before refresh");
+			});
 
-			/*save image on mobile*/
+			/*save images on mobile*/
  			function modalUp() {
 				
 				
