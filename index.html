@@ -140,7 +140,7 @@
 	  		grdSF.addColorStop(Math.random(), "#f7f7f7");
 			var flakes = getRandomInt(30, 50);
       		for (let i = 0; i < flakes; i++) {
-        		snowflakes();
+        		snowflakes(getRandomInt(0, 4096), getRandomInt(0, 4096), 12, 20, 10);
       		}
 			
 			//clouds
@@ -220,7 +220,7 @@
               	ctxBG.stroke();
             }
 			
-			function snowflakes() {
+			/*function snowflakes() {
 				var centerX = getRandomInt(0, 4096);
         		var centerY = getRandomInt(0, 4096);
         		ctxFinal.moveTo(centerX, centerY);
@@ -239,7 +239,39 @@
         		ctxFinal.strokeStyle = grdSF;
         		ctxFinal.lineWidth = 0.5;
         		ctxFinal.stroke();
-      		}
+      		}*/
+			
+			function snowflakes(cx, cy, spikes, outerRadius, innerRadius) {
+				var rot = Math.PI / 2 * 3;
+				var x = cx;
+				var y = cy;
+				var step = Math.PI / spikes;
+
+				ctxFinal.strokeSyle = "#000";
+				ctxFinal.beginPath();
+				ctxFinal.moveTo(cx, cy - outerRadius)
+				for (i = 0; i < spikes; i++) {
+					x = cx + Math.cos(rot) * outerRadius;
+					y = cy + Math.sin(rot) * outerRadius;
+					ctxFinal.lineTo(x, y)
+					rot += step
+
+					x = cx + Math.cos(rot) * innerRadius;
+					y = cy + Math.sin(rot) * innerRadius;
+					ctxFinal.lineTo(x, y)
+					rot += step
+				}
+				ctxFinal.lineTo(cx, cy - outerRadius)
+				ctxFinal.closePath();
+				ctxFinal.lineWidth=5;
+				ctxFinal.strokeStyle='white';
+				ctxFinal.stroke();
+				ctxFinal.fillStyle='skyblue';
+				ctxFinal.fill();
+				
+			}
+			
+			
 			
 			canvasBG.addEventListener(
 				"click",
