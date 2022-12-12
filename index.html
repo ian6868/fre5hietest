@@ -34,16 +34,23 @@
 
 
 	  <img id="myImg" class='img' alt="F5xTurtles">
-    <canvas id="myCanvas" style="object-fit: contain; z-index: 1; top: 0; left: 0; position: absolute;"></canvas>/*bg*/
-    <canvas id="myCanvas2" style="object-fit: contain; z-index: 2; top: 0; left: 0; position: absolute;"></canvas>/*turtle*/
-    <canvas id="myCanvas3" style="object-fit: contain; z-index: 3; top: 0; left: 0; position: absolute;"></canvas>/*flakes*/
-    <canvas id="myCanvas4" style="object-fit: contain; z-index: 0; top: 0; left: 0; position: absolute;"></canvas>/*moon*/
-    <canvas id="clouds" style="object-fit: contain; z-index: 4; top: 0; left: 0; position: absolute;"></canvas>/*clouds*/
-
+    <canvas id="myCanvas"></canvas>
+    <canvas id="rain" style ="object-fit: contain; z-index: 0; top: 0; left: 0; position: absolute;"></canvas>
+    <canvas id="myCanvas2" style="object-fit: contain; z-index: -2; top: 0; left: 0; position: absolute;"></canvas>
+    <canvas id="imgCan" style="z-index: -1;"></canvas>
 
   </div>
 
     <script type="text/javascript">
+		
+		function releaseCanvas(canvas) {
+				canvas.width = 1;
+				canvas.style.width = "1vw";
+				canvas.height = 1;
+				canvas.style.height = "1vh";
+				const ctx = canvas.getContext('2d');
+				ctx && ctx.clearRect(0, 0, 1, 1);
+			}
 
         function getRandomDec(min,max) {
         return Math.random() * (max - min) + min;
@@ -53,36 +60,26 @@
         	return Math.floor(Math.random() * (max - min + 1) + min);
         }
 
-              var fvert1 = getRandomInt(300,2900);
-              var fhor1 = getRandomInt(1100,4000);
-              var fhor2 = getRandomInt(100,3050);
-              var dSize3 = getRandomInt(3000, 4000);
-              var dSize2 = getRandomInt(140000, 160000);
-              var dSize = getRandomInt(6000, 8000);
-              var shdX = getRandomInt(0, 0);
-              var shdY = getRandomInt(0, 0);
-
-
-              var f2 = 85.17195340862722;//flake
-              var f3 = 160.01001706698776;//flake
-              var f4 = 191.40868685819183;
-              var dArray2 = [f2, f3, f4]
-              var dIndex2 = getRandomInt(0, 2);
-              var design2 = dArray2[dIndex2];
-              var increment2 = design2;
-
+              var fvert1 = getRandomInt(2050,3350);
+              var fhor1 = getRandomInt(1200,4050);
+              var fhor2 = getRandomInt(50,2950);
+              var dSize = getRandomInt(50000, 65000);
+              var shdX = getRandomInt(-20, 20);
+              var shdY = getRandomInt(-20, 20);
 
 
               var img = document.getElementById('myImg');
               img.width = 4096;
               img.height = 4096;
-			        img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAAECBAMAAAAyVkcHAAAAIVBMVEXkO0QAAAD+8FDCsgBHcEwSEAD/j5UAAAAXFgcAAAD///9du4wqAAAACXRSTlPm5ubmAPzm/PyyRzEfAAABlUlEQVR42u3d0W3CMAAFQFboCqzQFVihK3SFrsAKrNApmwhZGNdxHOImTnVPQiAhc/54IuCYcLrslBO4O/gtEzAYfBx4RE6ZrMHBYPB28AP9HNIOB4PBYDAYXAfPoWtwMBgMBoPBS+FywGAwGAwGg8FgcO0CWzsUDAaDwWDwMriE23IDBh8HzuGb7kQFg8FN4Bhfi4LB4P3ggF8aBAwGg8H7wbU/ugODwXvA9xcoweNz50xyY8D9wePQ+y1MAPzf4AcbplCHTuHgHuH4AFAu1m0I+DhwelD/GlIu1u32PeQ3/YyD+4Vz1UqLdYfLBQPvDwfkPcnHkHgCabGeM10w8FHhcrnA/cA5MIbD4zCBZuUCHwB+fNDbuFzgBXAJTeGAnxcEDAaDwWBwGZ5DYzj+or4UBYPB+8MpVoMXF8rBYHATOAyO73MZT4bk0Cn8es0vroP7haeKBe4bzqG1G4nmJlrcEAoGg5vC8QmsGjR+M3n5YjNgMLgZXLuJLAVfRcFg8PZwemBv8QdiYDB4W/gvAgaDwS/nB8M/7bm7KB9uAAAAAElFTkSuQmCC';
-
+              img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQwAAACkBAMAAACQmg2XAAAAG1BMVEUAAAAYVjYvrGtHcEz8AEMAAAD+rjT/////dXUBpp31AAAABHRSTlPm5uYA5cyABgAAAXJJREFUeNrt2+ENgyAQhmFX6ApdwRVcwRW6Qlfo2BUt4aAcgm2anrzfHysNd88PQ4zoMP5FBhgwYMDYMi15LJlEYMCAAaOFoFJgwIDRKWNqCgwYMGBEVZdc18xrrknc/zDOxRgy0QkOcV/zDkkoMDpjeEQeAuMcDN/ykonkyMvTM+Y5v4RFFBgwYJyKobXXODBg7DPKtz0wbDNqCZISN9IvTxi9M8qBAQMGDBh9MFoI8rFLMwEGDBjdMdLWNZSGbR0YMGAYYfhS8qglR9Ao2lYQDBgwLDLcgzKdsP+6yDtjf+s49IQBA4Y1hjt1Lwtuw+n2bg1BLmWlOTEh9IQBA4ZVhh+uS9jQOxLZDwYMGPYYY4Zye0WOx3HL1P4HD6Vayt0XjL9l+InyOB1MuRYMGwxP2bJNiH8djV5LedoDAwYMQ4yASZeco5/ZVdeCYYIRJn+KaKgFwwhDLmSfIaprwTDDCJPHL6SiFgxDjB8HBgwYhhhPqh4WqdmwOaIAAAAASUVORK5CYII=';
 
 
         var ang1 = 0.46289330053579913;
         var ang2 = 0.0008996859405740301;
         var ang3 = 0.0030492461097504056;
+        var r1 = getRandomDec(0.1, 0.29);console.log(r1); //0.28632333536970855, 0.9945030443157901, 0.20282799201856094
+        var r2 = getRandomDec(0.98, 1);console.log(r2);
+        var r3 = getRandomDec(0.19, 0.21);console.log(r3);
 
 
       canvas = document.getElementById('myCanvas');
@@ -92,190 +89,164 @@
       canvas.style.height = '100vh';
       canvas.getContext('2d').scale(2,2);
 
-      var c3 = document.getElementById("myCanvas3");
-      var ctx3 = c3.getContext("2d");
-      var ctx4 = c3.getContext("2d");
-      c3.width =4096;
-      c3.height = 4096;
-      c3.style.width = "100vw";
-      c3.style.height = '100vh';
-
-      var c4 = document.getElementById("myCanvas4");
-      var ctx4 = c4.getContext("2d");
-      c4.width =4096;
-      c4.height = 4096;
-      c4.style.width = "100vw";
-      c4.style.height = '100vh';
-
-
-      var c2 = document.getElementById("myCanvas2");
-      var ctx2 = c2.getContext("2d");
-      c2.width =4096;
-      c2.height = 4096;
-      c2.style.width = "100vw";
-      c2.style.height = '100vh';
-
-      var clouds = document.getElementById('clouds');
-      var cloudsCTX = clouds.getContext('2d')
-      clouds.width = 4096;
-      clouds.height = 4096;
-      clouds.style.width = "100vw";
-      clouds.style.height = '100vh';
-
-
       var ctx = canvas.getContext("2d");
-      var grd = cloudsCTX.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
+      var grd = ctx.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
+
+      grd.addColorStop(Math.random(), "#dbdbe1");
+      grd.addColorStop(Math.random(), "#323f50");
+      grd.addColorStop(Math.random(), "#e2edf3");
+
+      var ctx2 = canvas.getContext("2d");
       var grd2 = ctx.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
-      var grd3 = ctx.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
 
-      grd.addColorStop(Math.random(), "#9da5ac");
-      grd.addColorStop(Math.random(), "transparent");
-      grd.addColorStop(Math.random(), "#6a737a");
-      grd.addColorStop(Math.random(), "transparent");
-      grd.addColorStop(Math.random(), "#69696c");
-      grd.addColorStop(Math.random(), "transparent");
-      grd.addColorStop(Math.random(), "#747788");
-      grd.addColorStop(Math.random(), "transparent");
-      grd.addColorStop(Math.random(), "#6a737a");
-      cloudsCTX.globalAlpha = 0.8;
-      cloudsCTX.fillStyle = grd;
-  	  cloudsCTX.fillRect(0, 0, 4096, 2600);
+      grd2.addColorStop(Math.random(), "#8a8b95");
+      //grd2.addColorStop(Math.random(), "#edeef2");
+      grd2.addColorStop(Math.random(), "#83808a");
+      grd2.addColorStop(Math.random(), "#797782");
+      grd2.addColorStop(Math.random(), "#5e5c69");
+      //grd2.addColorStop(Math.random(), "#444445");
 
 
-      grd2.addColorStop(Math.random(), "#f7f7f7");
-      grd2.addColorStop(Math.random(), "#afa177");
-      grd2.addColorStop(Math.random(), "#706036");
-      grd2.addColorStop(Math.random(), "#ffffff");
-      grd2.addColorStop(Math.random(), "#6d6c35");
+      canvas3 = document.getElementById('rain');
+      canvas3.width =4096;
+      canvas3.height = 4096;
+      canvas3.style.width = "100vw";
+      canvas3.style.height = '100vh';
+      canvas3.getContext('2d').scale(2,2);
 
-      ctx.fillStyle = grd2;
-      ctx.fillRect(0,1300, 2048, 2048);
+      var ctx3 = canvas3.getContext("2d");
+      var grd3 = ctx3.createLinearGradient(0, Math.floor(r1 * 4096), Math.floor(r2 * 4096), Math.floor(r3 * 4096));
+
+      //grd3.addColorStop(Math.random(), "transparent");
+      //grd3.addColorStop(Math.random(), "#222222");
+      grd3.addColorStop(Math.random(), "transparent");
+      grd3.addColorStop(Math.random(), "#666666");
+      grd3.addColorStop(Math.random(), "transparent");
+      grd3.addColorStop(Math.random(), "transparent");
+      grd3.addColorStop(Math.random(), "#888888");
+      grd3.addColorStop(Math.random(), "transparent");
+      grd3.addColorStop(Math.random(), "#444444");
+      grd3.addColorStop(Math.random(), "transparent");
+      grd3.addColorStop(Math.random(), "transparent");
+      grd3.addColorStop(Math.random(), "#666666");
+      grd3.addColorStop(Math.random(), "transparent");
+      grd3.addColorStop(Math.random(), "#888888");
+      grd3.addColorStop(Math.random(), "transparent");
+
+
+
+	  ctx.fillStyle = grd;
+	  ctx.fillRect(0, 0, 2048, 1300);
+    ctx2.fillStyle = grd2;
+    ctx2.fillRect(0,1300, 2048, 2048);
+    ctx3.globalAlpha = 0.5;
+    ctx3.fillStyle = grd3;
+	  ctx3.fillRect(0, 0, 4096, 4096);
+
 
 	  var grd1 = ctx.createLinearGradient(0,Math.floor(ang1 * 4096),Math.floor(ang2 * 4096),Math.floor(ang3 * 4096));
-    grd1.addColorStop(Math.random(), "#f1f6f7");
-    grd1.addColorStop(Math.random(), "#dde4e8");
-	  grd1.addColorStop(Math.random(), "#f7f7f7");
-
-    var grd4 = ctx4.createLinearGradient(0,Math.floor(ang1 * 4096),Math.floor(ang2 * 4096),Math.floor(ang3 * 4096));
-	  grd4.addColorStop(Math.random(), "#f7f7f7");
-    grd4.addColorStop(Math.random(), "#f6f491");
-    grd4.addColorStop(Math.random(), "#f6e882");
-	  grd4.addColorStop(Math.random(), "#f4c75d");
-
-    var grd5 = ctx4.createLinearGradient(0,Math.floor(ang1 * 4096),Math.floor(ang2 * 4096),Math.floor(ang3 * 4096));
-	  grd5.addColorStop(Math.random(), "#bed2e6");
-    grd5.addColorStop(Math.random(), "#0b8ce0");
-    grd5.addColorStop(Math.random(), "#6bbbf2");
-	  grd5.addColorStop(Math.random(), "#1270c1");
+	  //grd1.addColorStop(Math.random(), "#f6f7f6");
+    grd1.addColorStop(Math.random(), "#f7eec8");
+    grd1.addColorStop(Math.random(), "#f7f493");
 
 
-    ctx4.fillStyle = grd5;
-    ctx4.fillRect(0, 0, 4096, 3072);
+        var c=document.getElementById("myCanvas");
+        var ctx=c.getContext("2d");
+        var centerX = getRandomInt(400, 1750);
+        var centerY = getRandomInt(350, 600);
+        ctx.moveTo(centerX, centerY);
 
 
-
-
-
-  window.onload = function() {
-  const flipper = getRandomInt(0,1);
-  switch (flipper) {
-    case 0:
-
-    var img = document.getElementById("myImg");
-    ctx2.save();
-    ctx2.scale(-1,1);
-    ctx2.drawImage(img, fhor1 * -1, fvert1, 1025, 1125);
-    ctx2.restore();
-
-
-    break;
-    default:
-
-    var img = document.getElementById("myImg");
-    ctx2.drawImage(img, fhor2, fvert1, 1025, 1125);
-  }
-  }
-
-
-//flakes
-function spiral() {
-
-        var centerX = getRandomInt(0, 4096);
-        var centerY = getRandomInt(0, 4096);
-        ctx3.moveTo(centerX, centerY);
-        var gap = Math.floor(Math.random() * 1) + .006;
-        var theta = increment2;
+        var gap = Math.floor(Math.random() * 1) + .0079;
+    		var d2 = 72.32374852430411;
+    		var d3 = 134.54777201720935;
+    		var d5 = 84.92411676611502;
+    		var d6 = 192.9465220708107;
+    		var d7 = 135.2208604006022;
+    		var d8 = 73.231322369623;
+    		var dArray = [d2, d3, d5, d6, d7, d8]
+    		var dIndex = getRandomInt(0, 5);
+    		var design = dArray[dIndex];
+    		var increment = design;
+        var theta = increment;
         while( theta < Math.floor(Math.random() * 50.090909095) + dSize) {
            var newX = centerX + theta * Math.cos(theta) * gap;
            var newY = centerY + theta * Math.sin(theta) * gap;
-           ctx3.lineTo(newX, newY);
-           theta = theta + increment2;
+           ctx.lineTo(newX, newY);
+           theta = theta + increment;
                 }
-        ctx3.shadowColor = "#222222";
-        ctx3.shadowOffsetX = shdX;
-        ctx3.shadowOffsetY = shdY;
-        ctx3.shadowBlur = 1;
-        ctx3.strokeStyle = grd1;
-        ctx3.lineWidth = 0.5;
-        ctx3.stroke();
+        ctx.shadowColor = "#111111";
+        ctx.shadowOffsetX = shdX;
+        ctx.shadowOffsetY = shdY;
+        ctx.shadowBlur = 20;
+        ctx.strokeStyle = grd1;
+        ctx.lineWidth = 3;
+        ctx.globalAlpha = 0.7;
+        ctx.stroke();
+
+
+		    var c2 = document.getElementById("myCanvas2");
+        var ctx2 = c2.getContext("2d");
+		    c2.width =4096;
+      	c2.height = 4096;
+      	c2.style.width = "100vw";
+      	c2.style.height = '100vh';
+
+
+        ctx2.drawImage(c, 0, 0);
+		//flipAndCopy();
+        //ctx2.drawImage(canvas3, 0, 0);
+    		document.getElementById("myCanvas").style.display = "none";
+        document.getElementById("rain").style.display = "none";
+
+        var c2 = document.getElementById("myCanvas2");
+        var ctx2 = c2.getContext("2d");
+
+
+      window.onload = function() {
+  			const flipper = getRandomInt(0,1);
+  			switch (flipper) {
+			  case 0:
+
+        var img = document.getElementById("myImg");
+        ctx2.save();
+			  ctx2.scale(-1,1);
+			  ctx2.drawImage(img, fhor1 * -1, fvert1, 1100, 725);	
+			  ctx2.restore();
+ctx2.drawImage(canvas3, 0, 0);
+
+			  break;
+			  default:
+
+			  var img = document.getElementById("myImg");
+        ctx2.drawImage(img, fhor2, fvert1, 1100, 725);
+ctx2.drawImage(canvas3, 0, 0);
       }
-
-//sun
-      function spiral2() {
-
-              var centerX = getRandomInt(100, 3996);
-              var centerY = getRandomInt(100, 925);
-              ctx4.moveTo(centerX, centerY);
-              var gap = Math.floor(Math.random() * 1) + .006;
-              var d2 = 59.51211822206524;
-              var d3 = 122.19139188997966;
-              var d5 = 235.75276882101318;
-              var d6 = 404.95056737323205;
-              var d7 = 116.82480140130096;
-              var d8 = 298.36096218950416;
-              var d9 = 179.0879286460222;
-              var d10 = 128.77220761038356;
-              var dArray = [d2, d3, d5, d6, d7, d8, d9, d10]
-              var dIndex = getRandomInt(0, 7);
-              var design = dArray[dIndex];
-              var increment = design;
-              var theta = increment;
-              while( theta < Math.floor(Math.random() * 50.090909095) + dSize2) {
-                 var newX = centerX + theta * Math.cos(theta) * gap;
-                 var newY = centerY + theta * Math.sin(theta) * gap;
-                 ctx4.lineTo(newX, newY);
-                 theta = theta + increment;
-                      }
-              ctx4.shadowColor = "#222222";
-              ctx4.shadowOffsetX = shdX;
-              ctx4.shadowOffsetY = shdY;
-              ctx4.shadowBlur = 2;
-              ctx4.strokeStyle = grd4;
-              ctx4.lineWidth = 4;
-              ctx4.stroke();
-            }
+    }
 
 
-      var flakes = getRandomInt(30, 50);
-      for (let i = 0; i < flakes; i++) {
-        spiral();
-      }
-  spiral2();
+    c2.addEventListener(
+      "click",
+      function (event) {
 
+        if (!event.target.matches("myCanvas2")) {
+			var canvases = document.getElementsByTagName("canvas");
+			var canvasesList = Array.prototype.slice.call(canvases);
+            canvasesList.forEach(releaseCanvas);
+          location.reload();
+        }
 
-  clouds.addEventListener(
-    "click",
-    function (event) {
-
-      if (!event.target.matches(".clouds")) {
-        location.reload();
-      }
-
-    },
-    false
-  );
-
-
-      </script>
+      },
+      false
+    );
+		
+		/*Run release even when they refresh not with click (F5, refresh button, closing page)*/
+			window.addEventListener('pagehide', (event) => {
+				/*Release every canvas*/
+					var canvases = document.getElementsByTagName("canvas");
+					var canvasesList = Array.prototype.slice.call(canvases);
+            		canvasesList.forEach(releaseCanvas);
+			});
+    </script>
         </body>
             </html>
