@@ -1,43 +1,50 @@
-<!DOCTYPE HTML>
-<html>
-	<head>
-    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-      	<style>
-      		body, html {
-				padding:0 !important;
-				margin: 0 !important;
-				margin-bottom: 0px;
-				padding-bottom: 0px;
-		    }
+  <!DOCTYPE HTML>
+    <html>
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+      body, html {
+        padding:0 !important;
+        margin: 0 !important;
+        margin-bottom: 0px;
+        padding-bottom: 0px;
+      }
 
-		  	* {
-				padding: 0;
-				margin: 0;
-		  	}
-        	body  { 
-				background-color: black; overflow: hidden;
-			}
-			
-      		.img {
-				position: absolute;
-				object-fit: contain;
-				display: none;
-      		}
+      * {
+        padding: 0;
+        margin: 0;
+      }
+        body  { background-color: black; overflow: hidden;}
+      .img{
+        position: absolute;
+        object-fit: contain;
+        display: none;
+
+
+      }
 
         </style>
-	</head>
-	<body>
-		<div style="text-align:center; position: relative;">
-	    	<img id="myImg" class='img' alt="F5xTurtles">
-			<canvas id="myCanvasFinal" style="object-fit: contain; z-index: 0; top: 0; left: 0; position: absolute;"></canvas>/*final*/
-    		<canvas id="myCanvasBG" style="object-fit: contain; z-index: 1; top: 0; left: 0; position: absolute;"></canvas>/*bg*/
-			
-			
-    
-		</div>
+      </head>
+        <body>
+
+
+
+
+  <div style="text-align:center; position: relative;">
+
+
+	  <img id="myImg" class='img' alt="F5xTurtles">
+	  
+    <canvas id="myCanvas"></canvas>
+    <canvas id="water" style ="object-fit: contain; z-index: 0;"></canvas>
+    <canvas id="myCanvas2" style="object-fit: contain; z-index: -1; top: 0; left: 0; position: absolute;"></canvas>
+
+
+  </div>
+
+    <script type="text/javascript">
 		
-		<script type="text/javascript">
-			function releaseCanvas(canvas) {
+		function releaseCanvas(canvas) {
 				canvas.width = 1;
 				canvas.style.width = "1vw";
 				canvas.height = 1;
@@ -45,231 +52,192 @@
 				const ctx = canvas.getContext('2d');
 				ctx && ctx.clearRect(0, 0, 1, 1);
 			}
-			
-			function getRandomDec(min,max) {
-				return Math.random() * (max - min) + min;
-			}
 
-			function getRandomInt(min, max) {
-				return Math.floor(Math.random() * (max - min + 1) + min);
-			}
-			
-			var fvert1 = getRandomInt(300,2900);
-            var fhor1 = getRandomInt(1100,4000);
-            var fhor2 = getRandomInt(100,3050);
-            var dSize3 = getRandomInt(3000, 4000);
-            var dSize2 = getRandomInt(140000, 160000);
-            var dSize = getRandomInt(6000, 8000);
-            var shdX = getRandomInt(0, 0);
-            var shdY = getRandomInt(0, 0);
+        function getRandomDec(min,max) {
+        return Math.random() * (max - min) + min;
+        }
 
-            var f2 = 85.17195340862722;//flake
-            var f3 = 160.01001706698776;//flake
-            var f4 = 191.40868685819183;
-            var dArray2 = [f2, f3, f4]
-            var dIndex2 = getRandomInt(0, 2);
-            var design2 = dArray2[dIndex2];
-            var increment2 = design2;
+      	function getRandomInt(min, max) {
+        	return Math.floor(Math.random() * (max - min + 1) + min);
+        }
 
-            var img = document.getElementById('myImg');
-            img.width = 4096;
-            img.height = 4096;
-			
-			img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAAECBAMAAAAyVkcHAAAAIVBMVEXkO0QAAAD+8FDCsgBHcEwSEAD/j5UAAAAXFgcAAAD///9du4wqAAAACXRSTlPm5ubmAPzm/PyyRzEfAAABlUlEQVR42u3d0W3CMAAFQFboCqzQFVihK3SFrsAKrNApmwhZGNdxHOImTnVPQiAhc/54IuCYcLrslBO4O/gtEzAYfBx4RE6ZrMHBYPB28AP9HNIOB4PBYDAYXAfPoWtwMBgMBoPBS+FywGAwGAwGg8FgcO0CWzsUDAaDwWDwMriE23IDBh8HzuGb7kQFg8FN4Bhfi4LB4P3ggF8aBAwGg8H7wbU/ugODwXvA9xcoweNz50xyY8D9wePQ+y1MAPzf4AcbplCHTuHgHuH4AFAu1m0I+DhwelD/GlIu1u32PeQ3/YyD+4Vz1UqLdYfLBQPvDwfkPcnHkHgCabGeM10w8FHhcrnA/cA5MIbD4zCBZuUCHwB+fNDbuFzgBXAJTeGAnxcEDAaDwWBwGZ5DYzj+or4UBYPB+8MpVoMXF8rBYHATOAyO73MZT4bk0Cn8es0vroP7haeKBe4bzqG1G4nmJlrcEAoGg5vC8QmsGjR+M3n5YjNgMLgZXLuJLAVfRcFg8PZwemBv8QdiYDB4W/gvAgaDwS/nB8M/7bm7KB9uAAAAAElFTkSuQmCC';
-			
-			var ang1 = 0.46289330053579913;
-        	var ang2 = 0.0008996859405740301;
-        	var ang3 = 0.0030492461097504056;
-			
-			//init - bg canvasBG 
-			canvasBG = document.getElementById('myCanvasBG');
-      		canvasBG.width =4096;
-      		canvasBG.height = 4096;
-      		canvasBG.style.width = "100vw";
-      		canvasBG.style.height = '100vh';
-      		//canvasBG.getContext('2d').scale(2,2);
-			var ctxBG = canvasBG.getContext("2d");
-			
-			//init - final canvas 
-			canvasFinal = document.getElementById('myCanvasFinal');
-      		canvasFinal.width =4096;
-      		canvasFinal.height = 4096;
-      		canvasFinal.style.width = "100vw";
-      		canvasFinal.style.height = '100vh';
-      		//canvasFinal.getContext('2d').scale(2,2);
-			var ctxFinal = canvasFinal.getContext("2d");
-			
-			//sky
-			var grdSky = ctxBG.createLinearGradient(2048, 0, 2048, 4096);
-	  		grdSky.addColorStop(Math.random(), "#bed2e6");
-    		grdSky.addColorStop(Math.random(), "#0b8ce0");
-    		grdSky.addColorStop(Math.random(), "#6bbbf2");
-	  		grdSky.addColorStop(Math.random(), "#1270c1");
+        var fvert1 = getRandomInt(2200,3000);
+        var fhor1 = getRandomInt(1100,4000);
+        var fhor2 = getRandomInt(50,2950);
+        var dSize = getRandomInt(70000, 85000);
+        var shdX = getRandomInt(-10, 10);
+        var shdY = getRandomInt(-10, 10);
 
-    		ctxBG.fillStyle = grdSky;
-    		ctxBG.fillRect(0, 0, 4096, 2700);
-			
-			//ground
-			var grdGround = ctxBG.createLinearGradient(2048, 0, 2048, 4096);
-			grdGround.addColorStop(Math.random(), "#f7f7f7");
-      		grdGround.addColorStop(Math.random(), "#afa177");
-      		grdGround.addColorStop(Math.random(), "#706036");
-      		grdGround.addColorStop(Math.random(), "#ffffff");
-      		grdGround.addColorStop(Math.random(), "#6d6c35");
-      		ctxBG.fillStyle = grdGround;
-      		ctxBG.fillRect(0,2600, 4096, 1496);
-			
-			//sun
-			var grdSun = ctxBG.createLinearGradient(0,Math.floor(ang1 * 4096),Math.floor(ang2 * 4096),Math.floor(ang3 * 4096));
-	  		grdSun.addColorStop(Math.random(), "#f7f7f7");
-    		grdSun.addColorStop(Math.random(), "#f6f491");
-    		grdSun.addColorStop(Math.random(), "#f6e882");
-	  		grdSun.addColorStop(Math.random(), "#f4c75d");
-			
-			//draw sun
-			drawSun();
-			
-			//draw turtle on BG canvas
-			flipTurtle();
-			//ctxBG.drawImage(img, fhor2, fvert1, 1025, 1125);
-			
-			//draw snowflakes
-			var grdSF = ctxFinal.createLinearGradient(0,Math.floor(ang1 * 4096),Math.floor(ang2 * 4096),Math.floor(ang3 * 4096));
-    		grdSF.addColorStop(Math.random(), "#f1f6f7");
-    		grdSF.addColorStop(Math.random(), "#dde4e8");
-	  		grdSF.addColorStop(Math.random(), "#f7f7f7");
-			var flakes = getRandomInt(30, 50);
-      		for (let i = 0; i < flakes; i++) {
-        		snowflakes();
-      		}
-			
-			//clouds
-			var grdClouds = ctxFinal.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
-			grdClouds.addColorStop(Math.random(), "#9da5ac");
-      		grdClouds.addColorStop(Math.random(), "transparent");
-      		grdClouds.addColorStop(Math.random(), "#6a737a");
-      		grdClouds.addColorStop(Math.random(), "transparent");
-      		grdClouds.addColorStop(Math.random(), "#69696c");
-      		grdClouds.addColorStop(Math.random(), "transparent");
-      		grdClouds.addColorStop(Math.random(), "#747788");
-      		grdClouds.addColorStop(Math.random(), "transparent");
-      		grdClouds.addColorStop(Math.random(), "#6a737a");
-      		ctxFinal.globalAlpha = 0.2;
-      		ctxFinal.fillStyle = grdClouds;
-  	  		ctxFinal.fillRect(0, 0, 4096, 2600);
-			
-			//copy final canvas onto BG canvas
-			ctxBG.drawImage(canvasFinal, 0, 0);
-		    document.getElementById('myCanvasFinal').style.display= "none";
-			
-  			
-			
-			
-			
-			
-			
-			 function flipTurtle() {
-			 	const flipper = getRandomInt(0,1);
-				var img = document.getElementById("myImg");
-			  	switch (flipper) {
-					case 0:
-					ctxBG.save();
-					ctxBG.scale(-1,1);
-					ctxBG.drawImage(img, fhor1 * -1, fvert1, 1025, 1125);
-					ctxBG.restore();
-					break;
-					default:
-					ctxBG.drawImage(img, fhor2, fvert1, 1025, 1125);
-			  	}
-			  }
-			
-			function drawSun() {
-            	var centerX = getRandomInt(100, 3996);
-              	var centerY = getRandomInt(100, 925);
-              	ctxBG.moveTo(centerX, centerY);
-              	var gap = Math.floor(Math.random() * 1) + .006;
-              	var d2 = 59.51211822206524;
-              	var d3 = 122.19139188997966;
-              	var d5 = 235.75276882101318;
-              	var d6 = 404.95056737323205;
-              	var d7 = 116.82480140130096;
-              	var d8 = 298.36096218950416;
-              	var d9 = 179.0879286460222;
-              	var d10 = 128.77220761038356;
-              	var dArray = [d2, d3, d5, d6, d7, d8, d9, d10]
-              	var dIndex = getRandomInt(0, 7);
-              	var design = dArray[dIndex];
-              	var increment = design;
-              	var theta = increment;
-              	while( theta < Math.floor(Math.random() * 50.090909095) + dSize2) {
-                	var newX = centerX + theta * Math.cos(theta) * gap;
-                 	var newY = centerY + theta * Math.sin(theta) * gap;
-                 	ctxBG.lineTo(newX, newY);
-                 	theta = theta + increment;
+
+              var img = document.getElementById('myImg');
+              img.width = 4096;
+              img.height = 4096;
+			        img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPgAAACMBAMAAACjTHnvAAAAJFBMVEXnAAAAAABHcEz/am//swAAbf8AAAAaCwuFuv////8aGhoaEgA1Tsb6AAAAA3RSTlPm5gBfPTymAAABM0lEQVR42u3Z3Q2CMBRA4a7gCq7QFViBFVyBFVzBFViB5SwJlUu5LdVEaes5LyaN+t0HUv7M9cQMODg4eFV477q7ehE4OHg7uAanBgAHB68L798KHBy8JPyipH3HLt1ENij8LXiZ+DiC/wvuIRPUueQQEpb4w2WV5ADgJeLTNGNbGrxF3B9o3StJr/khNFzbZMBLx7cQeLv4ejI5xufVEPcD2EjgdeHaGnhL+P7Eoq1peCrwsnFP7W8b1jXwuvHtBmOSyYcFn8DgZeHh1qIdduAt4/vTSwjmDKA9PAQvB5ebjHYZCd4G7v9AfsbS4NgAw6C/IAAHB/8trsGplwAxPOelLzg4+Hm4fEmXAw9LR8OCg4OXgecUbiapmwFwcPD68PDiIPdiARwcvB78W4GDg4N/tSdYmUOfEXAO/QAAAABJRU5ErkJggg==';
+
+
+
+        var ang1 = 0.46289330053579913;
+        var ang2 = 0.0008996859405740301;
+        var ang3 = 0.0030492461097504056;
+
+
+      canvas = document.getElementById('myCanvas');
+      canvas.width =4096;
+      canvas.height = 4096;
+      canvas.style.width = "100vw";
+      canvas.style.height = '100vh';
+      canvas.getContext('2d').scale(2,2);
+
+      var ctx = canvas.getContext("2d");
+      var grd = ctx.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
+
+      grd.addColorStop(Math.random(), "#96c0e2");
+      grd.addColorStop(Math.random(), "#99b6c8");
+      grd.addColorStop(Math.random(), "#5f86bf");
+      grd.addColorStop(Math.random(), "#3f69a3");
+      grd.addColorStop(Math.random(), "#acbddc");
+
+
+      var ctx2 = canvas.getContext("2d");
+      var grd2 = ctx.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
+
+      grd2.addColorStop(Math.random(), "#192d44");
+      grd2.addColorStop(Math.random(), "#144273");
+      grd2.addColorStop(Math.random(), "#0d5181");
+
+
+
+
+	  ctx.fillStyle = grd;
+	  ctx.fillRect(0, 0, 2048, 1300);
+    ctx2.fillStyle = grd2;
+    ctx2.fillRect(0,1300, 2048, 2048);
+
+
+    canvas3 = document.getElementById('water');
+    canvas3.width =4096;
+    canvas3.height = 4096;
+    canvas3.style.width = "100vw";
+    canvas3.style.height = '100vh';
+    canvas3.getContext('2d').scale(2,2);
+
+    var ctx3 = canvas3.getContext("2d");
+    var grd3 = ctx3.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
+
+    grd3.addColorStop(Math.random(), "#3ae0dc");
+    grd3.addColorStop(Math.random(), "#47c3e8");
+    grd3.addColorStop(Math.random(), "#1e9fc2");
+    grd3.addColorStop(Math.random(), "#0f7eae");
+    grd3.addColorStop(Math.random(), "#1a628b");
+    grd3.addColorStop(Math.random(), "#163961");
+
+  ctx3.globalAlpha = 0.6;
+  ctx3.fillStyle = grd3;
+  ctx3.fillRect(0,1300, 2048, 2048);
+
+	  var grd1 = ctx.createLinearGradient(0,Math.floor(ang1 * 4096),Math.floor(ang2 * 4096),Math.floor(ang3 * 4096));
+	  grd1.addColorStop(Math.random(), "#f7f7ef");
+    grd1.addColorStop(Math.random(), "#f6ec8a");
+    grd1.addColorStop(Math.random(), "#f6e955");
+	  //grd1.addColorStop(Math.random(), "#f0f4f6");
+
+
+        var c=document.getElementById("myCanvas");
+        var ctx=c.getContext("2d");
+        var centerX = getRandomInt(400, 1750);
+        var centerY = getRandomInt(350, 600);
+        ctx.moveTo(centerX, centerY);
+
+
+        //var gap = Math.floor(Math.random() * 1) + .034;
+        var gap = Math.floor(Math.random() * 1) + .0079;
+    		var d2 = 442.99974149943415;
+    		var d3 = 304.9957611560802;
+    		var d5 = 474.3188517728332;
+    		var d6 = 392.5157119029724;
+    		var d7 = 357.5641147325213;
+    		var d8 = 468.0213931547312;
+    		var dArray = [d2, d3, d5, d6, d7, d8]
+    		var dIndex = getRandomInt(0, 5);
+    		var design = dArray[dIndex];
+    		var increment = design;
+        var theta = increment;
+        while( theta < Math.floor(Math.random() * 50.090909095) + dSize) {
+           var newX = centerX + theta * Math.cos(theta) * gap;
+           var newY = centerY + theta * Math.sin(theta) * gap;
+           ctx.lineTo(newX, newY);
+           theta = theta + increment;
                 }
-              	ctxBG.shadowColor = "#222222";
-              	ctxBG.shadowOffsetX = shdX;
-              	ctxBG.shadowOffsetY = shdY;
-              	ctxBG.shadowBlur = 2;
-              	ctxBG.strokeStyle = grdSun;
-              	ctxBG.lineWidth = 4;
-              	ctxBG.stroke();
-            }
-			
-			function snowflakes() {
-				var centerX = getRandomInt(0, 4096);
-        		var centerY = getRandomInt(0, 4096);
-        		ctxFinal.moveTo(centerX, centerY);
-        		var gap = Math.floor(Math.random() * 1) + .006;
-        		var theta = increment2;
-        		while( theta < Math.floor(Math.random() * 50.090909095) + dSize) {
-           		var newX = centerX + theta * Math.cos(theta) * gap;
-           		var newY = centerY + theta * Math.sin(theta) * gap;
-           		ctxFinal.lineTo(newX, newY);
-           		theta = theta + increment2;
-                }
-        		ctxFinal.shadowColor = "#222222";
-        		ctxFinal.shadowOffsetX = shdX;
-        		ctxFinal.shadowOffsetY = shdY;
-        		ctxFinal.shadowBlur = 1;
-        		ctxFinal.strokeStyle = grdSF;
-        		ctxFinal.lineWidth = 0.5;
-        		ctxFinal.stroke();
-      		}
-			
-			canvasBG.addEventListener(
-				"click",
-				function (event) {
-					if (!event.target.matches(".myCanvasBG")) {
-						var canvases = document.getElementsByTagName("canvas");
+        //ctx.globalAlpha = 0.4;
+        ctx.shadowColor = "#222222";
+        ctx.shadowOffsetX = shdX;
+        ctx.shadowOffsetY = shdY;
+        ctx.shadowBlur = 20;
+        ctx.strokeStyle = grd1;
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+
+	    	var c2 = document.getElementById("myCanvas2");
+        var ctx2 = c2.getContext("2d");
+		    c2.width =4096;
+      	c2.height = 4096;
+      	c2.style.width = "100vw";
+      	c2.style.height = '100vh';
+
+       
+		ctx2.drawImage(c, 0, 0);
+		 flipAndSave();
+		ctx2.drawImage(canvas3, 0, 0);
+		document.getElementById("myCanvas").style.display = "none";
+		document.getElementById("water").style.display = "none";
+
+
+
+		function flipAndSave() {
+			const flipper = getRandomInt(0,1);
+			switch (flipper) {
+			  case 0:
+
+        var img = document.getElementById("myImg");
+			  ctx2.save();
+			  ctx2.scale(-1,1);
+
+        ctx2.drawImage(img, fhor1 * -1, fvert1, 1075, 625);
+			  ctx2.restore();
+
+
+			  break;
+			  default:
+
+			  var img = document.getElementById("myImg");
+        ctx2.drawImage(img, fhor2, fvert1, 1075, 625);
+      }
+    }
+
+        c2.addEventListener(
+          "click",
+          function (event) {
+
+            if (!event.target.matches("myCanvas2")) {
+				var canvases = document.getElementsByTagName("canvas");
 						var canvasesList = Array.prototype.slice.call(canvases);
             			canvasesList.forEach(releaseCanvas);
-						location.reload();
-				  	}
+              location.reload();
+            }
 
-				},
-				false
-		  	);
-
-            /*Run release even when they refresh not with click (F5, refresh button, closing page)*/
+          },
+          false
+        );
+		
+		 /*Run release even when they refresh not with click (F5, refresh button, closing page)*/
 			window.addEventListener('pagehide', (event) => {
 				/*Release every canvas*/
 					var canvases = document.getElementsByTagName("canvas");
 					var canvasesList = Array.prototype.slice.call(canvases);
             		canvasesList.forEach(releaseCanvas);
 			});
-		
-		</script>
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	</body>
-</html>
+
+    </script>
+        </body>
+            </html>
