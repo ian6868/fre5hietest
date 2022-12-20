@@ -73,7 +73,7 @@
               var img = document.getElementById('myImg');
               img.width = 4096;
               img.height = 4096;
-			        img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQwAAACkBAMAAACQmg2XAAAAG1BMVEUAAAAYVjYvrGtHcEz8AEMAAAD+rjT/////dXUBpp31AAAABHRSTlPm5uYA5cyABgAAAXJJREFUeNrt2+ENgyAQhmFX6ApdwRVcwRW6Qlfo2BUt4aAcgm2anrzfHysNd88PQ4zoMP5FBhgwYMDYMi15LJlEYMCAAaOFoFJgwIDRKWNqCgwYMGBEVZdc18xrrknc/zDOxRgy0QkOcV/zDkkoMDpjeEQeAuMcDN/ykonkyMvTM+Y5v4RFFBgwYJyKobXXODBg7DPKtz0wbDNqCZISN9IvTxi9M8qBAQMGDBh9MFoI8rFLMwEGDBjdMdLWNZSGbR0YMGAYYfhS8qglR9Ao2lYQDBgwLDLcgzKdsP+6yDtjf+s49IQBA4Y1hjt1Lwtuw+n2bg1BLmWlOTEh9IQBA4ZVhh+uS9jQOxLZDwYMGPYYY4Zye0WOx3HL1P4HD6Vayt0XjL9l+InyOB1MuRYMGwxP2bJNiH8djV5LedoDAwYMQ4yASZeco5/ZVdeCYYIRJn+KaKgFwwhDLmSfIaprwTDDCJPHL6SiFgxDjB8HBgwYhhhPqh4WqdmwOaIAAAAASUVORK5CYII=';
+			        img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPgAAACuBAMAAADpKN3SAAAAMFBMVEU2wfwAAABHcEwALj8AAACKiorkO0T////s7Oz2dXp/f38AtNeiJjNjx00A1P8v/wCAfIxHAAAABHRSTlPm5gDmpIGTIQAAAaJJREFUeNrt2mFxgzAYxnEszMIszEIsYKEWsICFWagFLMwCFmqhS5a9RwZJCOwovLn/86HljpZfPjwHgdC8n5gGHBxcIf5lA147bky4bQx47bj5yXIbvFbcYfe7J7fT4BrxkN9Og2vEjWnbsHTgteOOdtnPg+vChf4PD64JF/r5HMe27ft9PLgefCrbaNPbdJ1MJ242nza3IODacaEfj2FwZfO0PCYArw+fyjbYTHQKzg0AXAMeTiHCsoHXiufo26aA68DXywZeB/72mxzt9jcFcb/bdJIBPxHPl01wswi4JlyK9mETp/2B5mUzpuv8baP7zJcO/Kp4igavCZeipcvm98kA/x7e83Ea/Pp4jk7hcoFZn1CAXwMvLVs4gGZDwK+Ml9DgNeFlNHg9eCkNrh2fytYtErugpCYTux4IgZ+Im2hiRQOvBV/PHCwZwBwGBwd/PS4HCL9TicGpAch/sov34ODgh+MxOLcIkMJjWX3pFhwc/GV4uEhXAocnnDUEHBz8fLwk85NJ7mYAHBxcHz6fHJROFsDBwfXgRwUcHBz80HwDaJBsPagl2cAAAAAASUVORK5CYII=';
 
 
 
@@ -82,9 +82,6 @@
         var ang1 = 0.46289330053579913;
         var ang2 = 0.0008996859405740301;
         var ang3 = 0.0030492461097504056;
-		var r1 = getRandomDec(0.1, 0.29);
-        var r2 = getRandomDec(0.98, 1);
-        var r3 = getRandomDec(0.19, 0.21);
 
 //gradient backgrounds
       canvas = document.getElementById('canvasBG');
@@ -97,18 +94,20 @@
       var ctx = canvas.getContext("2d");
       var grd = ctx.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
 
-	  grd.addColorStop(Math.random(), "#dbdbe1");
-      grd.addColorStop(Math.random(), "#323f50");
-      grd.addColorStop(Math.random(), "#e2edf3");
+      grd.addColorStop(Math.random(), "#7d745f");
+      grd.addColorStop(Math.random(), "#9f7138");
+      grd.addColorStop(Math.random(), "#656666");
+      grd.addColorStop(Math.random(), "#546c9f");
+      grd.addColorStop(Math.random(), "#788ebf");
 
 
       var ctx2 = canvas.getContext("2d");
       var grd2 = ctx.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
 
-      grd2.addColorStop(Math.random(), "#8a8b95");
-      grd2.addColorStop(Math.random(), "#83808a");
-      grd2.addColorStop(Math.random(), "#797782");
-      grd2.addColorStop(Math.random(), "#5e5c69");
+      grd2.addColorStop(Math.random(), "#2b9116");
+      grd2.addColorStop(Math.random(), "#015929");
+      grd2.addColorStop(Math.random(), "#155e27");
+      grd2.addColorStop(Math.random(), "#007d01");
 
 	  ctx.fillStyle = grd;
 	  ctx.fillRect(0, 0, 2048, 1300);
@@ -125,50 +124,43 @@
     canvas3.getContext('2d').scale(2,2);
 
     var ctx3 = canvas3.getContext("2d");
-    var grd3 = ctx3.createLinearGradient(0, Math.floor(r1 * 4096), Math.floor(r2 * 4096), Math.floor(r3 * 4096));
+    var grd3 = ctx3.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
 
+    grd3.addColorStop(Math.random(), "#dedfdf");
     grd3.addColorStop(Math.random(), "transparent");
-      	grd3.addColorStop(Math.random(), "#666666");
-      	grd3.addColorStop(Math.random(), "transparent");
-      	grd3.addColorStop(Math.random(), "transparent");
-      	grd3.addColorStop(Math.random(), "#888888");
-      	grd3.addColorStop(Math.random(), "transparent");
-      	grd3.addColorStop(Math.random(), "#444444");
-      	grd3.addColorStop(Math.random(), "transparent");
-      	grd3.addColorStop(Math.random(), "transparent");
-      	grd3.addColorStop(Math.random(), "#666666");
-      	grd3.addColorStop(Math.random(), "transparent");
-      	grd3.addColorStop(Math.random(), "#888888");
-      	grd3.addColorStop(Math.random(), "transparent");
+    grd3.addColorStop(Math.random(), "#7f7f7f");
+    grd3.addColorStop(Math.random(), "transparent");
+    grd3.addColorStop(Math.random(), "#a9a9a9");
+    grd3.addColorStop(Math.random(), "transparent");
+    grd3.addColorStop(Math.random(), "#c3c3c3");
+    grd3.addColorStop(Math.random(), "transparent");
+    grd3.addColorStop(Math.random(), "#8e8f8c");
   ctx3.globalAlpha = 0.6;
   ctx3.fillStyle = grd3;
-  ctx3.fillRect(0, 0, 4096, 4096);	
-		
-		
-		
-		
-		
-		
-		
+  ctx3.fillRect(0, 0, 4096, 4096);
 
-	  var grd1 = ctx.createLinearGradient(0,Math.floor(ang1 * 4096),Math.floor(ang2 * 4096),Math.floor(ang3 * 4096));	
-		grd1.addColorStop(Math.random(), "#f7eec8");
-    	grd1.addColorStop(Math.random(), "#f7f493");
+	  var grd1 = ctx.createLinearGradient(0,Math.floor(ang1 * 4096),Math.floor(ang2 * 4096),Math.floor(ang3 * 4096));
+	  grd1.addColorStop(Math.random(), "#f68d21");
+    grd1.addColorStop(Math.random(), "#f6cf01");
+    grd1.addColorStop(Math.random(), "#f77a34");
+	  grd1.addColorStop(Math.random(), "#f04f2f");
 
 //design
         var c=document.getElementById("canvasBG");
         var ctx=c.getContext("2d");
-        var centerX = getRandomInt(400, 3696);
-        var centerY = getRandomInt(350, 1300);
+        var centerX = getRandomInt(400, 1750);
+        var centerY = getRandomInt(350, 600);
         ctx.moveTo(centerX, centerY);
-		
-		var gap = Math.floor(Math.random() * 1) + .0079;
-    		var d2 = 72.32374852430411;
-    		var d3 = 134.54777201720935;
-    		var d5 = 84.92411676611502;
-    		var d6 = 192.9465220708107;
-    		var d7 = 135.2208604006022;
-    		var d8 = 73.231322369623;
+
+
+        //var gap = Math.floor(Math.random() * 1) + .034;
+        var gap = Math.floor(Math.random() * 1) + .0079;
+    		var d2 = 442.99974149943415;
+    		var d3 = 304.9957611560802;
+    		var d5 = 474.3188517728332;
+    		var d6 = 392.5157119029724;
+    		var d7 = 357.5641147325213;
+    		var d8 = 468.0213931547312;
     		var dArray = [d2, d3, d5, d6, d7, d8]
     		var dIndex = getRandomInt(0, 5);
     		var design = dArray[dIndex];
@@ -180,13 +172,13 @@
            ctx.lineTo(newX, newY);
            theta = theta + increment;
                 }
+        ctx.globalAlpha = 0.4;
         ctx.shadowColor = "#111111";
         ctx.shadowOffsetX = shdX;
         ctx.shadowOffsetY = shdY;
         ctx.shadowBlur = 20;
         ctx.strokeStyle = grd1;
         ctx.lineWidth = 3;
-        ctx.globalAlpha = 0.7;
         ctx.stroke();
 
 //canvas that gets displayed
