@@ -31,13 +31,20 @@
 
 
   <div style="text-align:center; position: relative;">
+
+
 	  <img id="myImg" class='img' alt="F5xTurtles" style="z-index: 0;">
-      <canvas id="canvasRain" style ="object-fit: contain; z-index: 1; top: 0; left: 0; position: absolute;"></canvas>  
-      <canvas id="canvasFinal" style ="object-fit: contain; z-index: 2; top: 0; left: 0; position: absolute;"></canvas>  
+
+    
+    <canvas id="canvasBG"></canvas>
+    <canvas id="canvasFog" style ="object-fit: contain; z-index: 1; top: 0; left: 0; position: absolute;"></canvas>
+    <canvas id="canvasBG2" style="object-fit: contain; z-index: -1; top: 0; left: 0; position: absolute;"></canvas>
+
+
   </div>
 
     <script type="text/javascript">
-		
+	
 		function releaseCanvas(canvas) {
 				canvas.width = 1;
 				canvas.style.width = "1vw";
@@ -47,7 +54,6 @@
 				ctx && ctx.clearRect(0, 0, 1, 1);
 			}
 		
-
         function getRandomDec(min,max) {
         return Math.random() * (max - min) + min;
         }
@@ -56,62 +62,105 @@
         	return Math.floor(Math.random() * (max - min + 1) + min);
         }
 
-              var fvert1 = getRandomInt(2050,3350);
-              var fhor1 = getRandomInt(1200,4050);
-              var fhor2 = getRandomInt(50,2950);
-              var dSize = getRandomInt(100000, 115000);
-              var shdX = getRandomInt(-20, 20);
-              var shdY = getRandomInt(-20, 20);
-			  var ang1 = 0.46289330053579913;
-        	  var ang2 = 0.0008996859405740301;
-			  var ang3 = 0.0030492461097504056;
-        	  var r1 = getRandomDec(0.1, 0.29);
-        	  var r2 = getRandomDec(0.98, 1);
-        	  var r3 = getRandomDec(0.19, 0.21);
+        var fvert1 = getRandomInt(2200,3250);
+        var fhor1 = getRandomInt(1200,4000);
+        var fhor2 = getRandomInt(100,2900);
+        var dSize = getRandomInt(80000, 95000);
+        var shdX = getRandomInt(-10, 10);
+        var shdY = getRandomInt(-10, 10);
 
 
               var img = document.getElementById('myImg');
               img.width = 4096;
               img.height = 4096;
-              img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQwAAACkBAMAAACQmg2XAAAAG1BMVEUAAAAYVjYvrGtHcEz8AEMAAAD+rjT/////dXUBpp31AAAABHRSTlPm5uYA5cyABgAAAXJJREFUeNrt2+ENgyAQhmFX6ApdwRVcwRW6Qlfo2BUt4aAcgm2anrzfHysNd88PQ4zoMP5FBhgwYMDYMi15LJlEYMCAAaOFoFJgwIDRKWNqCgwYMGBEVZdc18xrrknc/zDOxRgy0QkOcV/zDkkoMDpjeEQeAuMcDN/ykonkyMvTM+Y5v4RFFBgwYJyKobXXODBg7DPKtz0wbDNqCZISN9IvTxi9M8qBAQMGDBh9MFoI8rFLMwEGDBjdMdLWNZSGbR0YMGAYYfhS8qglR9Ao2lYQDBgwLDLcgzKdsP+6yDtjf+s49IQBA4Y1hjt1Lwtuw+n2bg1BLmWlOTEh9IQBA4ZVhh+uS9jQOxLZDwYMGPYYY4Zye0WOx3HL1P4HD6Vayt0XjL9l+InyOB1MuRYMGwxP2bJNiH8djV5LedoDAwYMQ4yASZeco5/ZVdeCYYIRJn+KaKgFwwhDLmSfIaprwTDDCJPHL6SiFgxDjB8HBgwYhhhPqh4WqdmwOaIAAAAASUVORK5CYII=';
+			        img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQwAAACkBAMAAACQmg2XAAAAG1BMVEUAAAAYVjYvrGtHcEz8AEMAAAD+rjT/////dXUBpp31AAAABHRSTlPm5uYA5cyABgAAAXJJREFUeNrt2+ENgyAQhmFX6ApdwRVcwRW6Qlfo2BUt4aAcgm2anrzfHysNd88PQ4zoMP5FBhgwYMDYMi15LJlEYMCAAaOFoFJgwIDRKWNqCgwYMGBEVZdc18xrrknc/zDOxRgy0QkOcV/zDkkoMDpjeEQeAuMcDN/ykonkyMvTM+Y5v4RFFBgwYJyKobXXODBg7DPKtz0wbDNqCZISN9IvTxi9M8qBAQMGDBh9MFoI8rFLMwEGDBjdMdLWNZSGbR0YMGAYYfhS8qglR9Ao2lYQDBgwLDLcgzKdsP+6yDtjf+s49IQBA4Y1hjt1Lwtuw+n2bg1BLmWlOTEh9IQBA4ZVhh+uS9jQOxLZDwYMGPYYY4Zye0WOx3HL1P4HD6Vayt0XjL9l+InyOB1MuRYMGwxP2bJNiH8djV5LedoDAwYMQ4yASZeco5/ZVdeCYYIRJn+KaKgFwwhDLmSfIaprwTDDCJPHL6SiFgxDjB8HBgwYhhhPqh4WqdmwOaIAAAAASUVORK5CYII=';
 
-//final canvas
-		canvasFinal = document.getElementById('canvasFinal');
-		canvasFinal.width =4096;
-		canvasFinal.height = 4096;
-		canvasFinal.style.width = "100vw";
-		canvasFinal.style.height = '100vh';
-		//canvas.getContext('2d').scale(2,2);
-		var ctxFinal = canvasFinal.getContext("2d");
+
+
+
+
+        var ang1 = 0.46289330053579913;
+        var ang2 = 0.0008996859405740301;
+        var ang3 = 0.0030492461097504056;
+		var r1 = getRandomDec(0.1, 0.29);
+        var r2 = getRandomDec(0.98, 1);
+        var r3 = getRandomDec(0.19, 0.21);
+
+//gradient backgrounds
+      canvas = document.getElementById('canvasBG');
+      canvas.width =4096;
+      canvas.height = 4096;
+      canvas.style.width = "100vw";
+      canvas.style.height = '100vh';
+      canvas.getContext('2d').scale(2,2);
+
+      var ctx = canvas.getContext("2d");
+      var grd = ctx.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
+
+	  grd.addColorStop(Math.random(), "#dbdbe1");
+      grd.addColorStop(Math.random(), "#323f50");
+      grd.addColorStop(Math.random(), "#e2edf3");
+
+
+      var ctx2 = canvas.getContext("2d");
+      var grd2 = ctx.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
+
+      grd2.addColorStop(Math.random(), "#8a8b95");
+      grd2.addColorStop(Math.random(), "#83808a");
+      grd2.addColorStop(Math.random(), "#797782");
+      grd2.addColorStop(Math.random(), "#5e5c69");
+
+	  ctx.fillStyle = grd;
+	  ctx.fillRect(0, 0, 2048, 1300);
+    ctx2.fillStyle = grd2;
+    ctx2.fillRect(0,1300, 2048, 2048);
+
+//fog
 		
-//image canvas
-		canvasRain = document.getElementById('canvasRain');
-		canvasRain.width =4096;
-		canvasRain.height = 4096;
-		canvasRain.style.width = "100vw";
-		canvasRain.style.height = '100vh';
-		//canvas.getContext('2d').scale(2,2);
-		var ctxRain = canvasRain.getContext("2d");
+    canvas3 = document.getElementById('canvasFog');
+    canvas3.width =4096;
+    canvas3.height = 4096;
+    canvas3.style.width = "100vw";
+    canvas3.style.height = '100vh';
+    canvas3.getContext('2d').scale(2,2);
+
+    var ctx3 = canvas3.getContext("2d");
+    var grd3 = ctx3.createLinearGradient(0, Math.floor(r1 * 4096), Math.floor(r2 * 4096), Math.floor(r3 * 4096));
+
+    grd3.addColorStop(Math.random(), "transparent");
+      	grd3.addColorStop(Math.random(), "#666666");
+      	grd3.addColorStop(Math.random(), "transparent");
+      	grd3.addColorStop(Math.random(), "transparent");
+      	grd3.addColorStop(Math.random(), "#888888");
+      	grd3.addColorStop(Math.random(), "transparent");
+      	grd3.addColorStop(Math.random(), "#444444");
+      	grd3.addColorStop(Math.random(), "transparent");
+      	grd3.addColorStop(Math.random(), "transparent");
+      	grd3.addColorStop(Math.random(), "#666666");
+      	grd3.addColorStop(Math.random(), "transparent");
+      	grd3.addColorStop(Math.random(), "#888888");
+      	grd3.addColorStop(Math.random(), "transparent");
+  ctx3.globalAlpha = 0.6;
+  ctx3.fillStyle = grd3;
+  ctx3.fillRect(0, 0, 4096, 4096);	
 		
-//sky
-		var grdSky = ctxFinal.createLinearGradient(2048, 0, 2048, 4096);
-		grdSky.addColorStop(Math.random(), "#dbdbe1");
-      	grdSky.addColorStop(Math.random(), "#323f50");
-      	grdSky.addColorStop(Math.random(), "#e2edf3");
-		ctxFinal.fillStyle = grdSky;
-	  	ctxFinal.fillRect(0, 0, 4096, 2500);
+		
+		
+		
+		
+		
 		
 
-//moon
-		var grdMoon = ctxFinal.createLinearGradient(0,Math.floor(ang1 * 4096),Math.floor(ang2 * 4096),Math.floor(ang3 * 4096));
-	  	//grd1.addColorStop(Math.random(), "#f6f7f6");
-    	grdMoon.addColorStop(Math.random(), "#f7eec8");
-    	grdMoon.addColorStop(Math.random(), "#f7f493");
-		
+	  var grd1 = ctx.createLinearGradient(0,Math.floor(ang1 * 4096),Math.floor(ang2 * 4096),Math.floor(ang3 * 4096));	
+		grd1.addColorStop(Math.random(), "#f7eec8");
+    	grd1.addColorStop(Math.random(), "#f7f493");
+
 //design
-		var centerX = getRandomInt(400, 3696);
+        var c=document.getElementById("canvasBG");
+        var ctx=c.getContext("2d");
+        var centerX = getRandomInt(400, 3696);
         var centerY = getRandomInt(350, 1300);
-        ctxFinal.moveTo(centerX, centerY);
+        ctx.moveTo(centerX, centerY);
 		
 		var gap = Math.floor(Math.random() * 1) + .0079;
     		var d2 = 72.32374852430411;
@@ -128,88 +177,77 @@
         while( theta < Math.floor(Math.random() * 50.090909095) + dSize) {
            var newX = centerX + theta * Math.cos(theta) * gap;
            var newY = centerY + theta * Math.sin(theta) * gap;
-           ctxFinal.lineTo(newX, newY);
+           ctx.lineTo(newX, newY);
            theta = theta + increment;
                 }
-        ctxFinal.shadowColor = "#111111";
-        ctxFinal.shadowOffsetX = shdX;
-        ctxFinal.shadowOffsetY = shdY;
-        ctxFinal.shadowBlur = 20;
-        ctxFinal.strokeStyle = grdMoon;
-        ctxFinal.lineWidth = 3;
-        ctxFinal.globalAlpha = 0.7;
-        ctxFinal.stroke();
-		
-//ground
-		ctxFinal.globalAlpha = 1;
-		ctxFinal.shadowOffsetX = 0;
-        ctxFinal.shadowOffsetY = 0;
-		ctxFinal.shadowBlur = 0;
-		var grdGround = ctxFinal.createLinearGradient(2048, 0, 2048, 4096);
-		grdGround.addColorStop(Math.random(), "#8a8b95");
-      	grdGround.addColorStop(Math.random(), "#83808a");
-      	grdGround.addColorStop(Math.random(), "#797782");
-      	grdGround.addColorStop(Math.random(), "#5e5c69");
-		ctxFinal.fillStyle = grdGround;
-    	ctxFinal.fillRect(0,2500, 4096, 1596);
-		
+        ctx.shadowColor = "#111111";
+        ctx.shadowOffsetX = shdX;
+        ctx.shadowOffsetY = shdY;
+        ctx.shadowBlur = 20;
+        ctx.strokeStyle = grd1;
+        ctx.lineWidth = 3;
+        ctx.globalAlpha = 0.7;
+        ctx.stroke();
 
-			  
-//rain gradient to be drawn above inside onload function
-	    
-      	var grdRain = ctxRain.createLinearGradient(0, Math.floor(r1 * 4096), Math.floor(r2 * 4096), Math.floor(r3 * 4096));
-      	//grdRain.addColorStop(Math.random(), "transparent");
-      	//grdRain.addColorStop(Math.random(), "#222222");
-      	grdRain.addColorStop(Math.random(), "transparent");
-      	grdRain.addColorStop(Math.random(), "#666666");
-      	grdRain.addColorStop(Math.random(), "transparent");
-      	grdRain.addColorStop(Math.random(), "transparent");
-      	grdRain.addColorStop(Math.random(), "#888888");
-      	grdRain.addColorStop(Math.random(), "transparent");
-      	grdRain.addColorStop(Math.random(), "#444444");
-      	grdRain.addColorStop(Math.random(), "transparent");
-      	grdRain.addColorStop(Math.random(), "transparent");
-      	grdRain.addColorStop(Math.random(), "#666666");
-      	grdRain.addColorStop(Math.random(), "transparent");
-      	grdRain.addColorStop(Math.random(), "#888888");
-      	grdRain.addColorStop(Math.random(), "transparent");
-		ctxRain.globalAlpha = 0.5;
-		ctxRain.fillStyle = grdRain;
-	    ctxRain.fillRect(0, 0, 4096, 4096);
+//canvas that gets displayed
+	    	var c2 = document.getElementById("canvasBG2");
+        var ctx2 = c2.getContext("2d");
+		    c2.width =4096;
+      	c2.height = 4096;
+      	c2.style.width = "100vw";
+      	c2.style.height = '100vh';
+
+//copy everything on final canvas
+        ctx2.drawImage(c, 0, 0);
 		
- //draw image and rain onto final canvas
-	   
-		//copy image onto canvas onload
-              window.onload = function() {
-					const flipper = getRandomInt(0,1);
-					switch (flipper) {
-					  case 0:
-							ctxFinal.globalAlpha = 1;
-							ctxFinal.save();
-					  		ctxFinal.scale(-1,1);
-					  		ctxFinal.drawImage(img, fhor1 * -1, fvert1, 1100, 725);	
-					  		ctxFinal.restore();
-							ctxFinal.drawImage(canvasRain, 0, 0);
-							break;
-					  default:
-							ctxFinal.globalAlpha = 1;
-							ctxFinal.drawImage(img, fhor2, fvert1, 1100, 725);
-							ctxFinal.drawImage(canvasRain, 0, 0);
-			        }
-				  	
-			  }
-			  
- //click to refresh
-		canvasFinal.addEventListener("click", function (event) {
-			if (!event.target.matches("canvasFinal")) {
+		//flipAndCopy();
+		
+        //ctx2.drawImage(canvas3, 0, 0);
+		
+        document.getElementById("canvasBG").style.display = "none";
+        document.getElementById("canvasFog").style.display = "none";
+
+
+//flipAndCopy
+		
+		window.onload = function() {
+			const flipper = getRandomInt(0,1);
+			switch (flipper) {
+			  case 0:
+
+        var img = document.getElementById("myImg");
+			  ctx2.save();
+			  ctx2.scale(-1,1);
+
+        ctx2.drawImage(img, fhor1 * -1, fvert1, 1125, 775);
+			  ctx2.restore();
+ctx2.drawImage(canvas3, 0, 0);
+
+			  break;
+			  default:
+
+			  var img = document.getElementById("myImg");
+        ctx2.drawImage(img, fhor2, fvert1, 1125, 775);
+					ctx2.drawImage(canvas3, 0, 0);
+      }
+    }
+
+        c2.addEventListener(
+          "click",
+          function (event) {
+
+            if (!event.target.matches("canvasBG2")) {
 				var canvases = document.getElementsByTagName("canvas");
 				var canvasesList = Array.prototype.slice.call(canvases);
             	canvasesList.forEach(releaseCanvas);
-			  location.reload();
-			}
-      	},false);
+              location.reload();
+            }
+
+          },
+          false
+        );
 		
-/*Run release even when they refresh not with click (F5, refresh button, closing page)*/
+		/*Run release even when they refresh not with click (F5, refresh button, closing page)*/
 			window.addEventListener('pagehide', (event) => {
 				/*Release every canvas*/
 					var canvases = document.getElementsByTagName("canvas");
@@ -217,9 +255,6 @@
             		canvasesList.forEach(releaseCanvas);
 			});
 
-
-
-      
     </script>
         </body>
             </html>
