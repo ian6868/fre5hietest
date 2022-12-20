@@ -42,6 +42,14 @@
   </div>
 
     <script type="text/javascript">
+    function releaseCanvas(canvas) {
+				canvas.width = 1;
+				canvas.style.width = "1vw";
+				canvas.height = 1;
+				canvas.style.height = "1vh";
+				const ctx = canvas.getContext('2d');
+				ctx && ctx.clearRect(0, 0, 1, 1);
+			}
 
         function getRandomDec(min,max) {
         return Math.random() * (max - min) + min;
@@ -219,12 +227,24 @@
       function (event) {
 
         if (!event.target.matches("rain")) {
-          location.reload();
+          var canvases = document.getElementsByTagName("canvas");
+          var canvasesList = Array.prototype.slice.call(canvases);
+                canvasesList.forEach(releaseCanvas);
+                location.reload();
         }
 
       },
       false
     );
+
+
+    /*Run release even when they refresh not with click (F5, refresh button, closing page)*/
+			window.addEventListener('pagehide', (event) => {
+				/*Release every canvas*/
+					var canvases = document.getElementsByTagName("canvas");
+					var canvasesList = Array.prototype.slice.call(canvases);
+            		canvasesList.forEach(releaseCanvas);
+			});
     </script>
         </body>
             </html>
