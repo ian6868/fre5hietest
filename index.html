@@ -31,12 +31,12 @@
 
 
   <div style="text-align:center; position: relative;">
-	  <img id="myImg" class='img' alt="F5xTurtles" style="display: none">
-      <canvas id="canvasFinal" style ="object-fit: contain;"></canvas>  
+
+      <canvas id="canvasFinal" style ="object-fit: contain;"></canvas>
   </div>
 
     <script type="text/javascript">
-		
+
 		function releaseCanvas(canvas) {
 				canvas.width = 1;
 				canvas.style.width = "1vw";
@@ -45,7 +45,7 @@
 				const ctx = canvas.getContext('2d');
 				ctx && ctx.clearRect(0, 0, 1, 1);
 			}
-		
+
 
         function getRandomDec(min,max) {
         return Math.random() * (max - min) + min;
@@ -69,10 +69,7 @@
         	  var r3 = getRandomDec(0.19, 0.21);
 
 
-              var img = document.getElementById('myImg');
-              img.width = 4096;
-              img.height = 4096;
-              img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQwAAACkBAMAAACQmg2XAAAAG1BMVEUAAAAYVjYvrGtHcEz8AEMAAAD+rjT/////dXUBpp31AAAABHRSTlPm5uYA5cyABgAAAXJJREFUeNrt2+ENgyAQhmFX6ApdwRVcwRW6Qlfo2BUt4aAcgm2anrzfHysNd88PQ4zoMP5FBhgwYMDYMi15LJlEYMCAAaOFoFJgwIDRKWNqCgwYMGBEVZdc18xrrknc/zDOxRgy0QkOcV/zDkkoMDpjeEQeAuMcDN/ykonkyMvTM+Y5v4RFFBgwYJyKobXXODBg7DPKtz0wbDNqCZISN9IvTxi9M8qBAQMGDBh9MFoI8rFLMwEGDBjdMdLWNZSGbR0YMGAYYfhS8qglR9Ao2lYQDBgwLDLcgzKdsP+6yDtjf+s49IQBA4Y1hjt1Lwtuw+n2bg1BLmWlOTEh9IQBA4ZVhh+uS9jQOxLZDwYMGPYYY4Zye0WOx3HL1P4HD6Vayt0XjL9l+InyOB1MuRYMGwxP2bJNiH8djV5LedoDAwYMQ4yASZeco5/ZVdeCYYIRJn+KaKgFwwhDLmSfIaprwTDDCJPHL6SiFgxDjB8HBgwYhhhPqh4WqdmwOaIAAAAASUVORK5CYII=';
+
 
 //final canvas
 		canvasFinal = document.getElementById('canvasFinal');
@@ -82,7 +79,7 @@
 		canvasFinal.style.height = '100vh';
 		//canvas.getContext('2d').scale(2,2);
 		var ctxFinal = canvasFinal.getContext("2d");
-		
+
 //sky
 		var grdSky = ctxFinal.createLinearGradient(2048, 0, 2048, 4096);
 		grdSky.addColorStop(Math.random(), "#dbdbe1");
@@ -90,19 +87,19 @@
       	grdSky.addColorStop(Math.random(), "#e2edf3");
 		ctxFinal.fillStyle = grdSky;
 	  	ctxFinal.fillRect(0, 0, 4096, 2500);
-		
+
 
 //moon
 		var grdMoon = ctxFinal.createLinearGradient(0,Math.floor(ang1 * 4096),Math.floor(ang2 * 4096),Math.floor(ang3 * 4096));
 	  	//grd1.addColorStop(Math.random(), "#f6f7f6");
     	grdMoon.addColorStop(Math.random(), "#f7eec8");
     	grdMoon.addColorStop(Math.random(), "#f7f493");
-		
+
 //design
 		var centerX = getRandomInt(400, 3696);
         var centerY = getRandomInt(350, 1300);
         ctxFinal.moveTo(centerX, centerY);
-		
+
 		var gap = Math.floor(Math.random() * 1) + .0079;
     		var d2 = 72.32374852430411;
     		var d3 = 134.54777201720935;
@@ -129,7 +126,7 @@
         ctxFinal.lineWidth = 3;
         ctxFinal.globalAlpha = 0.7;
         ctxFinal.stroke();
-		
+
 //ground
 		ctxFinal.globalAlpha = 1;
 		ctxFinal.shadowOffsetX = 0;
@@ -142,10 +139,11 @@
       	grdGround.addColorStop(Math.random(), "#5e5c69");
 		ctxFinal.fillStyle = grdGround;
     	ctxFinal.fillRect(0,2500, 4096, 1596);
-		
+
 //draw image onto final canvas
 	    var ctxFinal = canvasFinal.getContext("2d");
-		
+      var picSource = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQwAAACkBAMAAACQmg2XAAAAG1BMVEUAAAAYVjYvrGtHcEz8AEMAAAD+rjT/////dXUBpp31AAAABHRSTlPm5uYA5cyABgAAAXJJREFUeNrt2+ENgyAQhmFX6ApdwRVcwRW6Qlfo2BUt4aAcgm2anrzfHysNd88PQ4zoMP5FBhgwYMDYMi15LJlEYMCAAaOFoFJgwIDRKWNqCgwYMGBEVZdc18xrrknc/zDOxRgy0QkOcV/zDkkoMDpjeEQeAuMcDN/ykonkyMvTM+Y5v4RFFBgwYJyKobXXODBg7DPKtz0wbDNqCZISN9IvTxi9M8qBAQMGDBh9MFoI8rFLMwEGDBjdMdLWNZSGbR0YMGAYYfhS8qglR9Ao2lYQDBgwLDLcgzKdsP+6yDtjf+s49IQBA4Y1hjt1Lwtuw+n2bg1BLmWlOTEh9IQBA4ZVhh+uS9jQOxLZDwYMGPYYY4Zye0WOx3HL1P4HD6Vayt0XjL9l+InyOB1MuRYMGwxP2bJNiH8djV5LedoDAwYMQ4yASZeco5/ZVdeCYYIRJn+KaKgFwwhDLmSfIaprwTDDCJPHL6SiFgxDjB8HBgwYhhhPqh4WqdmwOaIAAAAASUVORK5CYII=';
+
 		//copy image on canvas onload
               window.onload = function() {
 					const flipper = getRandomInt(0,1);
@@ -154,22 +152,30 @@
 							ctxFinal.globalAlpha = 1;
 							ctxFinal.save();
 					  		ctxFinal.scale(-1,1);
-					  		ctxFinal.drawImage(img, fhor1 * -1, fvert1, 1100, 725);	
+                img = new Image();
+                img.onload = function() {
+					  		ctxFinal.drawImage(img, fhor1 * -1, fvert1, 1100, 725);
 					  		ctxFinal.restore();
+                };
+                img.src = picSource;
 							//ctxImg.drawImage(img, 0, 0);
 							break;
 					  default:
 							ctxFinal.globalAlpha = 1;
+              img = new Image();
+              img.onload = function() {
 							ctxFinal.drawImage(img, fhor2, fvert1, 1100, 725);
+            };
+            img.src = picSource;
 							//ctxImg.drawImage(img, 0, 0);
 			        }
 				  	ctxFinal.globalAlpha = 0.5;
 			      	ctxFinal.fillStyle = grdRain;
 	    		  	ctxFinal.fillRect(0, 0, 4096, 4096);
 			  }
-			  
+
 //rain gradient to be drawn above inside onload function
-	    
+
       	var grdRain = ctxFinal.createLinearGradient(0, Math.floor(r1 * 4096), Math.floor(r2 * 4096), Math.floor(r3 * 4096));
       	//grdRain.addColorStop(Math.random(), "transparent");
       	//grdRain.addColorStop(Math.random(), "#222222");
@@ -186,8 +192,8 @@
       	grdRain.addColorStop(Math.random(), "transparent");
       	grdRain.addColorStop(Math.random(), "#888888");
       	grdRain.addColorStop(Math.random(), "transparent");
-		
-      
+
+
  //click to refresh
 		canvasFinal.addEventListener("click", function (event) {
 			if (!event.target.matches("canvasFinal")) {
@@ -197,7 +203,7 @@
 			  location.reload();
 			}
       	},false);
-		
+
 /*Run release even when they refresh not with click (F5, refresh button, closing page)*/
 			window.addEventListener('pagehide', (event) => {
 				/*Release every canvas*/
@@ -208,7 +214,7 @@
 
 
 
-      
+
     </script>
         </body>
             </html>
