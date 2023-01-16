@@ -1,259 +1,279 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Frac5</title>
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+<!DOCTYPE HTML>
+<html>
+	<head>
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+      	<style>
+      		body, html {
+				padding:0 !important;
+				margin: 0 !important;
+				margin-bottom: 0px;
+				padding-bottom: 0px;
+		    }
 
-body {
-  background-color: #000000;
-}
+		  	* {
+				padding: 0;
+				margin: 0;
+		  	}
+        	body  { 
+				background-color: black; overflow: hidden;
+			}
+			
+      		.img {
+				position: absolute;
+				object-fit: contain;
+				display: none;
+      		}
 
-/* The Modal (background) */
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 0px; /* Location of the box */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
-}
+        </style>
+	</head>
+	<body>
+		<div style="text-align:center; position: relative;">
+	    	<img id="myImg" class='img' alt="F5xTurtles">
+			<canvas id="myCanvasFinal" style="object-fit: contain; z-index: 0; top: 0; left: 0; position: absolute;"></canvas>/*final*/
+    		<canvas id="myCanvasBG" style="object-fit: contain; z-index: 1; top: 0; left: 0; position: absolute;"></canvas>/*bg*/
+			
+			
+    
+		</div>
+		
+		<script type="text/javascript">
+			function releaseCanvas(canvas) {
+				canvas.width = 1;
+				canvas.style.width = "1vw";
+				canvas.height = 1;
+				canvas.style.height = "1vh";
+				const ctx = canvas.getContext('2d');
+				ctx && ctx.clearRect(0, 0, 1, 1);
+			}
+			
+			function getRandomDec(min,max) {
+				return Math.random() * (max - min) + min;
+			}
 
-/* Modal Content (Image) */
-.modal-content {
-  margin: auto;
-  display: block;
-  width: 80%;
-  max-width: 700px;
-}
+			function getRandomInt(min, max) {
+				return Math.floor(Math.random() * (max - min + 1) + min);
+			}
+			
+			var fvert1 = getRandomInt(300,2900);
+            var fhor1 = getRandomInt(1100,4000);
+            var fhor2 = getRandomInt(100,3050);
+            var dSize3 = getRandomInt(3000, 4000);
+            var dSize2 = getRandomInt(140000, 160000);
+            var dSize = getRandomInt(6000, 8000);
+            var shdX = getRandomInt(0, 0);
+            var shdY = getRandomInt(0, 0);
 
+            var f2 = 85.17195340862722;//flake
+            var f3 = 160.01001706698776;//flake
+            var f4 = 191.40868685819183;
+            var dArray2 = [f2, f3, f4]
+            var dIndex2 = getRandomInt(0, 2);
+            var design2 = dArray2[dIndex2];
+            var increment2 = design2;
 
-/* Add Animation - Zoom in the Modal */
-.modal-content, #caption {
-  animation-name: zoom;
-  animation-duration: 0.6s;
-}
+            var img = document.getElementById('myImg');
+            img.width = 4096;
+            img.height = 4096;
+			
+			img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAAECBAMAAAAyVkcHAAAAIVBMVEXkO0QAAAD+8FDCsgBHcEwSEAD/j5UAAAAXFgcAAAD///9du4wqAAAACXRSTlPm5ubmAPzm/PyyRzEfAAABlUlEQVR42u3d0W3CMAAFQFboCqzQFVihK3SFrsAKrNApmwhZGNdxHOImTnVPQiAhc/54IuCYcLrslBO4O/gtEzAYfBx4RE6ZrMHBYPB28AP9HNIOB4PBYDAYXAfPoWtwMBgMBoPBS+FywGAwGAwGg8FgcO0CWzsUDAaDwWDwMriE23IDBh8HzuGb7kQFg8FN4Bhfi4LB4P3ggF8aBAwGg8H7wbU/ugODwXvA9xcoweNz50xyY8D9wePQ+y1MAPzf4AcbplCHTuHgHuH4AFAu1m0I+DhwelD/GlIu1u32PeQ3/YyD+4Vz1UqLdYfLBQPvDwfkPcnHkHgCabGeM10w8FHhcrnA/cA5MIbD4zCBZuUCHwB+fNDbuFzgBXAJTeGAnxcEDAaDwWBwGZ5DYzj+or4UBYPB+8MpVoMXF8rBYHATOAyO73MZT4bk0Cn8es0vroP7haeKBe4bzqG1G4nmJlrcEAoGg5vC8QmsGjR+M3n5YjNgMLgZXLuJLAVfRcFg8PZwemBv8QdiYDB4W/gvAgaDwS/nB8M/7bm7KB9uAAAAAElFTkSuQmCC';
+			
+			var ang1 = 0.46289330053579913;
+        	var ang2 = 0.0008996859405740301;
+        	var ang3 = 0.0030492461097504056;
+			
+			//init - bg canvasBG 
+			canvasBG = document.getElementById('myCanvasBG');
+      		canvasBG.width =4096;
+      		canvasBG.height = 4096;
+      		canvasBG.style.width = "100vw";
+      		canvasBG.style.height = '100vh';
+      		//canvasBG.getContext('2d').scale(2,2);
+			var ctxBG = canvasBG.getContext("2d");
+			
+			//init - final canvas 
+			canvasFinal = document.getElementById('myCanvasFinal');
+      		canvasFinal.width =4096;
+      		canvasFinal.height = 4096;
+      		canvasFinal.style.width = "100vw";
+      		canvasFinal.style.height = '100vh';
+      		//canvasFinal.getContext('2d').scale(2,2);
+			var ctxFinal = canvasFinal.getContext("2d");
+			
+			//sky
+			var grdSky = ctxBG.createLinearGradient(2048, 0, 2048, 4096);
+	  		grdSky.addColorStop(Math.random(), "#bed2e6");
+    		grdSky.addColorStop(Math.random(), "#0b8ce0");
+    		grdSky.addColorStop(Math.random(), "#6bbbf2");
+	  		grdSky.addColorStop(Math.random(), "#1270c1");
 
-@keyframes zoom {
-  from {transform:scale(0)}
-  to {transform:scale(1)}
-}
+    		ctxBG.fillStyle = grdSky;
+    		ctxBG.fillRect(0, 0, 4096, 2700);
+			
+			//ground
+			var grdGround = ctxBG.createLinearGradient(2048, 0, 2048, 4096);
+			grdGround.addColorStop(Math.random(), "#f7f7f7");
+      		grdGround.addColorStop(Math.random(), "#afa177");
+      		grdGround.addColorStop(Math.random(), "#706036");
+      		grdGround.addColorStop(Math.random(), "#ffffff");
+      		grdGround.addColorStop(Math.random(), "#6d6c35");
+      		ctxBG.fillStyle = grdGround;
+      		ctxBG.fillRect(0,2600, 4096, 1496);
+			
+			//sun
+			var grdSun = ctxBG.createLinearGradient(0,Math.floor(ang1 * 4096),Math.floor(ang2 * 4096),Math.floor(ang3 * 4096));
+	  		grdSun.addColorStop(Math.random(), "#f7f7f7");
+    		grdSun.addColorStop(Math.random(), "#f6f491");
+    		grdSun.addColorStop(Math.random(), "#f6e882");
+	  		grdSun.addColorStop(Math.random(), "#f4c75d");
+			
+			//draw sun
+			drawSun();
+			
+			//draw turtle on BG canvas
+			//flipTurtle();
+			//ctxBG.drawImage(img, fhor2, fvert1, 1025, 1125);
+			
+			//draw snowflakes
+			var grdSF = ctxFinal.createLinearGradient(0,Math.floor(ang1 * 4096),Math.floor(ang2 * 4096),Math.floor(ang3 * 4096));
+    		grdSF.addColorStop(Math.random(), "#f1f6f7");
+    		grdSF.addColorStop(Math.random(), "#dde4e8");
+	  		grdSF.addColorStop(Math.random(), "#f7f7f7");
+			var flakes = getRandomInt(30, 50);
+      		for (let i = 0; i < flakes; i++) {
+        		snowflakes();
+      		}
+			
+			//clouds
+			var grdClouds = ctxFinal.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
+			grdClouds.addColorStop(Math.random(), "#9da5ac");
+      		grdClouds.addColorStop(Math.random(), "transparent");
+      		grdClouds.addColorStop(Math.random(), "#6a737a");
+      		grdClouds.addColorStop(Math.random(), "transparent");
+      		grdClouds.addColorStop(Math.random(), "#69696c");
+      		grdClouds.addColorStop(Math.random(), "transparent");
+      		grdClouds.addColorStop(Math.random(), "#747788");
+      		grdClouds.addColorStop(Math.random(), "transparent");
+      		grdClouds.addColorStop(Math.random(), "#6a737a");
+      		ctxFinal.globalAlpha = 0.2;
+      		ctxFinal.fillStyle = grdClouds;
+  	  		ctxFinal.fillRect(0, 0, 4096, 2600);
+			
+			//copy final canvas onto BG canvas
+			//ctxBG.drawImage(canvasFinal, 0, 0);
+		    //document.getElementById('myCanvasFinal').style.display= "none";
+			
+  			
+			
+			
+			
+			
+			
+			 window.onload = function() {
+			 	const flipper = getRandomInt(0,1);
+				var img = document.getElementById("myImg");
+			  	switch (flipper) {
+					case 0:
+					ctxBG.save();
+					ctxBG.scale(-1,1);
+					ctxBG.drawImage(img, fhor1 * -1, fvert1, 1025, 1125);
+					ctxBG.restore();
+						ctxBG.drawImage(canvasFinal, 0, 0);
+		    document.getElementById('myCanvasFinal').style.display= "none";
+					break;
+					default:
+					ctxBG.drawImage(img, fhor2, fvert1, 1025, 1125);
+						ctxBG.drawImage(canvasFinal, 0, 0);
+		    document.getElementById('myCanvasFinal').style.display= "none";
+			  	}
+			  }
+			
+			function drawSun() {
+            	var centerX = getRandomInt(100, 3996);
+              	var centerY = getRandomInt(100, 925);
+              	ctxBG.moveTo(centerX, centerY);
+              	var gap = Math.floor(Math.random() * 1) + .006;
+              	var d2 = 59.51211822206524;
+              	var d3 = 122.19139188997966;
+              	var d5 = 235.75276882101318;
+              	var d6 = 404.95056737323205;
+              	var d7 = 116.82480140130096;
+              	var d8 = 298.36096218950416;
+              	var d9 = 179.0879286460222;
+              	var d10 = 128.77220761038356;
+              	var dArray = [d2, d3, d5, d6, d7, d8, d9, d10]
+              	var dIndex = getRandomInt(0, 7);
+              	var design = dArray[dIndex];
+              	var increment = design;
+              	var theta = increment;
+              	while( theta < Math.floor(Math.random() * 50.090909095) + dSize2) {
+                	var newX = centerX + theta * Math.cos(theta) * gap;
+                 	var newY = centerY + theta * Math.sin(theta) * gap;
+                 	ctxBG.lineTo(newX, newY);
+                 	theta = theta + increment;
+                }
+              	ctxBG.shadowColor = "#222222";
+              	ctxBG.shadowOffsetX = shdX;
+              	ctxBG.shadowOffsetY = shdY;
+              	ctxBG.shadowBlur = 2;
+              	ctxBG.strokeStyle = grdSun;
+              	ctxBG.lineWidth = 4;
+              	ctxBG.stroke();
+            }
+			
+			function snowflakes() {
+				var centerX = getRandomInt(0, 4096);
+        		var centerY = getRandomInt(0, 4096);
+        		ctxFinal.moveTo(centerX, centerY);
+        		var gap = Math.floor(Math.random() * 1) + .006;
+        		var theta = increment2;
+        		while( theta < Math.floor(Math.random() * 50.090909095) + dSize) {
+           		var newX = centerX + theta * Math.cos(theta) * gap;
+           		var newY = centerY + theta * Math.sin(theta) * gap;
+           		ctxFinal.lineTo(newX, newY);
+           		theta = theta + increment2;
+                }
+        		ctxFinal.shadowColor = "#222222";
+        		ctxFinal.shadowOffsetX = shdX;
+        		ctxFinal.shadowOffsetY = shdY;
+        		ctxFinal.shadowBlur = 1;
+        		ctxFinal.strokeStyle = grdSF;
+        		ctxFinal.lineWidth = 0.5;
+        		ctxFinal.stroke();
+      		}
+			
+			canvasBG.addEventListener(
+				"click",
+				function (event) {
+					if (!event.target.matches(".myCanvasBG")) {
+						var canvases = document.getElementsByTagName("canvas");
+						var canvasesList = Array.prototype.slice.call(canvases);
+            			canvasesList.forEach(releaseCanvas);
+						location.reload();
+				  	}
 
-/* The Close Button */
-.close {
-  position: absolute;
-  top: 15px;
-  right: 35px;
-  color: #f1f1f1;
-  font-size: 40px;
-  font-weight: bold;
-  transition: 0.3s;
-}
+				},
+				false
+		  	);
 
-.close:hover,
-.close:focus {
-  color: #bbb;
-  text-decoration: none;
-  cursor: pointer;
-}
-</style>
-</head>
-
-<body>
-  <center>
-<canvas id="canvas1" style="object-fit: contain; top: 0; left: 0; position: absolute;"></canvas>
-<img id="myImg" style="object-fit: contain; top: 0; left: 0; position: absolute;"></img>
-</center>
-
-
-<!-- The Modal -->
-<div id="myModal" class="modal">
-  <!-- The Close Button -->
-  <span class="close">&times;</span>
-
-  <!-- Modal Content (The Image) -->
-  <img class="modal-content" id="img01" style="object-fit: contain; width: 100vw; height: 100vh;" width="4096" height="4096">
-
-</div>
-<script>
-
-/*Release canvas from memory*/
-function releaseCanvas(canvas) {
-  canvas.width = 1;
-  canvas.style.width = "1vw";
-  canvas.height = 1;
-  canvas.style.height = "1vh";
-  const ctx = canvas.getContext('2d');
-  ctx && ctx.clearRect(0, 0, 1, 1);
-}
-
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-  }
-  function getRandomDec(min,max) {
-  	  return Math.random() * (max - min) + min;
-  	}
-function randomColor() {
-  return '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
-  }
-
-//globals
-  var size1 = getRandomDec(128,129);
-  var x = 319;
-  var y = 50;
-  var x1 = 481;
-  var y1 = 600;
-  var color1 = "#B7D21D";
-  var color2 = "#3F3E6F";
-  var color3 = "#603F35";
-  var color4 = "#5CA676";
-  var color5 = "#67266C";
-  var offX = getRandomInt(0, 0);
-  var offY = getRandomInt(0, 0);
-  var lineW = getRandomInt(0.01, 0.02);
-  var blur = getRandomInt(10, 20);
-
-window.addEventListener('load', function() {
-  const canvas = document.getElementById('canvas1');
-  const ctx = canvas.getContext('2d');
-  canvas.width = 4096;
-  canvas.height = 4096;
-  canvas.style.width = "100vw";
-  canvas.style.height = '100vh';
-  //canvas settings
-  var lineJoin = ['round', 'bevel', 'miter'];
-  var s = 300;
-  var grd = ctx.createRadialGradient(s, s, 50, s, s, 300);
-  grd.addColorStop(Math.random(), color1);
-  grd.addColorStop(Math.random(), color2);
-  grd.addColorStop(Math.random(), color3);
-  grd.addColorStop(Math.random(), color4);
-  grd.addColorStop(Math.random(), color5);
-  ctx.fillStyle = "#000000";
-  ctx.fillRect(0, 0, 4096, 4096);
-  ctx.lineWidth = lineW;
-  ctx.lineCap = 'round';
-  ctx.strokeStyle = grd;
-  ctx.fillStyle = grd;
-  ctx.shadowColor = '#222222';
-  ctx.shadowOffsetX = offX;
-  ctx.shadowOffsetY = offY;
-  ctx.shadowBlur = blur;
-
-  const ctx2 = canvas.getContext('2d');
-  var grd1 = ctx2.createRadialGradient(2048, 2048, 500, 2048, 2048, 2048);
-  grd1.addColorStop(0, "lightgray");
-  grd1.addColorStop(1, "gray");
-  ctx2.fillStyle = grd1;
-  ctx2.fillRect(0, 0, 4096, 4096);
-
-
-  class Fractal {
-    constructor(canvasWidth, canvasHeight){
-      this.canvasWidth = canvasWidth;
-      this.canvasHeight = canvasHeight;
-      this.size = this.canvasWidth * 0.01;
-      this.sides = size1;
-    }
-    draw(context){
-      context.save();
-      context.translate(this.canvasWidth/2, this.canvasHeight/2);
-      context.scale(2, 2);
-      context.rotate(0);
-
-
-      for (let i = 0; i < this.sides; i++){
-        this.#drawLine(context);
-        context.rotate((Math.PI * 35)/this.sides);
-      }
-
-      context.restore();
-    }
-
-
-
-    #drawLine(context){
-      for (let i = 0; i < lineJoin.length; i++) {
-      context.lineJoin = lineJoin[i];
-      context.beginPath();
-      context.moveTo(x-30, y-30 + i * 140);
-      context.lineTo(x-30, y-30 + i * 140);
-      context.lineTo(x1-30, y1-30 + i * 140);
-      context.lineTo(-35, -45 + i * 140);
-      context.arc(x, y, 200, 0, 8 * Math.PI);
-      context.stroke();
-    }}
-  }
-
-  const fractal1 = new Fractal(canvas.width, canvas.height);
-  fractal1.draw(ctx);
-
-
-  });
-
-
-//modal
-  let timer;
-  document.getElementById("canvas1").addEventListener('click', event => {
-    if (event.detail === 1) {
-    timer = setTimeout(() => {
-      ('click');
-      location.reload();
-    }, 200)
-    }
-  });
-  document.getElementById("canvas1").addEventListener('dblclick', event => {
-    clearTimeout(timer);
-    ('dblclick');
-    modalUp();
-  })
-
-  /*Run release even when they refresh not with click (F5, refresh button, closing page)*/
-  			window.addEventListener('pagehide', (event) => {
-  				/*Release every canvas*/
-  					var canvases = document.getElementsByTagName("canvas");
-  					var canvasesList = Array.prototype.slice.call(canvases);
-              		canvasesList.forEach(releaseCanvas);
-  			});
-  //save image on mobile
-   			function modalUp() {
-
-               	var inputVal = canvas1.toDataURL({format: 'image/png', quality:1, width:4096, height:4096});
-  				var img = new Image();
-  				img.src = inputVal;
-
-  				var modal = document.getElementById("myModal");
-
-  				// Get the image and insert it inside the modal - use its "alt" text as a caption
-
-  				var modalImg = document.getElementById("img01");
-
-
-  				  modal.style.display = "block";
-  				  modalImg.src = inputVal;
-
-  				// Get the <span> element that closes the modal
-  				var span = document.getElementsByClassName("close")[0];
-
-  				// When the user clicks on <span> (x), close the modal
-  				span.onclick = function() {
-  				  	modal.style.display = "none";
-  				}
-
-           	}
-</script>
-
-</body>
+            /*Run release even when they refresh not with click (F5, refresh button, closing page)*/
+			window.addEventListener('pagehide', (event) => {
+				/*Release every canvas*/
+					var canvases = document.getElementsByTagName("canvas");
+					var canvasesList = Array.prototype.slice.call(canvases);
+            		canvasesList.forEach(releaseCanvas);
+			});
+		
+		</script>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</body>
 </html>
