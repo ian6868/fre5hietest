@@ -1,252 +1,259 @@
-  <!DOCTYPE HTML>
-    <html>
-    <head>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <style>
-      body, html {
-        padding:0 !important;
-        margin: 0 !important;
-        margin-bottom: 0px;
-        padding-bottom: 0px;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Frac5</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #000000;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 0px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+}
+
+/* Modal Content (Image) */
+.modal-content {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+}
+
+
+/* Add Animation - Zoom in the Modal */
+.modal-content, #caption {
+  animation-name: zoom;
+  animation-duration: 0.6s;
+}
+
+@keyframes zoom {
+  from {transform:scale(0)}
+  to {transform:scale(1)}
+}
+
+/* The Close Button */
+.close {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+  <center>
+<canvas id="canvas1" style="object-fit: contain; top: 0; left: 0; position: absolute;"></canvas>
+<img id="myImg" style="object-fit: contain; top: 0; left: 0; position: absolute;"></img>
+</center>
+
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+  <!-- The Close Button -->
+  <span class="close">&times;</span>
+
+  <!-- Modal Content (The Image) -->
+  <img class="modal-content" id="img01" style="object-fit: contain; width: 100vw; height: 100vh;" width="4096" height="4096">
+
+</div>
+<script>
+
+/*Release canvas from memory*/
+function releaseCanvas(canvas) {
+  canvas.width = 1;
+  canvas.style.width = "1vw";
+  canvas.height = 1;
+  canvas.style.height = "1vh";
+  const ctx = canvas.getContext('2d');
+  ctx && ctx.clearRect(0, 0, 1, 1);
+}
+
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+  function getRandomDec(min,max) {
+  	  return Math.random() * (max - min) + min;
+  	}
+function randomColor() {
+  return '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
+  }
+
+//globals
+  var size1 = getRandomDec(128,129);
+  var x = 319;
+  var y = 50;
+  var x1 = 481;
+  var y1 = 600;
+  var color1 = "#B7D21D";
+  var color2 = "#3F3E6F";
+  var color3 = "#603F35";
+  var color4 = "#5CA676";
+  var color5 = "#67266C";
+  var offX = getRandomInt(0, 0);
+  var offY = getRandomInt(0, 0);
+  var lineW = getRandomInt(0.01, 0.02);
+  var blur = getRandomInt(10, 20);
+
+window.addEventListener('load', function() {
+  const canvas = document.getElementById('canvas1');
+  const ctx = canvas.getContext('2d');
+  canvas.width = 4096;
+  canvas.height = 4096;
+  canvas.style.width = "100vw";
+  canvas.style.height = '100vh';
+  //canvas settings
+  var lineJoin = ['round', 'bevel', 'miter'];
+  var s = 300;
+  var grd = ctx.createRadialGradient(s, s, 50, s, s, 300);
+  grd.addColorStop(Math.random(), color1);
+  grd.addColorStop(Math.random(), color2);
+  grd.addColorStop(Math.random(), color3);
+  grd.addColorStop(Math.random(), color4);
+  grd.addColorStop(Math.random(), color5);
+  ctx.fillStyle = "#000000";
+  ctx.fillRect(0, 0, 4096, 4096);
+  ctx.lineWidth = lineW;
+  ctx.lineCap = 'round';
+  ctx.strokeStyle = grd;
+  ctx.fillStyle = grd;
+  ctx.shadowColor = '#222222';
+  ctx.shadowOffsetX = offX;
+  ctx.shadowOffsetY = offY;
+  ctx.shadowBlur = blur;
+
+  const ctx2 = canvas.getContext('2d');
+  var grd1 = ctx2.createRadialGradient(2048, 2048, 500, 2048, 2048, 2048);
+  grd1.addColorStop(0, "lightgray");
+  grd1.addColorStop(1, "gray");
+  ctx2.fillStyle = grd1;
+  ctx2.fillRect(0, 0, 4096, 4096);
+
+
+  class Fractal {
+    constructor(canvasWidth, canvasHeight){
+      this.canvasWidth = canvasWidth;
+      this.canvasHeight = canvasHeight;
+      this.size = this.canvasWidth * 0.01;
+      this.sides = size1;
+    }
+    draw(context){
+      context.save();
+      context.translate(this.canvasWidth/2, this.canvasHeight/2);
+      context.scale(2, 2);
+      context.rotate(0);
+
+
+      for (let i = 0; i < this.sides; i++){
+        this.#drawLine(context);
+        context.rotate((Math.PI * 35)/this.sides);
       }
 
-      * {
-        padding: 0;
-        margin: 0;
-      }
-        body  { background-color: black; overflow: hidden;}
-      .img{
-        position: absolute;
-        object-fit: contain;
-        display: none;
-
-
-      }
-
-        </style>
-      </head>
-        <body>
-
-
-
-
-  <div style="text-align:center; position: relative;">
-
-
-	  <img id="myImg" class='img' alt="F5xTurtles">
-    <canvas id="myCanvas"></canvas>
-    <canvas id="rain" style ="object-fit: contain; z-index: 0; top: 0; left: 0; position: absolute;"></canvas>
-    <canvas id="myCanvas2" style="object-fit: contain; z-index: -2; top: 0; left: 0; position: absolute;"></canvas>
-    <canvas id="imgCan" style="z-index: -1;"></canvas>
-
-  </div>
-
-    <script type="text/javascript">
-		
-		function releaseCanvas(canvas) {
-				canvas.width = 1;
-				canvas.style.width = "1vw";
-				canvas.height = 1;
-				canvas.style.height = "1vh";
-				const ctx = canvas.getContext('2d');
-				ctx && ctx.clearRect(0, 0, 1, 1);
-			}
-
-        function getRandomDec(min,max) {
-        return Math.random() * (max - min) + min;
-        }
-
-      	function getRandomInt(min, max) {
-        	return Math.floor(Math.random() * (max - min + 1) + min);
-        }
-
-              var fvert1 = getRandomInt(2050,3350);
-              var fhor1 = getRandomInt(1200,4050);
-              var fhor2 = getRandomInt(50,2950);
-              var dSize = getRandomInt(50000, 65000);
-              var shdX = getRandomInt(-20, 20);
-              var shdY = getRandomInt(-20, 20);
-
-
-              var img = document.getElementById('myImg');
-              img.width = 4096;
-              img.height = 4096;
-              img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQwAAACkBAMAAACQmg2XAAAAG1BMVEUAAAAYVjYvrGtHcEz8AEMAAAD+rjT/////dXUBpp31AAAABHRSTlPm5uYA5cyABgAAAXJJREFUeNrt2+ENgyAQhmFX6ApdwRVcwRW6Qlfo2BUt4aAcgm2anrzfHysNd88PQ4zoMP5FBhgwYMDYMi15LJlEYMCAAaOFoFJgwIDRKWNqCgwYMGBEVZdc18xrrknc/zDOxRgy0QkOcV/zDkkoMDpjeEQeAuMcDN/ykonkyMvTM+Y5v4RFFBgwYJyKobXXODBg7DPKtz0wbDNqCZISN9IvTxi9M8qBAQMGDBh9MFoI8rFLMwEGDBjdMdLWNZSGbR0YMGAYYfhS8qglR9Ao2lYQDBgwLDLcgzKdsP+6yDtjf+s49IQBA4Y1hjt1Lwtuw+n2bg1BLmWlOTEh9IQBA4ZVhh+uS9jQOxLZDwYMGPYYY4Zye0WOx3HL1P4HD6Vayt0XjL9l+InyOB1MuRYMGwxP2bJNiH8djV5LedoDAwYMQ4yASZeco5/ZVdeCYYIRJn+KaKgFwwhDLmSfIaprwTDDCJPHL6SiFgxDjB8HBgwYhhhPqh4WqdmwOaIAAAAASUVORK5CYII=';
-
-
-        var ang1 = 0.46289330053579913;
-        var ang2 = 0.0008996859405740301;
-        var ang3 = 0.0030492461097504056;
-        var r1 = getRandomDec(0.1, 0.29);console.log(r1); //0.28632333536970855, 0.9945030443157901, 0.20282799201856094
-        var r2 = getRandomDec(0.98, 1);console.log(r2);
-        var r3 = getRandomDec(0.19, 0.21);console.log(r3);
-
-
-      canvas = document.getElementById('myCanvas');
-      canvas.width =4096;
-      canvas.height = 4096;
-      canvas.style.width = "100vw";
-      canvas.style.height = '100vh';
-      canvas.getContext('2d').scale(2,2);
-
-      var ctx = canvas.getContext("2d");
-      var grd = ctx.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
-
-      grd.addColorStop(Math.random(), "#dbdbe1");
-      grd.addColorStop(Math.random(), "#323f50");
-      grd.addColorStop(Math.random(), "#e2edf3");
-
-      var ctx2 = canvas.getContext("2d");
-      var grd2 = ctx.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
-
-      grd2.addColorStop(Math.random(), "#8a8b95");
-      //grd2.addColorStop(Math.random(), "#edeef2");
-      grd2.addColorStop(Math.random(), "#83808a");
-      grd2.addColorStop(Math.random(), "#797782");
-      grd2.addColorStop(Math.random(), "#5e5c69");
-      //grd2.addColorStop(Math.random(), "#444445");
-
-
-      canvas3 = document.getElementById('rain');
-      canvas3.width =4096;
-      canvas3.height = 4096;
-      canvas3.style.width = "100vw";
-      canvas3.style.height = '100vh';
-      canvas3.getContext('2d').scale(2,2);
-
-      var ctx3 = canvas3.getContext("2d");
-      var grd3 = ctx3.createLinearGradient(0, Math.floor(r1 * 4096), Math.floor(r2 * 4096), Math.floor(r3 * 4096));
-
-      //grd3.addColorStop(Math.random(), "transparent");
-      //grd3.addColorStop(Math.random(), "#222222");
-      grd3.addColorStop(Math.random(), "transparent");
-      grd3.addColorStop(Math.random(), "#666666");
-      grd3.addColorStop(Math.random(), "transparent");
-      grd3.addColorStop(Math.random(), "transparent");
-      grd3.addColorStop(Math.random(), "#888888");
-      grd3.addColorStop(Math.random(), "transparent");
-      grd3.addColorStop(Math.random(), "#444444");
-      grd3.addColorStop(Math.random(), "transparent");
-      grd3.addColorStop(Math.random(), "transparent");
-      grd3.addColorStop(Math.random(), "#666666");
-      grd3.addColorStop(Math.random(), "transparent");
-      grd3.addColorStop(Math.random(), "#888888");
-      grd3.addColorStop(Math.random(), "transparent");
-
-
-
-	  ctx.fillStyle = grd;
-	  ctx.fillRect(0, 0, 2048, 1300);
-    ctx2.fillStyle = grd2;
-    ctx2.fillRect(0,1300, 2048, 2048);
-    ctx3.globalAlpha = 0.5;
-    ctx3.fillStyle = grd3;
-	  ctx3.fillRect(0, 0, 4096, 4096);
-
-
-	  var grd1 = ctx.createLinearGradient(0,Math.floor(ang1 * 4096),Math.floor(ang2 * 4096),Math.floor(ang3 * 4096));
-	  //grd1.addColorStop(Math.random(), "#f6f7f6");
-    grd1.addColorStop(Math.random(), "#f7eec8");
-    grd1.addColorStop(Math.random(), "#f7f493");
-
-
-        var c=document.getElementById("myCanvas");
-        var ctx=c.getContext("2d");
-        var centerX = getRandomInt(400, 1750);
-        var centerY = getRandomInt(350, 600);
-        ctx.moveTo(centerX, centerY);
-
-
-        var gap = Math.floor(Math.random() * 1) + .0079;
-    		var d2 = 72.32374852430411;
-    		var d3 = 134.54777201720935;
-    		var d5 = 84.92411676611502;
-    		var d6 = 192.9465220708107;
-    		var d7 = 135.2208604006022;
-    		var d8 = 73.231322369623;
-    		var dArray = [d2, d3, d5, d6, d7, d8]
-    		var dIndex = getRandomInt(0, 5);
-    		var design = dArray[dIndex];
-    		var increment = design;
-        var theta = increment;
-        while( theta < Math.floor(Math.random() * 50.090909095) + dSize) {
-           var newX = centerX + theta * Math.cos(theta) * gap;
-           var newY = centerY + theta * Math.sin(theta) * gap;
-           ctx.lineTo(newX, newY);
-           theta = theta + increment;
-                }
-        ctx.shadowColor = "#111111";
-        ctx.shadowOffsetX = shdX;
-        ctx.shadowOffsetY = shdY;
-        ctx.shadowBlur = 20;
-        ctx.strokeStyle = grd1;
-        ctx.lineWidth = 3;
-        ctx.globalAlpha = 0.7;
-        ctx.stroke();
-
-
-		    var c2 = document.getElementById("myCanvas2");
-        var ctx2 = c2.getContext("2d");
-		    c2.width =4096;
-      	c2.height = 4096;
-      	c2.style.width = "100vw";
-      	c2.style.height = '100vh';
-
-
-        ctx2.drawImage(c, 0, 0);
-		//flipAndCopy();
-        //ctx2.drawImage(canvas3, 0, 0);
-    		document.getElementById("myCanvas").style.display = "none";
-        document.getElementById("rain").style.display = "none";
-
-        var c2 = document.getElementById("myCanvas2");
-        var ctx2 = c2.getContext("2d");
-
-
-      window.onload = function() {
-  			const flipper = getRandomInt(0,1);
-  			switch (flipper) {
-			  case 0:
-
-        var img = document.getElementById("myImg");
-        ctx2.save();
-			  ctx2.scale(-1,1);
-			  ctx2.drawImage(img, fhor1 * -1, fvert1, 1100, 725);	
-			  ctx2.restore();
-ctx2.drawImage(canvas3, 0, 0);
-
-			  break;
-			  default:
-
-			  var img = document.getElementById("myImg");
-        ctx2.drawImage(img, fhor2, fvert1, 1100, 725);
-ctx2.drawImage(canvas3, 0, 0);
-      }
+      context.restore();
     }
 
 
-    c2.addEventListener(
-      "click",
-      function (event) {
 
-        if (!event.target.matches("myCanvas2")) {
-			var canvases = document.getElementsByTagName("canvas");
-			var canvasesList = Array.prototype.slice.call(canvases);
-            canvasesList.forEach(releaseCanvas);
-          location.reload();
-        }
+    #drawLine(context){
+      for (let i = 0; i < lineJoin.length; i++) {
+      context.lineJoin = lineJoin[i];
+      context.beginPath();
+      context.moveTo(x-30, y-30 + i * 140);
+      context.lineTo(x-30, y-30 + i * 140);
+      context.lineTo(x1-30, y1-30 + i * 140);
+      context.lineTo(-35, -45 + i * 140);
+      context.arc(x, y, 200, 0, 8 * Math.PI);
+      context.stroke();
+    }}
+  }
 
-      },
-      false
-    );
-		
-		/*Run release even when they refresh not with click (F5, refresh button, closing page)*/
-			window.addEventListener('pagehide', (event) => {
-				/*Release every canvas*/
-					var canvases = document.getElementsByTagName("canvas");
-					var canvasesList = Array.prototype.slice.call(canvases);
-            		canvasesList.forEach(releaseCanvas);
-			});
-    </script>
-        </body>
-            </html>
+  const fractal1 = new Fractal(canvas.width, canvas.height);
+  fractal1.draw(ctx);
+
+
+  });
+
+
+//modal
+  let timer;
+  document.getElementById("canvas1").addEventListener('click', event => {
+    if (event.detail === 1) {
+    timer = setTimeout(() => {
+      ('click');
+      location.reload();
+    }, 200)
+    }
+  });
+  document.getElementById("canvas1").addEventListener('dblclick', event => {
+    clearTimeout(timer);
+    ('dblclick');
+    modalUp();
+  })
+
+  /*Run release even when they refresh not with click (F5, refresh button, closing page)*/
+  			window.addEventListener('pagehide', (event) => {
+  				/*Release every canvas*/
+  					var canvases = document.getElementsByTagName("canvas");
+  					var canvasesList = Array.prototype.slice.call(canvases);
+              		canvasesList.forEach(releaseCanvas);
+  			});
+  //save image on mobile
+   			function modalUp() {
+
+               	var inputVal = canvas1.toDataURL({format: 'image/png', quality:1, width:4096, height:4096});
+  				var img = new Image();
+  				img.src = inputVal;
+
+  				var modal = document.getElementById("myModal");
+
+  				// Get the image and insert it inside the modal - use its "alt" text as a caption
+
+  				var modalImg = document.getElementById("img01");
+
+
+  				  modal.style.display = "block";
+  				  modalImg.src = inputVal;
+
+  				// Get the <span> element that closes the modal
+  				var span = document.getElementsByClassName("close")[0];
+
+  				// When the user clicks on <span> (x), close the modal
+  				span.onclick = function() {
+  				  	modal.style.display = "none";
+  				}
+
+           	}
+</script>
+
+</body>
+</html>
