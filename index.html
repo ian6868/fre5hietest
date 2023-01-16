@@ -13,7 +13,7 @@
 }
 
 body {
-  background-color: #000000;
+  background-color: rgb(0,0,0);
 }
 
 /* The Modal (background) */
@@ -115,11 +115,11 @@ function randomColor() {
   var y = 50;
   var x1 = 481;
   var y1 = 600;
-  var color1 = "#B7D21D";
-  var color2 = "#3F3E6F";
-  var color3 = "#603F35";
-  var color4 = "#5CA676";
-  var color5 = "#67266C";
+  var color1 = "rgb(240,248,255)";
+  var color2 = "rgb(224,255,255)";
+  var color3 = "rgb(255,215,0)";
+  var color4 = "rgb(0,255,0)";
+  var color5 = "rgb(220,20,60)";
   var offX = getRandomInt(0, 0);
   var offY = getRandomInt(0, 0);
   var lineW = getRandomInt(0.01, 0.02);
@@ -141,11 +141,11 @@ window.addEventListener('load', function() {
   grd.addColorStop(Math.random(), color3);
   grd.addColorStop(Math.random(), color4);
   grd.addColorStop(Math.random(), color5);
-  ctx.fillStyle = "#000000";
+  ctx.fillStyle = "rgb(0,0,0)";
   ctx.fillRect(0, 0, 4096, 4096);
   ctx.lineWidth = lineW;
   ctx.lineCap = 'round';
-  ctx.strokeStyle = "#ffffff";
+  ctx.strokeStyle = "rgb(255,255,255)";
   ctx.fillStyle = grd;
   ctx.shadowColor = '#222222';
   ctx.shadowOffsetX = offX;
