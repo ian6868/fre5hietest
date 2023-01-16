@@ -9,6 +9,17 @@
   <div style="text-align:center">   <canvas id="myCanvas" style="object-fit: contain"></canvas> </div>
 
     <script type="text/javascript">
+
+    /*Release canvas from memory*/
+    function releaseCanvas(canvas) {
+      canvas.width = 1;
+      canvas.style.width = "1vw";
+      canvas.height = 1;
+      canvas.style.height = "1vh";
+      const ctx = canvas.getContext('2d');
+      ctx && ctx.clearRect(0, 0, 1, 1);
+    }
+
       canvas = document.getElementById('myCanvas');
       canvas.width = 4096;
       canvas.height = 4096;
@@ -68,6 +79,14 @@ var size1 = getRandomInt(275, 500); console.log(size1);
         ctx.strokeStyle = g2;
         ctx.lineWidth = 3;
         ctx.stroke(); // draw
+
+        /*Run release even when they refresh not with click (F5, refresh button, closing page)*/
+        			window.addEventListener('pagehide', (event) => {
+        				/*Release every canvas*/
+        					var canvases = document.getElementsByTagName("canvas");
+        					var canvasesList = Array.prototype.slice.call(canvases);
+                    		canvasesList.forEach(releaseCanvas);
+        			});
 
         canvas.addEventListener(
           "click",
