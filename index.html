@@ -33,34 +33,6 @@ body {
 </div>
 
   <script>
-  function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  }
-
-  var hsla1 = getRandomInt(0, 320)
-  var hsla2 = getRandomInt(0, 320)
-  var hsla3 = getRandomInt(0, 320)
-  var hsla4 = getRandomInt(0, 320)
-
-  var percent1 = getRandomInt(0, 100)
-  var perc1 = percent1 + "%"
-  var percent2 = getRandomInt(0, 100)
-  var perc2 = percent2 + "%"
-  var percent3 = getRandomInt(0, 100)
-  var perc3 = percent3 + "%"
-  var percent7 = getRandomInt(0, 100)
-  var perc7 = percent7 + "%"
-
-  var percent4 = getRandomInt(0, 75)
-  var perc4 = percent4 + "%"
-  var percent5 = getRandomInt(0, 75)
-  var perc5 = percent5 + "%"
-  var percent6 = getRandomInt(0, 75)
-  var perc6 = percent6 + "%"
-  var percent8 = getRandomInt(0, 75)
-  var perc8 = percent8 + "%"
-
-
   const randomGaussian = (mean = 0, sd = 1) => {
     let y1;
     let x1;
@@ -102,7 +74,7 @@ body {
   ctxStitch.canvas.width = stitchWidth;
   ctxStitch.canvas.height = stitchWidth;
 
-  ctxStitch.strokeStyle = `rgba(220, 220, 220, 0.0)`;
+  ctxStitch.strokeStyle = `rgba(220, 220, 220, 0.1)`;
 
   ctxStitch.beginPath();
   ctxStitch.moveTo(0, 0);
@@ -129,20 +101,27 @@ body {
   const TAU = Math.PI * 2;
   const R = Math.min(Math.min(MID_X, MID_Y) * 0.5, 150);
 
+  function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+
+  const c1 = (getRandomInt(0, 360));
+  const c2 = (getRandomInt(0, 360));
+  const c3 = (getRandomInt(0, 360));
+  const c4 = (getRandomInt(0, 360));
+
   const ALPHA = 0.006;
   const COLORS = [
-    `hsla(${hsla1}, 100%, 50%, ${ALPHA})`,
-    `hsla(${hsla2}, 100%, 50%, ${ALPHA})`,
-    `hsla(${hsla3}, 100%, 50%, ${ALPHA})`,
-    `hsla(${hsla4}, 100%, 50%, ${ALPHA})`,
-    `hsla(100, 100%, 50%, ${ALPHA})`,
+    `hsla(${c1}, 100%, 50%, ${ALPHA})`,
+    `hsla(${c2}, 100%, 50%, ${ALPHA})`,
+    `hsla(${c3}, 100%, 50%, ${ALPHA})`,
+    `hsla(${c4}, 100%, 50%, ${ALPHA})`,
   ];
 
   const INTERLEAVE = 5;
-
   const VARIANCE_DEFAULT = 20;
   const NUM_POLIES = 200;
-  const DEPTH = 2;
+  const DEPTH = 4;
   const NUM_SPOTS = 3;
   const ANGLE_STEP = TAU / NUM_SPOTS;
 
