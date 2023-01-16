@@ -1,366 +1,274 @@
-<!DOCTYPE HTML>
-  <html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-    body, html {
-      padding:0 !important;
-      margin: 0 !important;
-      margin-bottom: 0px;
-      padding-bottom: 0px;
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+<style>
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.container {
+  width: auto;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.canvas-stitch {
+  display: none;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+  <canvas class="canvas js-canvas" style="object-fit: contain" ></canvas>
+
+  <canvas class="canvas-stitch js-canvas-stitch"></canvas>
+</div>
+
+  <script>
+  function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  var hsla1 = getRandomInt(0, 320)
+  var hsla2 = getRandomInt(0, 320)
+  var hsla3 = getRandomInt(0, 320)
+  var hsla4 = getRandomInt(0, 320)
+
+  var percent1 = getRandomInt(0, 100)
+  var perc1 = percent1 + "%"
+  var percent2 = getRandomInt(0, 100)
+  var perc2 = percent2 + "%"
+  var percent3 = getRandomInt(0, 100)
+  var perc3 = percent3 + "%"
+  var percent7 = getRandomInt(0, 100)
+  var perc7 = percent7 + "%"
+
+  var percent4 = getRandomInt(0, 75)
+  var perc4 = percent4 + "%"
+  var percent5 = getRandomInt(0, 75)
+  var perc5 = percent5 + "%"
+  var percent6 = getRandomInt(0, 75)
+  var perc6 = percent6 + "%"
+  var percent8 = getRandomInt(0, 75)
+  var perc8 = percent8 + "%"
+
+
+  const randomGaussian = (mean = 0, sd = 1) => {
+    let y1;
+    let x1;
+    let x2
+    let w;
+    let previous;
+
+    if (previous) {
+      y1 = y2;
+      previous = false;
+    } else {
+      do {
+        x1 = (Math.random() * 2) - 1;
+        x2 = (Math.random() * 2) - 1;
+        w = x1 * x1 + x2 * x2;
+      } while (w >= 1);
+      w = Math.sqrt(-2 * Math.log(w) / w);
+      y1 = x1 * w;
+      y2 = x2 * w;
+      previous = true;
     }
 
-    * {
-      padding: 0;
-      margin: 0;
+    return y1 * sd + mean;
+  };
+
+  const randomBetween = (min, max) => (Math.random() * (max - min + 1)) + min;
+
+  const ctx = document
+    .querySelector('.js-canvas')
+    .getContext('2d');
+
+  // stitch pattern
+  const ctxStitch = document
+    .querySelector('.js-canvas-stitch')
+    .getContext('2d');
+
+  const stitchWidth = 5;
+
+  ctxStitch.canvas.width = stitchWidth;
+  ctxStitch.canvas.height = stitchWidth;
+
+  ctxStitch.strokeStyle = `rgba(220, 220, 220, 0.0)`;
+
+  ctxStitch.beginPath();
+  ctxStitch.moveTo(0, 0);
+  ctxStitch.lineTo(stitchWidth, stitchWidth);
+  ctxStitch.stroke();
+  ctxStitch.closePath();
+
+  ctxStitch.beginPath();
+  ctxStitch.moveTo(0, stitchWidth);
+  ctxStitch.lineTo(stitchWidth, 0);
+  ctxStitch.stroke();
+  ctxStitch.closePath();
+
+  const stitchPattern = ctx.createPattern(ctxStitch.canvas, 'repeat');
+
+
+  const W = 750;
+  const H = 750;
+
+  const MID_X = W * 0.5;
+  const MID_Y = H * 0.5;
+
+  const EDGES = 12;
+  const TAU = Math.PI * 2;
+  const R = Math.min(Math.min(MID_X, MID_Y) * 0.5, 150);
+
+  const ALPHA = 0.006;
+  const COLORS = [
+    `hsla(${hsla1}, 100%, 50%, ${ALPHA})`,
+    `hsla(${hsla2}, 100%, 50%, ${ALPHA})`,
+    `hsla(${hsla3}, 100%, 50%, ${ALPHA})`,
+    `hsla(${hsla4}, 100%, 50%, ${ALPHA})`,
+    `hsla(100, 100%, 50%, ${ALPHA})`,
+  ];
+
+  const INTERLEAVE = 5;
+
+  const VARIANCE_DEFAULT = 20;
+  const NUM_POLIES = 200;
+  const DEPTH = 2;
+  const NUM_SPOTS = 3;
+  const ANGLE_STEP = TAU / NUM_SPOTS;
+
+  let polyCount = 0;
+  let rafId;
+
+  ctx.globalCompositeOperation = 'multiply';
+  ctx.canvas.width = W;
+  ctx.canvas.height = H;
+
+
+  // get the points for a regular polygon with <edges>
+  const getPoly = (midX, midY, r, edges) => {
+    const vertices = [];
+    const angleStep = TAU / edges;
+
+    for (let angle = 0; angle < TAU; angle += angleStep) {
+      const x = midX + Math.cos(angle) * r;
+      const y = midY + Math.sin(angle) * r;
+
+      vertices.push({ x, y });
     }
-      body  {
-		  background-color: black;
-		  /*overflow: hidden;*/
-		}
 
+    return vertices;
+  };
 
+  // add extra point between each side of the polygon
+  const deformPoly = (vertices, depth, variance, varianceDecrease) => {
+    let deformedVertices = [];
 
-	/* The Modal  */
-			.modal {
-			  display: none;
-			  position: fixed;
-			  z-index: 6;
-			  left: 0;
-			  top: 0;
-			  width: 100%;
-			  height: 100%;
-			  background-color: black;
+    for (let i = 0; i < vertices.length; i++) {
+      const from = vertices[i];
+      const to = i === vertices.length - 1 ? vertices[0] : vertices[i + 1];
 
+      const midX = (from.x + to.x) * 0.5;
+      const midY = (from.y + to.y) * 0.5;
 
-			}
+      const newX = midX + randomGaussian() * variance;
+      const newY = midY + randomGaussian() * variance;
 
-			.modal-buttons {
-				margin:auto;
-			  	max-width: 650px;
+      deformedVertices.push(from);
+      deformedVertices.push({ x: newX, y: newY });
+    }
 
-			}
+    if (depth > 0) {
+      depth--;
 
+      return deformPoly(deformedVertices, depth, variance / varianceDecrease, varianceDecrease);
+    }
 
-			.modal-content {
-			  margin: auto;
-			  display: block;
+    return deformedVertices;
+  };
 
-			  max-width: 650px;
-			}
+  const drawPoly = (vertices, color) => {
+    const [firstVertex] = vertices;
 
+    ctx.save();
+    ctx.translate(MID_X, MID_Y);
+    ctx.beginPath();
+    ctx.fillStyle = color;
+    ctx.moveTo(firstVertex.x, firstVertex.y);
 
-			.modal-content, #caption {
-			  animation-name: zoom;
-			  animation-duration: 0.6s;
-			}
+    for (let i = 1; i < vertices.length; i++) {
+      const vertex = vertices[i];
+      ctx.lineTo(vertex.x, vertex.y);
+    }
 
-			@keyframes zoom {
-			  from {transform:scale(0)}
-			  to {transform:scale(1)}
-			}
+    ctx.lineTo(firstVertex.x, firstVertex.y);
+    ctx.fill();
+    ctx.closePath();
+    ctx.restore();
+  };
 
+  // blend the polygons
+  const drawLayer = (poly, polyIndex) => {
+    for (let i = 0; i < INTERLEAVE; i++) {
+      requestAnimationFrame(() => {
+        const deformed = deformPoly(poly, DEPTH, VARIANCE_DEFAULT + randomBetween(150, 5), 2);
 
+        drawPoly(deformed, COLORS[polyIndex]);
+      });
+    }
+  };
 
-			.close {
-			  right: 35px;
-			  color: #f1f1f1;
-			  font-size: 40px;
-			  font-weight: bold;
-			  transition: 0.3s;
-			}
+  const reset = () => {
+    polyCount = 0;
 
-			.close:hover,
-			.close:focus {
-			  color: #bbb;
-			  text-decoration: none;
-			  cursor: pointer;
-			}
+    cancelAnimationFrame(rafId);
 
+    ctx.clearRect(0, 0, ctx.canvas.width,ctx.canvas.height);
+  };
 
-			@media only screen and (max-width: 700px){
-			  .modal-content {
-				width: 100%;
-			  }
-			}
+  const generate = () => {
+    reset();
 
+    const polies = new Array(NUM_SPOTS).fill().map((_, i) => {
+      const poly = getPoly(
+        Math.cos(ANGLE_STEP * i) * (R * 0.5) * randomGaussian(3,),
+        Math.sin(ANGLE_STEP * i) * (R * 0.5) * randomGaussian(3,),
+        R + randomBetween(-15, 15),
+        EDGES
+      );
 
-		button {
-			margin-right: 10px;
-			padding: 5px;
-		}
+      return deformPoly(poly, DEPTH, VARIANCE_DEFAULT, 2);
+    });
 
-		#myCanvasDesign, #myCanvasBlack {
-			display: none;
-		}
+    ctx.fillStyle = stitchPattern;
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
+    const draw = () => {
+      polies.forEach(drawLayer);
 
-      </style>
-    </head>
+      polyCount += INTERLEAVE;
 
-    <body>
+      if (polyCount < NUM_POLIES) {
+        rafId = requestAnimationFrame(draw);
+      }
+    };
 
-		<div style="text-align:center">
+    draw();
+  };
 
 
-			<!--<img id="displayImg" class="img" alt="Fre5hies" style="object-fit: contain; top: 0; left: 0; position: absolute;" src="">-->
-			<!--/*Display canvas*/
-			<canvas id="displayCanvas" style="object-fit: contain; top: 0; left: 0; position: absolute; width: 100vw; height: 100vh;" width="2048" height="2048"></canvas>-->
-
-			/*Gradient canvas*/
-			<canvas id="myCanvasGrad" style="object-fit: contain; top: 0; left: 0; position: absolute;"></canvas>
-
-			/*Design canvas*/
-			<canvas id="myCanvasDesign" style="object-fit: contain; top: 0; left: 0; position: absolute;"></canvas>
-
-
-		</div>
-
-<!-- The Modal -->
-		<div id="myModal" class="modal">
-
-
-			<!-- Modal Content  -->
-			<table class="modal-buttons">
-				<tr>
-					<th ><button id="transparent" type="button">Transparent BG</button><button id="withbg" type="button">Gradien BG</button><button id="blackbg" type="button">Black BG</button></th>
-
-					<th >
-						<!-- The Close Button -->
-						<span class="close" style="float: right;">&times;</span>
-					</th>
-				</tr>
-			</table>
-
-
-			<img class="modal-content" id="imgGrad" style="object-fit: contain; width: 100vw; height: 80vh;" width="4096" height="4096">
-			<img class="modal-content" id="imgTrans" style="object-fit: contain; width: 100vw; height: 80vh;" width="4096" height="4096">
-			<img class="modal-content" id="imgBlack" style="object-fit: contain; width: 100vw; height: 80vh;" width="4096" height="4096">
-		</div>
-
-
-
-
-    	<script type="text/javascript">
-
-
-/*Get random number*/
-			function getRandomInt(min, max) {
-				return Math.floor(Math.random() * (max - min + 1) + min);
-			}
-
-			function getRandomDec(min,max) {
-				return Math.random() * (max - min) + min;
-			}
-
-			function randomColor() {
-				return '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
-			}
-
-			function releaseCanvas(canvas) {
-				canvas.width = 1;
-				canvas.height = 1;
-				const ctx = canvas.getContext('2d');
-				ctx && ctx.clearRect(0, 0, 1, 1);
-			}
-
-
-/*Globals*/
-			var color1 = randomColor();
-			var color2 = randomColor();
-
-
-/*canvas - desig*/
-			var canvasDesign = document.getElementById('myCanvasDesign');
-			canvasDesign.width = 4096;
-			canvasDesign.height = 4096;
-			canvasDesign.style.width = "100vw";
-			canvasDesign.style.height = '100vh';
-			canvasDesign.getContext('2d').scale(2,2);
-
-			var ctxDesign = canvasDesign.getContext("2d");
-
-			var grdLine = ctxDesign.createRadialGradient(1024, 1024, 100, 1024, 1024, 1024);
-			grdLine.addColorStop(Math.random(), randomColor());
-			grdLine.addColorStop(Math.random(), randomColor());
-			grdLine.addColorStop(Math.random(), randomColor());
-
-			var c = document.getElementById("myCanvasDesign");
-			var ctxDesign2 =c.getContext("2d");
-			var centerX = 1024;
-			var centerY = 1024;
-			ctxDesign2.moveTo(centerX, centerY);
-			var gap = Math.floor(Math.random() * 1) + .0079;
-			var dSize = getRandomInt(100000, 130000);
-			var increment = getRandomDec(300, 500); console.log(increment);
-			var theta = increment;
-			while( theta < Math.floor(Math.random() * 50.090909095) + dSize) {
-			var newX = centerX + theta * Math.cos(theta) * gap;
-			var newY = centerY + theta * Math.sin(theta) * gap;
-			ctxDesign2.lineTo(newX, newY);
-			theta = theta + increment;
-			}
-			ctxDesign2.shadowColor = "#222222";
-			ctxDesign2.shadowOffsetX = getRandomInt(-5, 5);
-			ctxDesign2.shadowOffsetY = getRandomInt(-5, 5);
-			ctxDesign2.shadowBlur = 10;
-			ctxDesign2.strokeStyle = "#000000";
-			ctxDesign2.lineWidth = 0.5;
-      ctxDesign2.globalAlpha = 1;
-			ctxDesign2.stroke();
-
-/*canvas - gradient background*/
-			var canvasGrad = document.getElementById('myCanvasGrad');
-			canvasGrad.width =4096;
-			canvasGrad.height = 4096;
-			canvasGrad.style.width = "100vw";
-			canvasGrad.style.height = '100vh';
-			canvasGrad.getContext('2d').scale(2,2);
-			var ctxGrad = canvasGrad.getContext("2d");
-      //Top Left
-			var grdBg1 = ctxGrad.createRadialGradient(1024, 1024, 100, 1024, 1024, 1024);
-			grdBg1.addColorStop(Math.random(), color1);
-      grdBg1.addColorStop(Math.random(), color2);
-			grdBg1.addColorStop(1, "#000000");
-      ctxGrad.globalAlpha = 0.7;
-			ctxGrad.fillStyle = grdBg1;
-			ctxGrad.fillRect(0, 0, 1024, 1500);
-      //Top Right
-      var grdBg2 = ctxGrad.createRadialGradient(1024, 1024, 100, 1024, 1024, 1024);
-			grdBg2.addColorStop(Math.random(), color1);
-      grdBg2.addColorStop(Math.random(), color2);
-			grdBg2.addColorStop(1, "#000000");
-			ctxGrad.fillStyle = grdBg2;
-      var move5 = getRandomInt(1024, 1550);
-			ctxGrad.fillRect(1024, 0, 1024, move5);
-      //Bottom Left
-      var grdBg3 = ctxGrad.createRadialGradient(1024, 1024, 100, 1024, 1024, 1024);
-			grdBg3.addColorStop(Math.random(), color1);
-      grdBg3.addColorStop(Math.random(), color2);
-			grdBg3.addColorStop(1, "#000000");
-			ctxGrad.fillStyle = grdBg3;
-			ctxGrad.fillRect(0, 512, 1024, 1550);
-      //Bottom Right
-      var grdBg4 = ctxGrad.createRadialGradient(1024, 1024, 100, 1024, 1024, 1024);
-			grdBg4.addColorStop(Math.random(), color1);
-      grdBg4.addColorStop(Math.random(), color2);
-			grdBg4.addColorStop(1, "#000000");
-			ctxGrad.fillStyle = grdBg4;
-			ctxGrad.fillRect(1024, 1024, 1024, 1024);
-      //Mid Right Bottom
-      var grdBg5 = ctxGrad.createRadialGradient(1024, 1024, 100, 1024, 1024, 1024);
-			grdBg5.addColorStop(Math.random(), color1);
-      grdBg5.addColorStop(Math.random(), color2);
-			grdBg5.addColorStop(1, "#000000");
-			ctxGrad.fillStyle = grdBg5;
-      var move3 = getRandomInt(512, 1024);
-      var move4 = getRandomInt(128, 768);
-			ctxGrad.fillRect(move4, move3, 1024, 1024);
-      //Mid Right Top
-      var grdBg5 = ctxGrad.createRadialGradient(1024, 1024, 100, 1024, 1024, 1024);
-			grdBg5.addColorStop(Math.random(), color1);
-      grdBg5.addColorStop(Math.random(), color2);
-			grdBg5.addColorStop(1, "#000000");
-			ctxGrad.fillStyle = grdBg5;
-      var move2 = getRandomInt(512, 1024);
-			ctxGrad.fillRect(1024, 0, 1024, move2);
-      //Top Left Bottom
-      var grdBg6 = ctxGrad.createRadialGradient(1024, 1024, 100, 1024, 1024, 1024);
-      grdBg6.addColorStop(Math.random(), color1);
-      grdBg6.addColorStop(Math.random(), color2);
-      grdBg6.addColorStop(1, "#000000");
-      var move1 = getRandomInt(128, 512);
-      ctxGrad.fillStyle = grdBg6;
-      ctxGrad.fillRect(0, 0, 1024, move1);
-
-
-
-
-
-      //ctxGrad.drawImage(canvasDesign, 0, 0, 4096, 4096, 0, 0, 2048, 2048);
-
-
-/*onclick refresh event*/
-			let timer;
-			document.getElementById("myCanvasGrad").addEventListener('click', event => {
-			  if (event.detail === 1) {
-				timer = setTimeout(() => {
-					/* Release gradient canvases */
-					releaseCanvas(canvasDesign);
-					releaseCanvas(canvasGrad);
-					/*releaseCanvas(displayCanvas);*/
-					location.reload();
-				}, 200)
-			  }
-			});
-			document.getElementById("myCanvasGrad").addEventListener('dblclick', event => {
-			  clearTimeout(timer);
-				modalUp();
-			})
-
-			/*save image on mobile*/
- 			function modalUp() {
-
-
-				/* Save canvases into images */
-				/* Gradient image */
-				var inputValGrad = myCanvasGrad.toDataURL({format: 'image/png', quality:1, width:4096, height:4096});
-				var imgGrad = new Image();
-				imgGrad.src = inputValGrad;
-
-				/* Transparent image */
-				var inputValTrans = canvasDesign.toDataURL({format: 'image/png', quality:1, width:4096, height:4096});
-				var imgTrans = new Image();
-				imgTrans.src = inputValTrans;
-
-				/* display modal */
-				var modal = document.getElementById("myModal");
-				modal.style.display = "block";
-
-				/* Get the gradient image and insert it inside the modal */
-				var modalimgGrad = document.getElementById("imgGrad");
-			    modalimgGrad.style.display = "block";
-			    modalimgGrad.src = inputValGrad;
-
-				/* Get the transparent image and insert it inside the modal */
-				var modalImgTrans = document.getElementById("imgTrans");
-			    modalImgTrans.style.display = "none";
-			    modalImgTrans.src = inputValTrans;
-
-
-				/* active button is red */
-				document.getElementById("withbg").style.color = "red";
-
-				document.getElementById("transparent").onclick = function() {
-					modalimgGrad.style.display = "none";
-					modalImgBlack.style.display = "none";
-					modalImgTrans.style.display = "block";
-
-					this.style.color = "red";
-					document.getElementById("withbg").style.color = "black";
-
-				}
-
-				document.getElementById("withbg").onclick = function() {
-					modalimgGrad.style.display = "block";
-					modalImgTrans.style.display = "none";
-					modalImgBlack.style.display = "none";
-
-					document.getElementById("transparent").style.color = "black";
-					this.style.color = "red";
-
-				}
-
-
-				/* Get the <span> element that closes the modal */
-				var span = document.getElementsByClassName("close")[0];
-
-				/* When the user clicks on <span> (x), close the modal */
-				span.onclick = function() {
-				modal.style.display = "none";
-				}
-         	}
-
+  generate();
+  document.body.addEventListener('click', generate);
   </script>
-      </body>
-          </html>
+
+</body>
+</html>
