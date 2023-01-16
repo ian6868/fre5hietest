@@ -1,253 +1,245 @@
-<!DOCTYPE html>
-<html lang="en" >
-<head>
-  <meta charset="UTF-8">
-<style>
-html,
-body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-}
-
-.container {
-  width: auto;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.canvas-stitch {
-  display: none;
-}
-</style>
-
-</head>
-<body>
-
-<div class="container">
-  <canvas class="canvas js-canvas" style="object-fit: contain" ></canvas>
-
-  <canvas class="canvas-stitch js-canvas-stitch"></canvas>
-</div>
-
-  <script>
-  const randomGaussian = (mean = 0, sd = 1) => {
-    let y1;
-    let x1;
-    let x2
-    let w;
-    let previous;
-
-    if (previous) {
-      y1 = y2;
-      previous = false;
-    } else {
-      do {
-        x1 = (Math.random() * 2) - 1;
-        x2 = (Math.random() * 2) - 1;
-        w = x1 * x1 + x2 * x2;
-      } while (w >= 1);
-      w = Math.sqrt(-2 * Math.log(w) / w);
-      y1 = x1 * w;
-      y2 = x2 * w;
-      previous = true;
-    }
-
-    return y1 * sd + mean;
-  };
-
-  const randomBetween = (min, max) => (Math.random() * (max - min + 1)) + min;
-
-  const ctx = document
-    .querySelector('.js-canvas')
-    .getContext('2d');
-
-  // stitch pattern
-  const ctxStitch = document
-    .querySelector('.js-canvas-stitch')
-    .getContext('2d');
-
-  const stitchWidth = 5;
-
-  ctxStitch.canvas.width = stitchWidth;
-  ctxStitch.canvas.height = stitchWidth;
-
-  ctxStitch.strokeStyle = `rgba(220, 220, 220, 0.1)`;
-
-  ctxStitch.beginPath();
-  ctxStitch.moveTo(0, 0);
-  ctxStitch.lineTo(stitchWidth, stitchWidth);
-  ctxStitch.stroke();
-  ctxStitch.closePath();
-
-  ctxStitch.beginPath();
-  ctxStitch.moveTo(0, stitchWidth);
-  ctxStitch.lineTo(stitchWidth, 0);
-  ctxStitch.stroke();
-  ctxStitch.closePath();
-
-  const stitchPattern = ctx.createPattern(ctxStitch.canvas, 'repeat');
-
-
-  const W = 750;
-  const H = 750;
-
-  const MID_X = W * 0.5;
-  const MID_Y = H * 0.5;
-
-  const EDGES = 12;
-  const TAU = Math.PI * 2;
-  const R = Math.min(Math.min(MID_X, MID_Y) * 0.5, 150);
-
-  function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-    }
-
-  const c1 = (getRandomInt(0, 360));
-  const c2 = (getRandomInt(0, 360));
-  const c3 = (getRandomInt(0, 360));
-  const c4 = (getRandomInt(0, 360));
-
-  const ALPHA = 0.006;
-  const COLORS = [
-    `hsla(${c1}, 100%, 50%, ${ALPHA})`,
-    `hsla(${c2}, 100%, 50%, ${ALPHA})`,
-    `hsla(${c3}, 100%, 50%, ${ALPHA})`,
-    `hsla(${c4}, 100%, 50%, ${ALPHA})`,
-  ];
-
-  const INTERLEAVE = 5;
-  const VARIANCE_DEFAULT = 20;
-  const NUM_POLIES = 200;
-  const DEPTH = 4;
-  const NUM_SPOTS = 3;
-  const ANGLE_STEP = TAU / NUM_SPOTS;
-
-  let polyCount = 0;
-  let rafId;
-
-  ctx.globalCompositeOperation = 'multiply';
-  ctx.canvas.width = W;
-  ctx.canvas.height = H;
-
-
-  // get the points for a regular polygon with <edges>
-  const getPoly = (midX, midY, r, edges) => {
-    const vertices = [];
-    const angleStep = TAU / edges;
-
-    for (let angle = 0; angle < TAU; angle += angleStep) {
-      const x = midX + Math.cos(angle) * r;
-      const y = midY + Math.sin(angle) * r;
-
-      vertices.push({ x, y });
-    }
-
-    return vertices;
-  };
-
-  // add extra point between each side of the polygon
-  const deformPoly = (vertices, depth, variance, varianceDecrease) => {
-    let deformedVertices = [];
-
-    for (let i = 0; i < vertices.length; i++) {
-      const from = vertices[i];
-      const to = i === vertices.length - 1 ? vertices[0] : vertices[i + 1];
-
-      const midX = (from.x + to.x) * 0.5;
-      const midY = (from.y + to.y) * 0.5;
-
-      const newX = midX + randomGaussian() * variance;
-      const newY = midY + randomGaussian() * variance;
-
-      deformedVertices.push(from);
-      deformedVertices.push({ x: newX, y: newY });
-    }
-
-    if (depth > 0) {
-      depth--;
-
-      return deformPoly(deformedVertices, depth, variance / varianceDecrease, varianceDecrease);
-    }
-
-    return deformedVertices;
-  };
-
-  const drawPoly = (vertices, color) => {
-    const [firstVertex] = vertices;
-
-    ctx.save();
-    ctx.translate(MID_X, MID_Y);
-    ctx.beginPath();
-    ctx.fillStyle = color;
-    ctx.moveTo(firstVertex.x, firstVertex.y);
-
-    for (let i = 1; i < vertices.length; i++) {
-      const vertex = vertices[i];
-      ctx.lineTo(vertex.x, vertex.y);
-    }
-
-    ctx.lineTo(firstVertex.x, firstVertex.y);
-    ctx.fill();
-    ctx.closePath();
-    ctx.restore();
-  };
-
-  // blend the polygons
-  const drawLayer = (poly, polyIndex) => {
-    for (let i = 0; i < INTERLEAVE; i++) {
-      requestAnimationFrame(() => {
-        const deformed = deformPoly(poly, DEPTH, VARIANCE_DEFAULT + randomBetween(150, 5), 2);
-
-        drawPoly(deformed, COLORS[polyIndex]);
-      });
-    }
-  };
-
-  const reset = () => {
-    polyCount = 0;
-
-    cancelAnimationFrame(rafId);
-
-    ctx.clearRect(0, 0, ctx.canvas.width,ctx.canvas.height);
-  };
-
-  const generate = () => {
-    reset();
-
-    const polies = new Array(NUM_SPOTS).fill().map((_, i) => {
-      const poly = getPoly(
-        Math.cos(ANGLE_STEP * i) * (R * 0.5) * randomGaussian(3,),
-        Math.sin(ANGLE_STEP * i) * (R * 0.5) * randomGaussian(3,),
-        R + randomBetween(-15, 15),
-        EDGES
-      );
-
-      return deformPoly(poly, DEPTH, VARIANCE_DEFAULT, 2);
-    });
-
-    ctx.fillStyle = stitchPattern;
-    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-    const draw = () => {
-      polies.forEach(drawLayer);
-
-      polyCount += INTERLEAVE;
-
-      if (polyCount < NUM_POLIES) {
-        rafId = requestAnimationFrame(draw);
+  <!DOCTYPE HTML>
+    <html>
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+      body, html {
+        padding:0 !important;
+        margin: 0 !important;
+        margin-bottom: 0px;
+        padding-bottom: 0px;
       }
-    };
 
-    draw();
-  };
+      * {
+        padding: 0;
+        margin: 0;
+      }
+        body  { background-color: black; overflow: hidden;}
+      .img{
+        position: absolute;
+        object-fit: contain;
+        display: none;
 
 
-  generate();
-  document.body.addEventListener('click', generate);
-  </script>
+      }
 
-</body>
-</html>
+        </style>
+      </head>
+        <body>
+
+
+
+
+  <div style="text-align:center; position: relative;">
+	  <img id="myImg" class='img' alt="F5xTurtles" style="display: none;">
+      <canvas id="canvasBg" style ="object-fit: contain; "></canvas>
+      <canvas id="canvasRain" style ="object-fit: contain; display: none;"></canvas>
+      <canvas id="canvasImg" style ="object-fit: contain; display: none;"></canvas>
+
+  </div>
+
+    <script type="text/javascript">
+
+		function releaseCanvas(canvas) {
+				canvas.width = 1;
+				canvas.style.width = "1vw";
+				canvas.height = 1;
+				canvas.style.height = "1vh";
+				const ctx = canvas.getContext('2d');
+				ctx && ctx.clearRect(0, 0, 1, 1);
+			}
+
+
+        function getRandomDec(min,max) {
+        return Math.random() * (max - min) + min;
+        }
+
+      	function getRandomInt(min, max) {
+        	return Math.floor(Math.random() * (max - min + 1) + min);
+        }
+
+              var fvert1 = getRandomInt(2050,3350);
+              var fhor1 = getRandomInt(1200,4050);
+              var fhor2 = getRandomInt(50,2950);
+              var dSize = getRandomInt(100000, 115000);
+              var shdX = getRandomInt(-20, 20);
+              var shdY = getRandomInt(-20, 20);
+			  var ang1 = 0.46289330053579913;
+        	  var ang2 = 0.0008996859405740301;
+			  var ang3 = 0.0030492461097504056;
+        	  var r1 = getRandomDec(0.1, 0.29);
+        	  var r2 = getRandomDec(0.98, 1);
+        	  var r3 = getRandomDec(0.19, 0.21);
+
+
+              var img = document.getElementById('myImg');
+              img.width = 4096;
+              img.height = 4096;
+              img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQwAAACkBAMAAACQmg2XAAAAG1BMVEUAAAAYVjYvrGtHcEz8AEMAAAD+rjT/////dXUBpp31AAAABHRSTlPm5uYA5cyABgAAAXJJREFUeNrt2+ENgyAQhmFX6ApdwRVcwRW6Qlfo2BUt4aAcgm2anrzfHysNd88PQ4zoMP5FBhgwYMDYMi15LJlEYMCAAaOFoFJgwIDRKWNqCgwYMGBEVZdc18xrrknc/zDOxRgy0QkOcV/zDkkoMDpjeEQeAuMcDN/ykonkyMvTM+Y5v4RFFBgwYJyKobXXODBg7DPKtz0wbDNqCZISN9IvTxi9M8qBAQMGDBh9MFoI8rFLMwEGDBjdMdLWNZSGbR0YMGAYYfhS8qglR9Ao2lYQDBgwLDLcgzKdsP+6yDtjf+s49IQBA4Y1hjt1Lwtuw+n2bg1BLmWlOTEh9IQBA4ZVhh+uS9jQOxLZDwYMGPYYY4Zye0WOx3HL1P4HD6Vayt0XjL9l+InyOB1MuRYMGwxP2bJNiH8djV5LedoDAwYMQ4yASZeco5/ZVdeCYYIRJn+KaKgFwwhDLmSfIaprwTDDCJPHL6SiFgxDjB8HBgwYhhhPqh4WqdmwOaIAAAAASUVORK5CYII=';
+
+
+
+//image canvas
+		canvasImg = document.getElementById('canvasImg');
+		canvasImg.width =4096;
+		canvasImg.height = 4096;
+		canvasImg.style.width = "100vw";
+		canvasImg.style.height = '100vh';
+		//canvas.getContext('2d').scale(2,2);
+		var ctxImg = canvasImg.getContext("2d");
+
+//rain canvas
+		canvasRain = document.getElementById('canvasRain');
+		canvasRain.width =4096;
+		canvasRain.height = 4096;
+		canvasRain.style.width = "100vw";
+		canvasRain.style.height = '100vh';
+		//canvas.getContext('2d').scale(2,2);
+		var ctxRain = canvasRain.getContext("2d");
+
+//bg canvas
+		canvasBg = document.getElementById('canvasBg');
+		canvasBg.width =4096;
+		canvasBg.height = 4096;
+		canvasBg.style.width = "100vw";
+		canvasBg.style.height = '100vh';
+		//canvas.getContext('2d').scale(2,2);
+		var ctxBg = canvasBg.getContext("2d");
+
+//bg canvas properties
+		ctxBg.globalAlpha = 1;
+		ctxBg.shadowOffsetX = 0;
+        ctxBg.shadowOffsetY = 0;
+		ctxBg.shadowBlur = 0;
+
+//draw sky - bg canvas
+		var grdSky = ctxBg.createLinearGradient(2048, 0, 2048, 4096);
+		grdSky.addColorStop(Math.random(), "#dbdbe1");
+      	grdSky.addColorStop(Math.random(), "#323f50");
+      	grdSky.addColorStop(Math.random(), "#e2edf3");
+		ctxBg.fillStyle = grdSky;
+	  	ctxBg.fillRect(0, 0, 4096, 2500);
+
+//draw ground - bg canvas
+		var grdGround = ctxBg.createLinearGradient(2048, 0, 2048, 4096);
+		grdGround.addColorStop(Math.random(), "#8a8b95");
+      	grdGround.addColorStop(Math.random(), "#83808a");
+      	grdGround.addColorStop(Math.random(), "#797782");
+      	grdGround.addColorStop(Math.random(), "#5e5c69");
+		ctxBg.fillStyle = grdGround;
+    	ctxBg.fillRect(0,2500, 4096, 1596);
+
+
+//moon
+		var grdMoon = ctxBg.createLinearGradient(0,Math.floor(ang1 * 4096),Math.floor(ang2 * 4096),Math.floor(ang3 * 4096));
+	  	//grd1.addColorStop(Math.random(), "#f6f7f6");
+    	grdMoon.addColorStop(Math.random(), "#f7eec8");
+    	grdMoon.addColorStop(Math.random(), "#f7f493");
+
+//design
+		var centerX = getRandomInt(400, 3696);
+        var centerY = getRandomInt(350, 1300);
+        ctxBg.moveTo(centerX, centerY);
+
+		var gap = Math.floor(Math.random() * 1) + .0079;
+    		var d2 = 72.32374852430411;
+    		var d3 = 134.54777201720935;
+    		var d5 = 84.92411676611502;
+    		var d6 = 192.9465220708107;
+    		var d7 = 135.2208604006022;
+    		var d8 = 73.231322369623;
+    		var dArray = [d2, d3, d5, d6, d7, d8]
+    		var dIndex = getRandomInt(0, 5);
+    		var design = dArray[dIndex];
+    		var increment = design;
+        var theta = increment;
+        while( theta < Math.floor(Math.random() * 50.090909095) + dSize) {
+           var newX = centerX + theta * Math.cos(theta) * gap;
+           var newY = centerY + theta * Math.sin(theta) * gap;
+           ctxBg.lineTo(newX, newY);
+           theta = theta + increment;
+                }
+        ctxBg.shadowColor = "#111111";
+        ctxBg.shadowOffsetX = shdX;
+        ctxBg.shadowOffsetY = shdY;
+        ctxBg.shadowBlur = 20;
+        ctxBg.strokeStyle = "#ffffff";
+        ctxBg.lineWidth = 3;
+        ctxBg.globalAlpha = 0.7;
+        ctxBg.stroke();
+
+
+//rain gradient to be drawn above inside onload function
+
+      	var grdRain = ctxRain.createLinearGradient(0, Math.floor(r1 * 4096), Math.floor(r2 * 4096), Math.floor(r3 * 4096));
+      	//grdRain.addColorStop(Math.random(), "transparent");
+      	//grdRain.addColorStop(Math.random(), "#222222");
+      	grdRain.addColorStop(Math.random(), "transparent");
+      	grdRain.addColorStop(Math.random(), "#666666");
+      	grdRain.addColorStop(Math.random(), "transparent");
+      	grdRain.addColorStop(Math.random(), "transparent");
+      	grdRain.addColorStop(Math.random(), "#888888");
+      	grdRain.addColorStop(Math.random(), "transparent");
+      	grdRain.addColorStop(Math.random(), "#444444");
+      	grdRain.addColorStop(Math.random(), "transparent");
+      	grdRain.addColorStop(Math.random(), "transparent");
+      	grdRain.addColorStop(Math.random(), "#666666");
+      	grdRain.addColorStop(Math.random(), "transparent");
+      	grdRain.addColorStop(Math.random(), "#888888");
+      	grdRain.addColorStop(Math.random(), "transparent");
+		ctxRain.globalAlpha = 0.5;
+		ctxRain.fillStyle = grdRain;
+	    ctxRain.fillRect(0, 0, 4096, 4096);
+
+ //draw image and rain onto final canvas
+
+		//copy image onto canvas onload
+              window.onload = function() {
+					const flipper = getRandomInt(0,1);
+					switch (flipper) {
+					  case 0:
+							ctxImg.globalAlpha = 1;
+							ctxImg.save();
+					  		ctxImg.scale(-1,1);
+					  		ctxImg.drawImage(img, fhor1 * -1, fvert1, 1100, 725);
+					  		ctxImg.restore();
+							ctxBg.drawImage(canvasImg, 0, 0);
+							break;
+					  default:
+							ctxImg.globalAlpha = 1;
+							ctxImg.drawImage(img, fhor2, fvert1, 1100, 725);
+							ctxBg.drawImage(canvasImg, 0, 0);
+			        }
+
+			  }
+//copy image
+	//ctxBg.drawImage(canvasImg, 0, 0);
+//copy rain
+	ctxBg.drawImage(canvasRain, 0, 0);
+	ctxBg.drawImage(canvasRain, 0, 0);
+
+
+ //click to refresh
+		canvasBg.addEventListener("click", function (event) {
+			if (!event.target.matches("canvasBg")) {
+				var canvases = document.getElementsByTagName("canvas");
+				var canvasesList = Array.prototype.slice.call(canvases);
+            	canvasesList.forEach(releaseCanvas);
+			  location.reload();
+			}
+      	},false);
+
+/*Run release even when they refresh not with click (F5, refresh button, closing page)*/
+			window.addEventListener('pagehide', (event) => {
+				/*Release every canvas*/
+					var canvases = document.getElementsByTagName("canvas");
+					var canvasesList = Array.prototype.slice.call(canvases);
+            		canvasesList.forEach(releaseCanvas);
+			});
+
+
+
+
+    </script>
+        </body>
+            </html>
