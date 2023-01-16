@@ -1,106 +1,58 @@
-  <!DOCTYPE HTML>
-    <html>
-    <head>
-      <style>
-        body  {overflow:hidden;}
-        </style>
-      </head>
-        <body>
-  <div style="text-align:center">   <canvas id="myCanvas" style="object-fit: contain"></canvas> </div>
-
-    <script type="text/javascript">
-
-    /*Release canvas from memory*/
-    function releaseCanvas(canvas) {
-      canvas.width = 1;
-      canvas.style.width = "1vw";
-      canvas.height = 1;
-      canvas.style.height = "1vh";
-      const ctx = canvas.getContext('2d');
-      ctx && ctx.clearRect(0, 0, 1, 1);
-    }
-
-      canvas = document.getElementById('myCanvas');
-      canvas.width = 4096;
-      canvas.height = 4096;
-      canvas.style.width = '100vw';
-      canvas.style.height = '100vh';
-      canvas.getContext('2d').scale(2,2);
-
-
-        var c = document.getElementById("myCanvas");
-        var ctx = c.getContext("2d");
-        var grd = ctx.createLinearGradient(0, 0, Math.floor(Math.random() * 4096), Math.floor(Math.random() * 4096));
-grd.addColorStop(Math.random(), "#026186");
-grd.addColorStop(Math.random(), "#e1057c");
-grd.addColorStop(Math.random(), "#f9a406");
-grd.addColorStop(Math.random(), "#8e0387");
-grd.addColorStop(Math.random(), "#76c40d");
-
-
-ctx.fillStyle = grd;
-ctx.fillRect(0, 0, 4096, 4096);
-
-var g2 = ctx.createLinearGradient(0,Math.floor(Math.random() * 4096), Math.floor(Math.random() * 4096), Math.floor(Math.random() * 4096));
-g2.addColorStop(Math.random() , "blue");
-g2.addColorStop(Math.random(), "green");
-g2.addColorStop(Math.random() , "red");
-g2.addColorStop(Math.random(), "yellow");
-
-        var c=document.getElementById("myCanvas");
-        var cxt=c.getContext("2d");
-        var centerX = Math.floor(Math.random() * 2048);
-        var centerY = Math.floor(Math.random() * 2048);
-        cxt.moveTo(centerX, centerY);
-
-        function getRandomInt(min,max) {
-	  return Math.random() * (max - min) + min;
-	}
-
-
-var size1 = getRandomInt(275, 500); console.log(size1);
-
-
-
-
-
-
-        var gap = Math.floor(Math.random() * 1) + .0079; // increase this for spacing between spiral lines also bigger smaller
-        //var STEPS_PER_ROTATION = Math.floor(Math.random() * 500) + 1; // increasing this makes the curve smoother
-
-        var increment = 323.3238843915455;//lower=darker
-        var theta = increment;
-        while( theta < Math.floor(Math.random() * 50.090909095) + 125000){//bigger or smaller
-           var newX = centerX + theta * Math.cos(theta) * gap;
-           var newY = centerY + theta * Math.sin(theta) * gap;
-           cxt.lineTo(newX, newY);
-           theta = theta + increment;
+<html>
+<body>
+<canvas id="myCanvas" width="800" height="800"></canvas>
+<script>
+var creal = -.8
+var cimag = .156;
+var canvas = document.getElementById('myCanvas');
+var context = canvas.getContext('2d');
+var frame = 0;
+ 
+var pallette=[]; //an array that stores the RGB combinations
+ 
+function julia()
+{
+        for(y=0;y<200;y++)
+                {
+                for(x=0;x<200;x++)
+                        {
+                        var cx=-2+x/50;
+                        var cy=-2+y/50;
+                        var i = 0;
+ 
+                        do
+                                {
+                                xt=cx*cx-cy*cy+creal;
+                                cy=2*cx*cy+cimag;
+                                cx=xt;
+                                i++;
+                                }
+                        while ((cx*cx+cy*cy<4)&&i<25);
+ 
+                        //i=i.toString(16); - commented out since not needed in this version
+                        context.beginPath();
+                        context.rect(x*4, y*4, 4, 4);
+                        context.fillStyle = pallette[i];
+                        context.fill();
+                        }
                 }
-        ctx.strokeStyle = g2;
-        ctx.lineWidth = 3;
-        ctx.stroke(); // draw
-
-        /*Run release even when they refresh not with click (F5, refresh button, closing page)*/
-        			window.addEventListener('pagehide', (event) => {
-        				/*Release every canvas*/
-        					var canvases = document.getElementsByTagName("canvas");
-        					var canvasesList = Array.prototype.slice.call(canvases);
-                    		canvasesList.forEach(releaseCanvas);
-        			});
-
-        canvas.addEventListener(
-          "click",
-          function (event) {
-
-            if (!event.target.matches(".myCanvas")) {
-              location.reload();
-            }
-
-          },
-          false
-        );
-
-
-    </script>
-        </body>
-            </html>
+        frame++;
+        creal=-.8+.6*Math.sin(frame/(3.14*20));
+        cimag=.156+.4*Math.cos(frame/(3.14*40));
+        
+}
+ 
+for(x=0;x<9;x++) // this loop populates the color pallette array
+        {
+        color=(31*x).toString(16); // convert the number to hex
+        if(color.length==1) color='0'+color;  // add a zero in front if only one hex digit
+        pallette[x]="#"+color+color+'ff'; // colors 0-8: the Red and Green components change, Blue=FF
+        pallette[x+8]='#00ff'+color;      // colors 8-16: the Blue component changes, Red and Green=FF
+        pallette[17+x]="#"+color+'0000';  // colors 17-25: the Red component changes, Green and Blue=0
+        }
+ 
+a=setInterval(julia,100);
+ 
+</script>
+</body>
+</html>
