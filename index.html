@@ -1,57 +1,43 @@
-  <!DOCTYPE HTML>
-    <html>
-    <head>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <style>
-      body, html {
-        padding:0 !important;
-        margin: 0 !important;
-        margin-bottom: 0px;
-        padding-bottom: 0px;
-      }
+<!DOCTYPE HTML>
+<html>
+	<head>
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+      	<style>
+      		body, html {
+				padding:0 !important;
+				margin: 0 !important;
+				margin-bottom: 0px;
+				padding-bottom: 0px;
+		    }
 
-      * {
-        padding: 0;
-        margin: 0;
-      }
-        body  { background-color: black; overflow: hidden;}
-      .img{
-        position: absolute;
-        object-fit: contain;
-        display: none;
-
-
-      }
+		  	* {
+				padding: 0;
+				margin: 0;
+		  	}
+        	body  { 
+				background-color: black; overflow: hidden;
+			}
+			
+      		.img {
+				position: absolute;
+				object-fit: contain;
+				display: none;
+      		}
 
         </style>
-      </head>
-        <body>
-
-
-
-
-  <div style="text-align:center; position: relative;">
-
-
-	  <img id="myImg" class='img' alt="F5xTurtles">
-	  
-    <canvas id="myCanvas" style="object-fit: contain; z-index: 0; top: 0; left: 0; position: absolute;"></canvas>
-    <canvas id="myCanvas2" style="object-fit: contain; z-index: 2; top: 0; left: 0; position: absolute;"></canvas>
-
-
-  </div>
-
-    <script type="text/javascript">
-
-        function getRandomDec(min,max) {
-        return Math.random() * (max - min) + min;
-        }
-
-      	function getRandomInt(min, max) {
-        	return Math.floor(Math.random() * (max - min + 1) + min);
-        }
+	</head>
+	<body>
+		<div style="text-align:center; position: relative;">
+	    	<img id="myImg" class='img' alt="F5xTurtles">
+			<canvas id="myCanvasFinal" style="object-fit: contain; z-index: 0; top: 0; left: 0; position: absolute;"></canvas>/*final*/
+    		<canvas id="myCanvasBG" style="object-fit: contain; z-index: 1; top: 0; left: 0; position: absolute;"></canvas>/*bg*/
+			
+			
+    
+		</div>
 		
-		function releaseCanvas(canvas) {
+		<script type="text/javascript">
+			function releaseCanvas(canvas) {
 				canvas.width = 1;
 				canvas.style.width = "1vw";
 				canvas.height = 1;
@@ -59,175 +45,267 @@
 				const ctx = canvas.getContext('2d');
 				ctx && ctx.clearRect(0, 0, 1, 1);
 			}
+			
+			function getRandomDec(min,max) {
+				return Math.random() * (max - min) + min;
+			}
 
-              var fvert1 = getRandomInt(2150,3250);
-              var fhor1 = getRandomInt(1150,4000);
-              var fhor2 = getRandomInt(100,2950);
-              var dSize = getRandomInt(1500, 1500);
-              var shdX = getRandomInt(0, 0);
-              var shdY = getRandomInt(0, 0);
-              var d2 = 85.17195340862722;
-          		var d3 = 198.54635545331595;
-          		var dArray = [d2, d3]
-          		var dIndex = getRandomInt(0, 1);
-          		var design = dArray[dIndex];
-          		var increment = design;
+			function getRandomInt(min, max) {
+				return Math.floor(Math.random() * (max - min + 1) + min);
+			}
+			
+			var fvert1 = getRandomInt(300,2900);
+            var fhor1 = getRandomInt(1100,4000);
+            var fhor2 = getRandomInt(100,3050);
+            var dSize3 = getRandomInt(3000, 4000);
+            var dSize2 = getRandomInt(140000, 160000);
+            var dSize = getRandomInt(6000, 8000);
+            var shdX = getRandomInt(0, 0);
+            var shdY = getRandomInt(0, 0);
 
+            var f2 = 85.17195340862722;//flake
+            var f3 = 160.01001706698776;//flake
+            var f4 = 191.40868685819183;
+            var dArray2 = [f2, f3, f4]
+            var dIndex2 = getRandomInt(0, 2);
+            var design2 = dArray2[dIndex2];
+            var increment2 = design2;
 
-              var img = document.getElementById('myImg');
-              img.width = 4096;
-              img.height = 4096;
-			        img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAACwBAMAAAD6RE+WAAAAJ1BMVEUAAAAYVjYvrGtHcEwFEgsAAAD+52EAAAAdNTdoABz/AESA9v////+gofATAAAABnRSTlPm5uYA/OGVP6/KAAABrUlEQVR42u3a223DMAyFYa/QFbpCV+gKWaEraAWv4BW6QlfIULWgEGEcXWjkIsr4z0ODBom+lwMyhj199cmEi4uL+1Z3WYN7VHdZQsA9qvuIiuvVlUnxmIrr1Q0hejl1XoM7upsalVNDwD2qu1fF9egui0yM9FcmxX4V16MbwrVR8TX+F+39Kq43N3bpd83txIjmrTplguvfjeeX3dMJd1w316l5lolxnRvR+MwkZ+P6cXOdSjsiebjjuqVO/a1JEyMlnv1dydbG9eGWOoU7vqs7JTtcd0rv+h9DtI3b39WdEld3quSGS3D9urpTH5foTskZMi/u3fO51i3cvq7ulLi6U233vle4PtxWp+Q9mSXxt7m2cX27rU61XMvux+3jWjulbbm+tti4fV1rp3DHda2d2rpiW66/cX24tU7hjuXG9/SZrX2g974lpetu3D5uax/gju+2dr2ct8fExcV9rivf1a+l5MzaPefafWdcXNzH3JxZfN6y4lqf+cLFxX2uq+9DWUw9Q2rfwcXFfa1r+txmPtSeycTFxfXjbve4Za/j4uL6cF8RXFxc3L35B//SkHCMJQNUAAAAAElFTkSuQmCC';
+            var img = document.getElementById('myImg');
+            img.width = 4096;
+            img.height = 4096;
+			
+			img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAAECBAMAAAAyVkcHAAAAIVBMVEXkO0QAAAD+8FDCsgBHcEwSEAD/j5UAAAAXFgcAAAD///9du4wqAAAACXRSTlPm5ubmAPzm/PyyRzEfAAABlUlEQVR42u3d0W3CMAAFQFboCqzQFVihK3SFrsAKrNApmwhZGNdxHOImTnVPQiAhc/54IuCYcLrslBO4O/gtEzAYfBx4RE6ZrMHBYPB28AP9HNIOB4PBYDAYXAfPoWtwMBgMBoPBS+FywGAwGAwGg8FgcO0CWzsUDAaDwWDwMriE23IDBh8HzuGb7kQFg8FN4Bhfi4LB4P3ggF8aBAwGg8H7wbU/ugODwXvA9xcoweNz50xyY8D9wePQ+y1MAPzf4AcbplCHTuHgHuH4AFAu1m0I+DhwelD/GlIu1u32PeQ3/YyD+4Vz1UqLdYfLBQPvDwfkPcnHkHgCabGeM10w8FHhcrnA/cA5MIbD4zCBZuUCHwB+fNDbuFzgBXAJTeGAnxcEDAaDwWBwGZ5DYzj+or4UBYPB+8MpVoMXF8rBYHATOAyO73MZT4bk0Cn8es0vroP7haeKBe4bzqG1G4nmJlrcEAoGg5vC8QmsGjR+M3n5YjNgMLgZXLuJLAVfRcFg8PZwemBv8QdiYDB4W/gvAgaDwS/nB8M/7bm7KB9uAAAAAElFTkSuQmCC';
+			
+			var ang1 = 0.46289330053579913;
+        	var ang2 = 0.0008996859405740301;
+        	var ang3 = 0.0030492461097504056;
+			
+			//init - bg canvasBG 
+			canvasBG = document.getElementById('myCanvasBG');
+      		canvasBG.width =4096;
+      		canvasBG.height = 4096;
+      		canvasBG.style.width = "100vw";
+      		canvasBG.style.height = '100vh';
+      		//canvasBG.getContext('2d').scale(2,2);
+			var ctxBG = canvasBG.getContext("2d");
+			
+			//init - final canvas 
+			canvasFinal = document.getElementById('myCanvasFinal');
+      		canvasFinal.width =4096;
+      		canvasFinal.height = 4096;
+      		canvasFinal.style.width = "100vw";
+      		canvasFinal.style.height = '100vh';
+      		//canvasFinal.getContext('2d').scale(2,2);
+			var ctxFinal = canvasFinal.getContext("2d");
+			
+			//sky
+			var grdSky = ctxBG.createLinearGradient(2048, 0, 2048, 4096);
+	  		grdSky.addColorStop(Math.random(), "#bed2e6");
+    		grdSky.addColorStop(Math.random(), "#0b8ce0");
+    		grdSky.addColorStop(Math.random(), "#6bbbf2");
+	  		grdSky.addColorStop(Math.random(), "#1270c1");
 
-
-
-        var ang1 = 0.46289330053579913;
-        var ang2 = 0.0008996859405740301;
-        var ang3 = 0.0030492461097504056;
-
-
-      canvas = document.getElementById('myCanvas');
-      canvas.width =4096;
-      canvas.height = 4096;
-      canvas.style.width = "100vw";
-      canvas.style.height = '100vh';
-      canvas.getContext('2d').scale(2,2);
-
-      var ctx = canvas.getContext("2d");
-      var grd = ctx.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
-
-      grd.addColorStop(Math.random(), "#06234a");
-      grd.addColorStop(Math.random(), "#0e3d71");
-      grd.addColorStop(Math.random(), "#0a5b9b");
-      grd.addColorStop(Math.random(), "#135a88");
-      grd.addColorStop(Math.random(), "#081b5e");
-
-
-      var ctx2 = canvas.getContext("2d");
-      var grd2 = ctx.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
-
-      grd2.addColorStop(Math.random(), "#302e2c");
-      grd2.addColorStop(Math.random(), "#46403e");
-      grd2.addColorStop(Math.random(), "#4e4737");
-      grd2.addColorStop(Math.random(), "#46403e");
-      grd2.addColorStop(Math.random(), "#302e2c");
-
-
-
-	  ctx.fillStyle = grd;
-	  ctx.fillRect(0, 0, 2048, 1300);
-    ctx2.fillStyle = grd2;
-    ctx2.fillRect(0,1300, 2048, 2048);
-
-	  var grd1 = ctx.createLinearGradient(0,Math.floor(ang1 * 4096),Math.floor(ang2 * 4096),Math.floor(ang3 * 4096));
-	  grd1.addColorStop(Math.random(), "#bee5f1");
-    grd1.addColorStop(Math.random(), "#f1f6f7");
-    grd1.addColorStop(Math.random(), "#dde4e8");
-	  grd1.addColorStop(Math.random(), "#f7f7f7");
-
-function spiral() {
-        var c=document.getElementById("myCanvas");
-        var ctx=c.getContext("2d");
-        var centerX = getRandomInt(50, 2000);
-        var centerY = getRandomInt(50, 925);
-        ctx.moveTo(centerX, centerY);
-
-
-        var gap = Math.floor(Math.random() * 1) + .006;
-
-        var theta = increment;
-        while( theta < Math.floor(Math.random() * 50.090909095) + dSize) {
-           var newX = centerX + theta * Math.cos(theta) * gap;
-           var newY = centerY + theta * Math.sin(theta) * gap;
-           ctx.lineTo(newX, newY);
-           theta = theta + increment;
+    		ctxBG.fillStyle = grdSky;
+    		ctxBG.fillRect(0, 0, 4096, 2700);
+			
+			//ground
+			var grdGround = ctxBG.createLinearGradient(2048, 0, 2048, 4096);
+			grdGround.addColorStop(Math.random(), "#f7f7f7");
+      		grdGround.addColorStop(Math.random(), "#afa177");
+      		grdGround.addColorStop(Math.random(), "#706036");
+      		grdGround.addColorStop(Math.random(), "#ffffff");
+      		grdGround.addColorStop(Math.random(), "#6d6c35");
+      		ctxBG.fillStyle = grdGround;
+      		ctxBG.fillRect(0,2600, 4096, 1496);
+			
+			//sun
+			var grdSun = ctxBG.createLinearGradient(0,Math.floor(ang1 * 4096),Math.floor(ang2 * 4096),Math.floor(ang3 * 4096));
+	  		grdSun.addColorStop(Math.random(), "#f7f7f7");
+    		grdSun.addColorStop(Math.random(), "#f6f491");
+    		grdSun.addColorStop(Math.random(), "#f6e882");
+	  		grdSun.addColorStop(Math.random(), "#f4c75d");
+			
+			//draw sun
+			drawSun();
+			
+			//draw turtle on BG canvas
+			//flipTurtle();
+			//ctxBG.drawImage(img, fhor2, fvert1, 1025, 1125);
+			
+			//draw snowflakes
+			var grdSF = ctxFinal.createLinearGradient(0,Math.floor(ang1 * 4096),Math.floor(ang2 * 4096),Math.floor(ang3 * 4096));
+    		grdSF.addColorStop(Math.random(), "#f1f6f7");
+    		grdSF.addColorStop(Math.random(), "#dde4e8");
+	  		grdSF.addColorStop(Math.random(), "#f7f7f7");
+			var flakes = getRandomInt(30, 50);
+      		for (let i = 0; i < flakes; i++) {
+        		snowflakes(getRandomInt(0, 4096), getRandomInt(0, 4096), 12, 20, 10);
+      		}
+			
+			//clouds
+			var grdClouds = ctxFinal.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
+			grdClouds.addColorStop(Math.random(), "#9da5ac");
+      		grdClouds.addColorStop(Math.random(), "transparent");
+      		grdClouds.addColorStop(Math.random(), "#6a737a");
+      		grdClouds.addColorStop(Math.random(), "transparent");
+      		grdClouds.addColorStop(Math.random(), "#69696c");
+      		grdClouds.addColorStop(Math.random(), "transparent");
+      		grdClouds.addColorStop(Math.random(), "#747788");
+      		grdClouds.addColorStop(Math.random(), "transparent");
+      		grdClouds.addColorStop(Math.random(), "#6a737a");
+      		ctxFinal.globalAlpha = 0.2;
+      		ctxFinal.fillStyle = grdClouds;
+  	  		ctxFinal.fillRect(0, 0, 4096, 2600);
+			
+			//copy final canvas onto BG canvas
+			//ctxBG.drawImage(canvasFinal, 0, 0);
+		    //document.getElementById('myCanvasFinal').style.display= "none";
+			
+  			
+			
+			
+			
+			
+			
+			 window.onload = function() {
+			 	const flipper = getRandomInt(0,1);
+				var img = document.getElementById("myImg");
+			  	switch (flipper) {
+					case 0:
+					ctxBG.save();
+					ctxBG.scale(-1,1);
+					ctxBG.drawImage(img, fhor1 * -1, fvert1, 1025, 1125);
+					ctxBG.restore();
+						ctxBG.drawImage(canvasFinal, 0, 0);
+		    document.getElementById('myCanvasFinal').style.display= "none";
+					break;
+					default:
+					ctxBG.drawImage(img, fhor2, fvert1, 1025, 1125);
+						ctxBG.drawImage(canvasFinal, 0, 0);
+		    document.getElementById('myCanvasFinal').style.display= "none";
+			  	}
+			  }
+			
+			function drawSun() {
+            	var centerX = getRandomInt(100, 3996);
+              	var centerY = getRandomInt(100, 925);
+              	ctxBG.moveTo(centerX, centerY);
+              	var gap = Math.floor(Math.random() * 1) + .006;
+              	var d2 = 59.51211822206524;
+              	var d3 = 122.19139188997966;
+              	var d5 = 235.75276882101318;
+              	var d6 = 404.95056737323205;
+              	var d7 = 116.82480140130096;
+              	var d8 = 298.36096218950416;
+              	var d9 = 179.0879286460222;
+              	var d10 = 128.77220761038356;
+              	var dArray = [d2, d3, d5, d6, d7, d8, d9, d10]
+              	var dIndex = getRandomInt(0, 7);
+              	var design = dArray[dIndex];
+              	var increment = design;
+              	var theta = increment;
+              	while( theta < Math.floor(Math.random() * 50.090909095) + dSize2) {
+                	var newX = centerX + theta * Math.cos(theta) * gap;
+                 	var newY = centerY + theta * Math.sin(theta) * gap;
+                 	ctxBG.lineTo(newX, newY);
+                 	theta = theta + increment;
                 }
-        ctx.shadowColor = "#4c6eb0";
-        ctx.shadowOffsetX = shdX;
-        ctx.shadowOffsetY = shdY;
-        ctx.shadowBlur = 30;
-        ctx.strokeStyle = grd1;
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-
-	    	var c2 = document.getElementById("myCanvas2");
-        var ctx2 = c2.getContext("2d");
-		    c2.width =4096;
-      	c2.height = 4096;
-      	c2.style.width = "100vw";
-      	c2.style.height = '100vh';
-
-
-		ctx2.drawImage(c, 0, 0);
-		document.getElementById("myCanvas").style.display = "none";
-
-
-
-		window.onload = function() {
-			const flipper = getRandomInt(0,1);
-			switch (flipper) {
-			  case 0:
-
-        var img = document.getElementById("myImg");
-			  ctx2.save();
-			  ctx2.scale(-1,1);
-
-        ctx2.drawImage(img, fhor1 * -1, fvert1, 1125, 800);
-       ctx2.restore();
-
-       break;
-       default:
-
-       var img = document.getElementById("myImg");
-
-       ctx2.drawImage(img, fhor2, fvert1, 1125, 800);
-      }
-    }
-
-        c2.addEventListener(
-          "click",
-          function (event) {
-
-            if (!event.target.matches(".myCanvas2")) {
-				var canvases = document.getElementsByTagName("canvas");
-				var canvasesList = Array.prototype.slice.call(canvases);
-            	canvasesList.forEach(releaseCanvas);
-              location.reload();
+              	ctxBG.shadowColor = "#222222";
+              	ctxBG.shadowOffsetX = shdX;
+              	ctxBG.shadowOffsetY = shdY;
+              	ctxBG.shadowBlur = 2;
+              	ctxBG.strokeStyle = grdSun;
+              	ctxBG.lineWidth = 4;
+              	ctxBG.stroke();
             }
+			
+			/*function snowflakes() {
+				var centerX = getRandomInt(0, 4096);
+        		var centerY = getRandomInt(0, 4096);
+        		ctxFinal.moveTo(centerX, centerY);
+        		var gap = Math.floor(Math.random() * 1) + .006;
+        		var theta = increment2;
+        		while( theta < Math.floor(Math.random() * 50.090909095) + dSize) {
+           		var newX = centerX + theta * Math.cos(theta) * gap;
+           		var newY = centerY + theta * Math.sin(theta) * gap;
+           		ctxFinal.lineTo(newX, newY);
+           		theta = theta + increment2;
+                }
+        		ctxFinal.shadowColor = "#222222";
+        		ctxFinal.shadowOffsetX = shdX;
+        		ctxFinal.shadowOffsetY = shdY;
+        		ctxFinal.shadowBlur = 1;
+        		ctxFinal.strokeStyle = grdSF;
+        		ctxFinal.lineWidth = 0.5;
+        		ctxFinal.stroke();
+      		}*/
+			
+			function snowflakes(cx, cy, spikes, outerRadius, innerRadius) {
+				var rot = Math.PI / 2 * 3;
+				var x = cx;
+				var y = cy;
+				var step = Math.PI / spikes;
 
-          },
-          false
-        );
-      };
-      for (let i = 0; i < 30; i++) {
-  spiral();
-}
+				ctxFinal.strokeSyle = "#000";
+				ctxFinal.beginPath();
+				ctxFinal.moveTo(cx, cy - outerRadius)
+				for (i = 0; i < spikes; i++) {
+					x = cx + Math.cos(rot) * outerRadius;
+					y = cy + Math.sin(rot) * outerRadius;
+					ctxFinal.lineTo(x, y)
+					rot += step
 
-var dSize = 60000;
-var d2 = 82.08821348482627;
-var d3 = 63.05723279263028;
-var d5 = 118.81117798221669;
-var d6 = 100.7779690913753;
-var d7 = 112.56027199005798;
-var d8 = 132.4238766421944;
-var d9 = 143.81848578996073;
-var d10 = 82.34972902795033;
-var dArray = [d2, d3, d5, d6, d7, d8, d9, d10]
-var dIndex = getRandomInt(0, 7);
-var design = dArray[dIndex];
-var increment = design;
-//ctx.strokeStyle = "grd";
-spiral();
+					x = cx + Math.cos(rot) * innerRadius;
+					y = cy + Math.sin(rot) * innerRadius;
+					ctxFinal.lineTo(x, y)
+					rot += step
+				}
+				ctxFinal.lineTo(cx, cy - outerRadius)
+				ctxFinal.closePath();
+				ctxFinal.lineWidth=5;
+				ctxFinal.strokeStyle='white';
+				ctxFinal.stroke();
+				ctxFinal.fillStyle='skyblue';
+				ctxFinal.fill();
+				
+			}
+			
+			
+			
+			canvasBG.addEventListener(
+				"click",
+				function (event) {
+					if (!event.target.matches(".myCanvasBG")) {
+						var canvases = document.getElementsByTagName("canvas");
+						var canvasesList = Array.prototype.slice.call(canvases);
+            			canvasesList.forEach(releaseCanvas);
+						location.reload();
+				  	}
 
-		
- /*Run release even when they refresh not with click (F5, refresh button, closing page)*/
+				},
+				false
+		  	);
+
+            /*Run release even when they refresh not with click (F5, refresh button, closing page)*/
 			window.addEventListener('pagehide', (event) => {
 				/*Release every canvas*/
 					var canvases = document.getElementsByTagName("canvas");
 					var canvasesList = Array.prototype.slice.call(canvases);
             		canvasesList.forEach(releaseCanvas);
 			});
-      </script>
-        </body>
-            </html>
+		
+		</script>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</body>
+</html>
