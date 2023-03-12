@@ -1,233 +1,231 @@
   <!DOCTYPE HTML>
-    <html>
-    <head>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <style>
-      body, html {
-        padding:0 !important;
-        margin: 0 !important;
-        margin-bottom: 0px;
-        padding-bottom: 0px;
-      }
+     <html>
+     <head>
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <style>
+     body  {
+       overflow:hidden;
+       background-color: #000000;
+     }
 
-      * {
-        padding: 0;
-        margin: 0;
-      }
-        body  { background-color: black; overflow: hidden;}
-      .img{
-        position: absolute;
-        object-fit: contain;
-        display: none;
+     body, html {
+       margin: 0 !important;
+       }
 
+     /* The Modal (background) */
+     .modal {
+       display: none; /* Hidden by default */
+       position: fixed; /* Stay in place */
+       z-index: 1; /* Sit on top */
+       padding-top: 0px; /* Location of the box */
+       left: 0;
+       top: 0;
+       width: 100%; /* Full width */
+       height: 100%; /* Full height */
+       overflow: auto; /* Enable scroll if needed */
+       background-color: rgb(0,0,0); /* Fallback color */
+       background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+     }
 
-      }
+     /* Modal Content (Image) */
+     .modal-content {
+       margin: auto;
+       display: block;
+       width: 80%;
+       max-width: 700px;
+     }
 
-        </style>
-      </head>
-        <body>
+     /* Add Animation - Zoom in the Modal */
+     .modal-content, #caption {
+       animation-name: zoom;
+       animation-duration: 0.6s;
+     }
 
+     @keyframes zoom {
+       from {transform:scale(0)}
+       to {transform:scale(1)}
+     }
 
+     /* The Close Button */
+     .close {
+       position: absolute;
+       top: 15px;
+       right: 35px;
+       color: #f1f1f1;
+       font-size: 40px;
+       font-weight: bold;
+       transition: 0.3s;
+     }
 
+     .close:hover,
+     .close:focus {
+       color: #bbb;
+       text-decoration: none;
+       cursor: pointer;
+     }
 
-  <div style="text-align:center; position: relative;">
+     /* 100% Image Width on Smaller Screens */
+     @media only screen and (max-width: 700px){
+       .modal-content {
+       width: 100%;
+       }
+     }
 
+     #myCanvas {
+       -webkit-user-select: none; /* Safari */
+       -ms-user-select: none; /* IE 10 and IE 11 */
+       user-select: none; /* Standard syntax */
+     }
 
-	  <img id="myImg" class='img' alt="F5xTurtles">
-	  
-    <canvas id="myCanvas" style="object-fit: contain; z-index: 0; top: 0; left: 0; position: absolute;"></canvas>
-    <canvas id="myCanvas2" style="object-fit: contain; z-index: 2; top: 0; left: 0; position: absolute;"></canvas>
+     </style>
+     </head>
+     <body>
+     <div style="text-align:center">
+       <canvas id="myCanvas" style="object-fit: contain; width: 100vw; height: 100vh;" width="4096" height="4096"></canvas>
+     </div>
+     <!-- The Modal -->
+     <div id="myModal" class="modal">
+       <!-- The Close Button -->
+       <span class="close">&times;</span>
 
+       <!-- Modal Content (The Image) -->
+       <img class="modal-content" id="img01" style="object-fit: contain; width: 100vw; height: 100vh;" width="4096" height="4096">
 
-  </div>
+     </div>
+     <script type="text/javascript">
 
-    <script type="text/javascript">
-
-        function getRandomDec(min,max) {
-        return Math.random() * (max - min) + min;
-        }
-
-      	function getRandomInt(min, max) {
-        	return Math.floor(Math.random() * (max - min + 1) + min);
-        }
-		
-		function releaseCanvas(canvas) {
+     function releaseCanvas(canvas) {
 				canvas.width = 1;
-				canvas.style.width = "1vw";
 				canvas.height = 1;
-				canvas.style.height = "1vh";
 				const ctx = canvas.getContext('2d');
 				ctx && ctx.clearRect(0, 0, 1, 1);
+        canvas.remove();
 			}
 
-              var fvert1 = getRandomInt(2150,3250);
-              var fhor1 = getRandomInt(1150,4000);
-              var fhor2 = getRandomInt(100,2950);
-              var dSize = getRandomInt(1500, 1500);
-              var shdX = getRandomInt(0, 0);
-              var shdY = getRandomInt(0, 0);
-              var d2 = 85.17195340862722;
-          		var d3 = 198.54635545331595;
-          		var dArray = [d2, d3]
-          		var dIndex = getRandomInt(0, 1);
-          		var design = dArray[dIndex];
-          		var increment = design;
+     function getRandomDec(min,max) {
+        	    return Math.random() * (max - min) + min;
+           	}
+      function randomColor() {
+	            return '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
+	          }
 
-
-              var img = document.getElementById('myImg');
-              img.width = 4096;
-              img.height = 4096;
-			        img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAACwBAMAAAD6RE+WAAAAJ1BMVEUAAAAYVjYvrGtHcEwFEgsAAAD+52EAAAAdNTdoABz/AESA9v////+gofATAAAABnRSTlPm5uYA/OGVP6/KAAABrUlEQVR42u3a223DMAyFYa/QFbpCV+gKWaEraAWv4BW6QlfIULWgEGEcXWjkIsr4z0ODBom+lwMyhj199cmEi4uL+1Z3WYN7VHdZQsA9qvuIiuvVlUnxmIrr1Q0hejl1XoM7upsalVNDwD2qu1fF9egui0yM9FcmxX4V16MbwrVR8TX+F+39Kq43N3bpd83txIjmrTplguvfjeeX3dMJd1w316l5lolxnRvR+MwkZ+P6cXOdSjsiebjjuqVO/a1JEyMlnv1dydbG9eGWOoU7vqs7JTtcd0rv+h9DtI3b39WdEld3quSGS3D9urpTH5foTskZMi/u3fO51i3cvq7ulLi6U233vle4PtxWp+Q9mSXxt7m2cX27rU61XMvux+3jWjulbbm+tti4fV1rp3DHda2d2rpiW66/cX24tU7hjuXG9/SZrX2g974lpetu3D5uax/gju+2dr2ct8fExcV9rivf1a+l5MzaPefafWdcXNzH3JxZfN6y4lqf+cLFxX2uq+9DWUw9Q2rfwcXFfa1r+txmPtSeycTFxfXjbve4Za/j4uL6cF8RXFxc3L35B//SkHCMJQNUAAAAAElFTkSuQmCC';
-
-
-
-        var ang1 = 0.46289330053579913;
-        var ang2 = 0.0008996859405740301;
-        var ang3 = 0.0030492461097504056;
-
-
-      canvas = document.getElementById('myCanvas');
-      canvas.width =4096;
+      var canvas = document.getElementById('myCanvas');
+      canvas.width = 4096;
       canvas.height = 4096;
-      canvas.style.width = "100vw";
+      canvas.style.width = '100vw';
       canvas.style.height = '100vh';
       canvas.getContext('2d').scale(2,2);
 
+      var html0 = randomColor();
+      var html1 = randomColor();
+      var html2 = randomColor();
+      var html3 = randomColor();
+      var html4 = randomColor();
+      var html5 = randomColor();
+      var html6 = randomColor();
+      var html7 = randomColor();
+      var dSize = getRandomDec(110000, 140000);
+      var centerX = getRandomDec(200, 1848);
+      var centerY = getRandomDec(200, 1848);
+      var gap = Math.floor(Math.random() * 1) + .0079;
+      var increment = getRandomDec(300,500); console.log(increment);
+      var theta = increment;
+      var maxTheta = Math.floor(Math.random() * 50.090909095) + dSize;
       var ctx = canvas.getContext("2d");
-      var grd = ctx.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
+      var grd = ctx.createLinearGradient(0, Math.floor(Math.random() * 4096), Math.floor(Math.random() * 4096), Math.floor(Math.random() * 4096));
+      grd.addColorStop(Math.random(), html0);
+      grd.addColorStop(Math.random(), html1);
+      grd.addColorStop(Math.random(), html2);
+      grd.addColorStop(Math.random(), html3);
+      grd.addColorStop(Math.random(), html4);
+      grd.addColorStop(Math.random(), html5);
+      grd.addColorStop(Math.random(), html6);
+      grd.addColorStop(Math.random(), html7);
 
-      grd.addColorStop(Math.random(), "#06234a");
-      grd.addColorStop(Math.random(), "#0e3d71");
-      grd.addColorStop(Math.random(), "#0a5b9b");
-      grd.addColorStop(Math.random(), "#135a88");
-      grd.addColorStop(Math.random(), "#081b5e");
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, 0, 4096, 4096);
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.strokeStyle = "rgba(10,10,10,0.5)";
+      ctx.lineWidth = 3;
 
+      function draw() {
+  if (theta < maxTheta) {
+    var newX = centerX + theta * Math.cos(theta) * gap;
+    var newY = centerY + theta * Math.sin(theta) * gap;
 
-      var ctx2 = canvas.getContext("2d");
-      var grd2 = ctx.createLinearGradient(0, Math.floor(ang1 * 4096), Math.floor(ang2 * 4096), Math.floor(ang3 * 4096));
-
-      grd2.addColorStop(Math.random(), "#302e2c");
-      grd2.addColorStop(Math.random(), "#46403e");
-      grd2.addColorStop(Math.random(), "#4e4737");
-      grd2.addColorStop(Math.random(), "#46403e");
-      grd2.addColorStop(Math.random(), "#302e2c");
-
-
-
-	  ctx.fillStyle = grd;
-	  ctx.fillRect(0, 0, 2048, 1300);
-    ctx2.fillStyle = grd2;
-    ctx2.fillRect(0,1300, 2048, 2048);
-
-	  var grd1 = ctx.createLinearGradient(0,Math.floor(ang1 * 4096),Math.floor(ang2 * 4096),Math.floor(ang3 * 4096));
-	  grd1.addColorStop(Math.random(), "#bee5f1");
-    grd1.addColorStop(Math.random(), "#f1f6f7");
-    grd1.addColorStop(Math.random(), "#dde4e8");
-	  grd1.addColorStop(Math.random(), "#f7f7f7");
-
-function spiral() {
-        var c=document.getElementById("myCanvas");
-        var ctx=c.getContext("2d");
-        var centerX = getRandomInt(50, 2000);
-        var centerY = getRandomInt(50, 925);
-        ctx.moveTo(centerX, centerY);
-
-
-        var gap = Math.floor(Math.random() * 1) + .006;
-
-        var theta = increment;
-        while( theta < Math.floor(Math.random() * 50.090909095) + dSize) {
-           var newX = centerX + theta * Math.cos(theta) * gap;
-           var newY = centerY + theta * Math.sin(theta) * gap;
-           ctx.lineTo(newX, newY);
-           theta = theta + increment;
-                }
-        ctx.shadowColor = "#4c6eb0";
-        ctx.shadowOffsetX = shdX;
-        ctx.shadowOffsetY = shdY;
-        ctx.shadowBlur = 30;
-        ctx.strokeStyle = grd1;
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-
-	    	var c2 = document.getElementById("myCanvas2");
-        var ctx2 = c2.getContext("2d");
-		    c2.width =4096;
-      	c2.height = 4096;
-      	c2.style.width = "100vw";
-      	c2.style.height = '100vh';
-
-
-		ctx2.drawImage(c, 0, 0);
-		document.getElementById("myCanvas").style.display = "none";
-
-
-
-		window.onload = function() {
-			const flipper = getRandomInt(0,1);
-			switch (flipper) {
-			  case 0:
-
-        var img = document.getElementById("myImg");
-			  ctx2.save();
-			  ctx2.scale(-1,1);
-
-        ctx2.drawImage(img, fhor1 * -1, fvert1, 1125, 800);
-       ctx2.restore();
-
-       break;
-       default:
-
-       var img = document.getElementById("myImg");
-
-       ctx2.drawImage(img, fhor2, fvert1, 1125, 800);
-      }
-    }
-
-        c2.addEventListener(
-          "click",
-          function (event) {
-
-            if (!event.target.matches(".myCanvas2")) {
-				var canvases = document.getElementsByTagName("canvas");
-				var canvasesList = Array.prototype.slice.call(canvases);
-            	canvasesList.forEach(releaseCanvas);
-              location.reload();
-            }
-
-          },
-          false
-        );
-      };
-      for (let i = 0; i < 30; i++) {
-  spiral();
+    ctx.lineTo(newX, newY);
+    theta += increment;
+    ctx.stroke();
+    requestAnimationFrame(draw);
+  } else {
+    requestAnimationFrame(addShadow);
+  }
 }
 
-var dSize = 60000;
-var d2 = 82.08821348482627;
-var d3 = 63.05723279263028;
-var d5 = 118.81117798221669;
-var d6 = 100.7779690913753;
-var d7 = 112.56027199005798;
-var d8 = 132.4238766421944;
-var d9 = 143.81848578996073;
-var d10 = 82.34972902795033;
-var dArray = [d2, d3, d5, d6, d7, d8, d9, d10]
-var dIndex = getRandomInt(0, 7);
-var design = dArray[dIndex];
-var increment = design;
-//ctx.strokeStyle = "grd";
-spiral();
+function addShadow() {
+  if (ctx.shadowBlur < 0.0001) {
+    // Gradually increase the shadow
+    ctx.shadowColor = "rgba(45,45,45,0.6)";
+    ctx.shadowOffsetX = getRandomDec(-10,10);
+    ctx.shadowOffsetY = getRandomDec(-10,10);
+    ctx.shadowBlur += 15;
+    //ctx2.globalAlpha = 0.8;
+    ctx.stroke();
+    requestAnimationFrame(addShadow);
+  } else {
+    // Shadow is fully added
+    ctx.stroke();
+  }
+}
 
-		
- /*Run release even when they refresh not with click (F5, refresh button, closing page)*/
-			window.addEventListener('pagehide', (event) => {
-				/*Release every canvas*/
-					var canvases = document.getElementsByTagName("canvas");
-					var canvasesList = Array.prototype.slice.call(canvases);
-            		canvasesList.forEach(releaseCanvas);
-			});
-      </script>
-        </body>
-            </html>
+requestAnimationFrame(draw);
+
+
+      let timer;
+      document.getElementById("myCanvas").addEventListener('click', event => {
+        if (event.detail === 1) {
+        timer = setTimeout(() => {
+        location.reload();
+        }, 200)
+        }
+      });
+      document.getElementById("myCanvas").addEventListener('dblclick', event => {
+        clearTimeout(timer);
+        modalUp();
+      })
+
+        /*Run release even when they refresh not with click (F5, refresh button, closing page)*/
+        			window.addEventListener('pagehide', (event) => {
+        				/*Release every canvas*/
+        					var canvases = document.getElementsByTagName("canvas");
+        					var canvasesList = Array.prototype.slice.call(canvases);
+                    		canvasesList.forEach(releaseCanvas);
+        			});
+
+              //save image on mobile
+               			function modalUp() {
+
+                      var inputVal = myCanvas.toDataURL({format: 'image/png', quality:1, width:4096, height:4096});
+              				var img = new Image();
+              				img.src = inputVal;
+
+              				var modal = document.getElementById("myModal");
+
+              				// Get the image and insert it inside the modal - use its "alt" text as a caption
+              				var modalImg = document.getElementById("img01");
+
+              				  modal.style.display = "block";
+              				  modalImg.src = inputVal;
+
+              				// Get the <span> element that closes the modal
+              				var span = document.getElementsByClassName("close")[0];
+
+              				// When the user clicks on <span> (x), close the modal
+              				span.onclick = function() {
+              				  	modal.style.display = "none";
+              				}
+                       	}
+          </script>
+              </body>
+                  </html>
