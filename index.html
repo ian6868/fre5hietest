@@ -1,3 +1,284 @@
-<!DOCTYPE html><html lang="en" ><head> <meta charset="UTF-8"><style>body{background: #000000; height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; perspective: 500px;}div{will-change: transform;}#ui{transform-style: preserve-3d;}#ui .text{position: absolute; font-size: 23rem; color: #fff; line-height: 20rem; font-family: "Copperplate", fantasy; padding: 50px 0; mix-blend-mode: screen; transform-style: preserve-3d;}#ui .text:nth-child(1){-webkit-clip-path: polygon(-30% 0, -20% 0, 20% 100%, 0% 100%); clip-path: polygon(-30% 0, -20% 0, 20% 100%, 0% 100%); -webkit-animation: wave 3500ms -10000ms ease-in-out infinite alternate; animation: wave 3500ms -10000ms ease-in-out infinite alternate;}#ui .text:nth-child(2){-webkit-clip-path: polygon(-25% 0, -15% 0, 25% 100%, 5% 100%); clip-path: polygon(-25% 0, -15% 0, 25% 100%, 5% 100%); -webkit-animation: wave 3500ms -9800ms ease-in-out infinite alternate; animation: wave 3500ms -9800ms ease-in-out infinite alternate;}#ui .text:nth-child(3){-webkit-clip-path: polygon(-20% 0, -10% 0, 30% 100%, 10% 100%); clip-path: polygon(-20% 0, -10% 0, 30% 100%, 10% 100%); -webkit-animation: wave 3500ms -9600ms ease-in-out infinite alternate; animation: wave 3500ms -9600ms ease-in-out infinite alternate;}#ui .text:nth-child(4){-webkit-clip-path: polygon(-15% 0, -5% 0, 35% 100%, 15% 100%); clip-path: polygon(-15% 0, -5% 0, 35% 100%, 15% 100%); -webkit-animation: wave 3500ms -9400ms ease-in-out infinite alternate; animation: wave 3500ms -9400ms ease-in-out infinite alternate;}#ui .text:nth-child(5){-webkit-clip-path: polygon(-10% 0, 0% 0, 40% 100%, 20% 100%); clip-path: polygon(-10% 0, 0% 0, 40% 100%, 20% 100%); -webkit-animation: wave 3500ms -9200ms ease-in-out infinite alternate; animation: wave 3500ms -9200ms ease-in-out infinite alternate;}#ui .text:nth-child(6){-webkit-clip-path: polygon(-5% 0, 5% 0, 45% 100%, 25% 100%); clip-path: polygon(-5% 0, 5% 0, 45% 100%, 25% 100%); -webkit-animation: wave 3500ms -9000ms ease-in-out infinite alternate; animation: wave 3500ms -9000ms ease-in-out infinite alternate;}#ui .text:nth-child(7){-webkit-clip-path: polygon(0% 0, 10% 0, 50% 100%, 30% 100%); clip-path: polygon(0% 0, 10% 0, 50% 100%, 30% 100%); -webkit-animation: wave 3500ms -8800ms ease-in-out infinite alternate; animation: wave 3500ms -8800ms ease-in-out infinite alternate;}#ui .text:nth-child(8){-webkit-clip-path: polygon(5% 0, 15% 0, 55% 100%, 35% 100%); clip-path: polygon(5% 0, 15% 0, 55% 100%, 35% 100%); -webkit-animation: wave 3500ms -8600ms ease-in-out infinite alternate; animation: wave 3500ms -8600ms ease-in-out infinite alternate;}#ui .text:nth-child(9){-webkit-clip-path: polygon(10% 0, 20% 0, 60% 100%, 40% 100%); clip-path: polygon(10% 0, 20% 0, 60% 100%, 40% 100%); -webkit-animation: wave 3500ms -8400ms ease-in-out infinite alternate; animation: wave 3500ms -8400ms ease-in-out infinite alternate;}#ui .text:nth-child(10){-webkit-clip-path: polygon(15% 0, 25% 0, 65% 100%, 45% 100%); clip-path: polygon(15% 0, 25% 0, 65% 100%, 45% 100%); -webkit-animation: wave 3500ms -8200ms ease-in-out infinite alternate; animation: wave 3500ms -8200ms ease-in-out infinite alternate;}#ui .text:nth-child(11){-webkit-clip-path: polygon(20% 0, 30% 0, 70% 100%, 50% 100%); clip-path: polygon(20% 0, 30% 0, 70% 100%, 50% 100%); -webkit-animation: wave 3500ms -8000ms ease-in-out infinite alternate; animation: wave 3500ms -8000ms ease-in-out infinite alternate;}#ui .text:nth-child(12){-webkit-clip-path: polygon(25% 0, 35% 0, 75% 100%, 55% 100%); clip-path: polygon(25% 0, 35% 0, 75% 100%, 55% 100%); -webkit-animation: wave 3500ms -7800ms ease-in-out infinite alternate; animation: wave 3500ms -7800ms ease-in-out infinite alternate;}#ui .text:nth-child(13){-webkit-clip-path: polygon(30% 0, 40% 0, 80% 100%, 60% 100%); clip-path: polygon(30% 0, 40% 0, 80% 100%, 60% 100%); -webkit-animation: wave 3500ms -7600ms ease-in-out infinite alternate; animation: wave 3500ms -7600ms ease-in-out infinite alternate;}#ui .text:nth-child(14){-webkit-clip-path: polygon(35% 0, 45% 0, 85% 100%, 65% 100%); clip-path: polygon(35% 0, 45% 0, 85% 100%, 65% 100%); -webkit-animation: wave 3500ms -7400ms ease-in-out infinite alternate; animation: wave 3500ms -7400ms ease-in-out infinite alternate;}#ui .text:nth-child(15){-webkit-clip-path: polygon(40% 0, 50% 0, 90% 100%, 70% 100%); clip-path: polygon(40% 0, 50% 0, 90% 100%, 70% 100%); -webkit-animation: wave 3500ms -7200ms ease-in-out infinite alternate; animation: wave 3500ms -7200ms ease-in-out infinite alternate;}#ui .text:nth-child(16){-webkit-clip-path: polygon(45% 0, 55% 0, 95% 100%, 75% 100%); clip-path: polygon(45% 0, 55% 0, 95% 100%, 75% 100%); -webkit-animation: wave 3500ms -7000ms ease-in-out infinite alternate; animation: wave 3500ms -7000ms ease-in-out infinite alternate;}#ui .text:nth-child(17){-webkit-clip-path: polygon(50% 0, 60% 0, 100% 100%, 80% 100%); clip-path: polygon(50% 0, 60% 0, 100% 100%, 80% 100%); -webkit-animation: wave 3500ms -6800ms ease-in-out infinite alternate; animation: wave 3500ms -6800ms ease-in-out infinite alternate;}#ui .text:nth-child(18){-webkit-clip-path: polygon(55% 0, 65% 0, 105% 100%, 85% 100%); clip-path: polygon(55% 0, 65% 0, 105% 100%, 85% 100%); -webkit-animation: wave 3500ms -6600ms ease-in-out infinite alternate; animation: wave 3500ms -6600ms ease-in-out infinite alternate;}#ui .text:nth-child(19){-webkit-clip-path: polygon(60% 0, 70% 0, 110% 100%, 90% 100%); clip-path: polygon(60% 0, 70% 0, 110% 100%, 90% 100%); -webkit-animation: wave 3500ms -6400ms ease-in-out infinite alternate; animation: wave 3500ms -6400ms ease-in-out infinite alternate;}#ui .text:nth-child(20){-webkit-clip-path: polygon(65% 0, 75% 0, 115% 100%, 95% 100%); clip-path: polygon(65% 0, 75% 0, 115% 100%, 95% 100%); -webkit-animation: wave 3500ms -6200ms ease-in-out infinite alternate; animation: wave 3500ms -6200ms ease-in-out infinite alternate;}#ui .text:nth-child(21){-webkit-clip-path: polygon(70% 0, 80% 0, 120% 100%, 100% 100%); clip-path: polygon(70% 0, 80% 0, 120% 100%, 100% 100%); -webkit-animation: wave 3500ms -6000ms ease-in-out infinite alternate; animation: wave 3500ms -6000ms ease-in-out infinite alternate;}#ui .text:nth-child(22){-webkit-clip-path: polygon(75% 0, 85% 0, 125% 100%, 105% 100%); clip-path: polygon(75% 0, 85% 0, 125% 100%, 105% 100%); -webkit-animation: wave 3500ms -5800ms ease-in-out infinite alternate; animation: wave 3500ms -5800ms ease-in-out infinite alternate;}#ui .text:nth-child(23){-webkit-clip-path: polygon(80% 0, 90% 0, 130% 100%, 110% 100%); clip-path: polygon(80% 0, 90% 0, 130% 100%, 110% 100%); -webkit-animation: wave 3500ms -5600ms ease-in-out infinite alternate; animation: wave 3500ms -5600ms ease-in-out infinite alternate;}#ui .text:nth-child(24){-webkit-clip-path: polygon(85% 0, 95% 0, 135% 100%, 115% 100%); clip-path: polygon(85% 0, 95% 0, 135% 100%, 115% 100%); -webkit-animation: wave 3500ms -5400ms ease-in-out infinite alternate; animation: wave 3500ms -5400ms ease-in-out infinite alternate;}#ui .text:nth-child(25){-webkit-clip-path: polygon(90% 0, 100% 0, 140% 100%, 120% 100%); clip-path: polygon(90% 0, 100% 0, 140% 100%, 120% 100%); -webkit-animation: wave 3500ms -5200ms ease-in-out infinite alternate; animation: wave 3500ms -5200ms ease-in-out infinite alternate;}#ui .text:nth-child(26){-webkit-clip-path: polygon(95% 0, 105% 0, 145% 100%, 125% 100%); clip-path: polygon(95% 0, 105% 0, 145% 100%, 125% 100%); -webkit-animation: wave 3500ms -3500ms ease-in-out infinite alternate; animation: wave 3500ms -3500ms ease-in-out infinite alternate;}:root{--color1: #FF0000; --color2: #00FF00;}@-webkit-keyframes wave{0%{transform: translate(-50%, -50%) scale(0.9) rotateX(180deg) rotateY(180deg) rotateZ(0deg); color: var(--color2);}100%{transform: translate(-50%, -50%) scale(1.1) rotateX(0deg) rotateY(0deg) rotateZ(0deg); color: var(--color1);}}@keyframes wave{0%{transform: translate(-50%, -50%) scale(0.9) rotateX(180deg) rotateY(180deg) rotateZ(0deg); color: var(--color2);}100%{transform: translate(-50%, -50%) scale(1.1) rotateX(0deg) rotateY(0deg) rotateZ(0deg); color: var(--color1);}}</style></head><body><div id="ui"> <div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div><div class="text">F5</div></div><script>
-function t(t,n){return Math.random()*(n-t)+t}var a=t(.1,.5);var h=t(.5,.9);function n(){const t=Math.floor(Math.random()*256);const n=Math.floor(Math.random()*256);const o=Math.floor(Math.random()*256);const c=a;return`rgba(${t}, ${n}, ${o}, ${c})`}function o(){const t=Math.floor(Math.random()*256);const n=Math.floor(Math.random()*256);const o=Math.floor(Math.random()*256);const c=h;return`rgba(${t}, ${n}, ${o}, ${c})`}const c=document.documentElement;c.style.setProperty("--color1",o());c.style.setProperty("--color2",n());document.querySelector("body").addEventListener("click",function(){location.reload()});
-</script></body></html>
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+<style>
+body {
+  background: #0a1428;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 500px;
+}
+
+div {
+  will-change: transform;
+}
+
+#su {
+  transform-style: preserve-3d;
+}
+#su .text {
+  position: absolute;
+  font-size: 21rem;
+  color: #fff;
+  line-height: 20rem;
+  font-family: "Copperplate", fantasy;
+  padding: 50px 0;
+  mix-blend-mode: screen;
+  transform-style: preserve-3d;
+}
+
+:root {
+  --color1: rgba(0, 0, 0, 0);
+  --color2: rgba(0, 0, 0, 0);
+}
+
+#su .text:nth-child(1) {
+  -webkit-clip-path: polygon(-30% 0, -20% 0, 20% 100%, 0% 100%);
+          clip-path: polygon(-30% 0, -20% 0, 20% 100%, 0% 100%);
+  -webkit-animation: spin 7500ms -10000ms ease-in-out infinite alternate;
+          animation: spin 7500ms -10000ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(2) {
+  -webkit-clip-path: polygon(-25% 0, -15% 0, 25% 100%, 5% 100%);
+          clip-path: polygon(-25% 0, -15% 0, 25% 100%, 5% 100%);
+  -webkit-animation: spin 7500ms -9800ms ease-in-out infinite alternate;
+          animation: spin 7500ms -9800ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(3) {
+  -webkit-clip-path: polygon(-20% 0, -10% 0, 30% 100%, 10% 100%);
+          clip-path: polygon(-20% 0, -10% 0, 30% 100%, 10% 100%);
+  -webkit-animation: spin 7500ms -9600ms ease-in-out infinite alternate;
+          animation: spin 7500ms -9600ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(4) {
+  -webkit-clip-path: polygon(-15% 0, -5% 0, 35% 100%, 15% 100%);
+          clip-path: polygon(-15% 0, -5% 0, 35% 100%, 15% 100%);
+  -webkit-animation: spin 7500ms -9400ms ease-in-out infinite alternate;
+          animation: spin 7500ms -9400ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(5) {
+  -webkit-clip-path: polygon(-10% 0, 0% 0, 40% 100%, 20% 100%);
+          clip-path: polygon(-10% 0, 0% 0, 40% 100%, 20% 100%);
+  -webkit-animation: spin 7500ms -9200ms ease-in-out infinite alternate;
+          animation: spin 7500ms -9200ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(6) {
+  -webkit-clip-path: polygon(-5% 0, 5% 0, 45% 100%, 25% 100%);
+          clip-path: polygon(-5% 0, 5% 0, 45% 100%, 25% 100%);
+  -webkit-animation: spin 7500ms -9000ms ease-in-out infinite alternate;
+          animation: spin 7500ms -9000ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(7) {
+  -webkit-clip-path: polygon(0% 0, 10% 0, 50% 100%, 30% 100%);
+          clip-path: polygon(0% 0, 10% 0, 50% 100%, 30% 100%);
+  -webkit-animation: spin 7500ms -8800ms ease-in-out infinite alternate;
+          animation: spin 7500ms -8800ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(8) {
+  -webkit-clip-path: polygon(5% 0, 15% 0, 55% 100%, 35% 100%);
+          clip-path: polygon(5% 0, 15% 0, 55% 100%, 35% 100%);
+  -webkit-animation: spin 7500ms -8600ms ease-in-out infinite alternate;
+          animation: spin 7500ms -8600ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(9) {
+  -webkit-clip-path: polygon(10% 0, 20% 0, 60% 100%, 40% 100%);
+          clip-path: polygon(10% 0, 20% 0, 60% 100%, 40% 100%);
+  -webkit-animation: spin 7500ms -8400ms ease-in-out infinite alternate;
+          animation: spin 7500ms -8400ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(10) {
+  -webkit-clip-path: polygon(15% 0, 25% 0, 65% 100%, 45% 100%);
+          clip-path: polygon(15% 0, 25% 0, 65% 100%, 45% 100%);
+  -webkit-animation: spin 7500ms -8200ms ease-in-out infinite alternate;
+          animation: spin 7500ms -8200ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(11) {
+  -webkit-clip-path: polygon(20% 0, 30% 0, 70% 100%, 50% 100%);
+          clip-path: polygon(20% 0, 30% 0, 70% 100%, 50% 100%);
+  -webkit-animation: spin 7500ms -8000ms ease-in-out infinite alternate;
+          animation: spin 7500ms -8000ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(12) {
+  -webkit-clip-path: polygon(25% 0, 35% 0, 75% 100%, 55% 100%);
+          clip-path: polygon(25% 0, 35% 0, 75% 100%, 55% 100%);
+  -webkit-animation: spin 7500ms -7800ms ease-in-out infinite alternate;
+          animation: spin 7500ms -7800ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(13) {
+  -webkit-clip-path: polygon(30% 0, 40% 0, 80% 100%, 60% 100%);
+          clip-path: polygon(30% 0, 40% 0, 80% 100%, 60% 100%);
+  -webkit-animation: spin 7500ms -7600ms ease-in-out infinite alternate;
+          animation: spin 7500ms -7600ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(14) {
+  -webkit-clip-path: polygon(35% 0, 45% 0, 85% 100%, 65% 100%);
+          clip-path: polygon(35% 0, 45% 0, 85% 100%, 65% 100%);
+  -webkit-animation: spin 7500ms -7400ms ease-in-out infinite alternate;
+          animation: spin 7500ms -7400ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(15) {
+  -webkit-clip-path: polygon(40% 0, 50% 0, 90% 100%, 70% 100%);
+          clip-path: polygon(40% 0, 50% 0, 90% 100%, 70% 100%);
+  -webkit-animation: spin 7500ms -7200ms ease-in-out infinite alternate;
+          animation: spin 7500ms -7200ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(16) {
+  -webkit-clip-path: polygon(45% 0, 55% 0, 95% 100%, 75% 100%);
+          clip-path: polygon(45% 0, 55% 0, 95% 100%, 75% 100%);
+  -webkit-animation: spin 7500ms -7000ms ease-in-out infinite alternate;
+          animation: spin 7500ms -7000ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(17) {
+  -webkit-clip-path: polygon(50% 0, 60% 0, 100% 100%, 80% 100%);
+          clip-path: polygon(50% 0, 60% 0, 100% 100%, 80% 100%);
+  -webkit-animation: spin 7500ms -6800ms ease-in-out infinite alternate;
+          animation: spin 7500ms -6800ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(18) {
+  -webkit-clip-path: polygon(55% 0, 65% 0, 105% 100%, 85% 100%);
+          clip-path: polygon(55% 0, 65% 0, 105% 100%, 85% 100%);
+  -webkit-animation: spin 7500ms -6600ms ease-in-out infinite alternate;
+          animation: spin 7500ms -6600ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(19) {
+  -webkit-clip-path: polygon(60% 0, 70% 0, 110% 100%, 90% 100%);
+          clip-path: polygon(60% 0, 70% 0, 110% 100%, 90% 100%);
+  -webkit-animation: spin 7500ms -6400ms ease-in-out infinite alternate;
+          animation: spin 7500ms -6400ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(20) {
+  -webkit-clip-path: polygon(65% 0, 75% 0, 115% 100%, 95% 100%);
+          clip-path: polygon(65% 0, 75% 0, 115% 100%, 95% 100%);
+  -webkit-animation: spin 7500ms -6200ms ease-in-out infinite alternate;
+          animation: spin 7500ms -6200ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(21) {
+  -webkit-clip-path: polygon(70% 0, 80% 0, 120% 100%, 100% 100%);
+          clip-path: polygon(70% 0, 80% 0, 120% 100%, 100% 100%);
+  -webkit-animation: spin 7500ms -6000ms ease-in-out infinite alternate;
+          animation: spin 7500ms -6000ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(22) {
+  -webkit-clip-path: polygon(75% 0, 85% 0, 125% 100%, 105% 100%);
+          clip-path: polygon(75% 0, 85% 0, 125% 100%, 105% 100%);
+  -webkit-animation: spin 7500ms -5800ms ease-in-out infinite alternate;
+          animation: spin 7500ms -5800ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(23) {
+  -webkit-clip-path: polygon(80% 0, 90% 0, 130% 100%, 110% 100%);
+          clip-path: polygon(80% 0, 90% 0, 130% 100%, 110% 100%);
+  -webkit-animation: spin 7500ms -5600ms ease-in-out infinite alternate;
+          animation: spin 7500ms -5600ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(24) {
+  -webkit-clip-path: polygon(85% 0, 95% 0, 135% 100%, 115% 100%);
+          clip-path: polygon(85% 0, 95% 0, 135% 100%, 115% 100%);
+  -webkit-animation: spin 7500ms -5400ms ease-in-out infinite alternate;
+          animation: spin 7500ms -5400ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(25) {
+  -webkit-clip-path: polygon(90% 0, 100% 0, 140% 100%, 120% 100%);
+          clip-path: polygon(90% 0, 100% 0, 140% 100%, 120% 100%);
+  -webkit-animation: spin 7500ms -5200ms ease-in-out infinite alternate;
+          animation: spin 7500ms -5200ms ease-in-out infinite alternate;
+}
+#su .text:nth-child(26) {
+  -webkit-clip-path: polygon(95% 0, 105% 0, 145% 100%, 125% 100%);
+          clip-path: polygon(95% 0, 105% 0, 145% 100%, 125% 100%);
+  -webkit-animation: spin 7500ms -3500ms ease-in-out infinite alternate;
+          animation: spin 7500ms -3500ms ease-in-out infinite alternate;
+}
+
+
+@-webkit-keyframes spin {
+  0% {
+    transform: translate(-50%, -50%) scale(0.9) rotateX(180deg) rotateY(180deg) rotateZ(0deg);
+    color: var(--color2);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.1) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    color: var(--color1);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: translate(-50%, -50%) scale(0.9) rotateX(180deg) rotateY(180deg) rotateZ(0deg);
+    color: var(--color2);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.1) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    color: var(--color1);
+  }
+}
+</style>
+
+</head>
+<body>
+
+<div id="su">
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+  <div class="text">F5</div>
+</div>
+<script>
+function getRandomDec(min,max) {
+	  return Math.random() * (max - min) + min;
+	}
+
+  var tp1 = getRandomDec(0.1,0.5);
+  var tp2 = getRandomDec(0.5,0.9);
+
+function getRandomColor2() {
+  const r = Math.floor(Math.random() * 256);
+  const g = Math.floor(Math.random() * 256);
+  const b = Math.floor(Math.random() * 256);
+  const a = tp1;
+  return `rgba(${r}, ${g}, ${b}, ${a})`;
+}
+function getRandomColor1() {
+  const r = Math.floor(Math.random() * 256);
+  const g = Math.floor(Math.random() * 256);
+  const b = Math.floor(Math.random() * 256);
+  const a = tp2;
+  return `rgba(${r}, ${g}, ${b}, ${a})`;
+}
+
+//const randomColor = getRandomColor();
+const root = document.documentElement;
+root.style.setProperty('--color1', getRandomColor1());
+root.style.setProperty('--color2', getRandomColor2());
+
+document.querySelector("body").addEventListener("click",function(){
+  			  location.reload();
+  		  });
+</script>
+</body>
+</html>
