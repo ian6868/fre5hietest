@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" >
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
 <style>
 body {
-  background: #0a1428;
+  background: #000000;
   height: 100vh;
+  width: 100vw;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  perspective: 500px;
-}
-
-div {
-  will-change: transform;
+  perspective: 100px;
 }
 
 #su {
@@ -22,9 +20,9 @@ div {
 }
 #su .text {
   position: absolute;
-  font-size: 21rem;
+  font-size: 15vw;
   color: #fff;
-  line-height: 20rem;
+  line-height: 15rem;
   font-family: "Copperplate", fantasy;
   padding: 50px 0;
   mix-blend-mode: screen;
@@ -253,8 +251,8 @@ function getRandomDec(min,max) {
 	  return Math.random() * (max - min) + min;
 	}
 
-  var tp1 = getRandomDec(0.1,0.5);
-  var tp2 = getRandomDec(0.5,0.9);
+  var tp1 = getRandomDec(0.3,0.5);
+  var tp2 = getRandomDec(0.7,0.9);
 
 function getRandomColor2() {
   const r = Math.floor(Math.random() * 256);
